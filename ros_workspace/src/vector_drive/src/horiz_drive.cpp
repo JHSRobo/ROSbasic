@@ -6,27 +6,33 @@
 * @section intro_sec Introduction
 * This code contains implementations for converting horizontal and vertical control vectors into individual thruster percents (multiplied by 10 for more accuracy without needing to be stored as doubles) from -1000 to 1000
 * @section compile_sec Compilation
-* Compile using catkin_make in the ros_workspace directory. 
+* Compile using catkin_make in the ros_workspace directory.
 */
 
 
 #include <ros/ros.h>
 #include <geometry_msgs/Twist.h>
+#include <std_msgs/Float64.h>
 
 //custom message for holding 4 int32 thruster percents
 #include "vector_drive/thrusterPercents.h"
 
 
 ros::Publisher pub;  //!< Publishes thrusterPercent (-1000 to 1000) message for thruster 1, 2, 3, and 4
-ros::Subscriber sub; //!< Subscribes to rov/cmd_vel in order to get command/control vectors for vector drive algorithm   
+ros::Subscriber sub; //!< Subscribes to rov/cmd_vel in order to get command/control vectors for vector drive algorithm
+ros::Subscriber pid_lr_sub; //!< Subscribes to rovpid/leftright/control_effort in order to get command/control values for vector drive algorithm
+ros::Subscriber pid_fb_sub; //!< Subscribes to rovpid/leftright/control_effort in order to get command/control values for vector drive algorithm
 
 vector_drive::thrusterPercents thrustPercents; //!< Message being published by pub
 
+double axisLR = 0;
+double axisFB = 0;
+double axisAngular = 0;
 //template classes for simple functions
 
 /**
 * @breif constrians value between min and max inclusive. Value is returned by reference.
-* @param[in,out] value input to be constrianed 
+* @param[in,out] value input to be constrianed
 * @param[in] min The minimum value that "value" should be able to be
 * @param[in] max The maximum value that "value" should be able to be
 */
@@ -84,7 +90,7 @@ T min(T value1, T value2){
 * @param[in] inMin The minimum value for the range of the input
 * @param[in] outMin The minimum value for the range of the output
 * @param[in] outMax The maximum value for the range of the output
-* @return The input trnslated proportionally from range in to range out 
+* @return The input trnslated proportionally from range in to range out
 */
 template <class T>
 T map(T input, T inMin, T inMax, T outMin, T outMax){
@@ -153,16 +159,36 @@ void commandVectorCallback(const geometry_msgs::Twist::ConstPtr& vel)
 {
     //only deals with values pertaining to horizontal vector drive
 
+    //angular
+    axisAngular = vel->angular.x;
+
+    vectorMath(axisLR, axisFB, axisAngular);
+
+    //publish message
+    pub.publish(thrustPercents);
+}
+
+void transverseCallback(const std_msgs::Float64::ConstPtr& vel)
+{
+    //only deals with values pertaining to horizontal vector drive
+
     //linear (L-R)
-    double linearX = vel->linear.x;
+    axisLR = vel->data;
+
+    vectorMath(axisLR, axisFB, axisAngular);
+
+    //publish message
+    pub.publish(thrustPercents);
+}
+
+void longitudinalCallback(const std_msgs::Float64::ConstPtr& vel)
+{
+    //only deals with values pertaining to horizontal vector drive
 
     //linear (F-B)
-    double linearY = vel->linear.y;
+    axisFB = vel->data;
 
-    //angular
-    double angularX = vel->angular.x;
-
-    vectorMath(linearX, linearY, angularX);
+    vectorMath(axisLR, axisFB, axisAngular);
 
     //publish message
     pub.publish(thrustPercents);
@@ -181,10 +207,12 @@ int main(int argc, char **argv)
 
     //ROS subscriber to get vectors from the joystick control input
     sub = n.subscribe("rov/cmd_vel", 1, commandVectorCallback);
+    pid_lr_sub = n.subscribe("rovpid/leftright/control_effort", 1, transverseCallback);
+    pid_fb_sub = n.subscribe("rovpid/frontback/control_effort", 1, longitudinalCallback);
+
 
 
     ros::spin();
 
     return 0;
 }
-

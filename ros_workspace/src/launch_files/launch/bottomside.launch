@@ -4,7 +4,7 @@
    <node pkg="vector_drive" type="horiz_drive" name="horiz_drive"/>
 
  <!-- horizontal front/back pid node -->
-   <node name="controller" pkg="pid" type="controller" ns="rov/pid/frontback" output="screen" >
+   <node name="controller" pkg="pid" type="controller" ns="rovpid/frontback" output="screen" >
       <param name="Kp" value="5.0" />
       <param name="Ki" value="0.0" />
       <param name="Kd" value="0.1" />
@@ -16,7 +16,7 @@
    </node>
 
  <!-- horizontal left/right pid node -->
-   <node name="controller" pkg="pid" type="controller" ns="rov/pid/leftright" output="screen" >
+   <node name="controller" pkg="pid" type="controller" ns="rovpid/leftright" output="screen" >
       <param name="Kp" value="5.0" />
       <param name="Ki" value="0.0" />
       <param name="Kd" value="0.1" />
@@ -28,7 +28,7 @@
    </node>
 
  <!-- vertical up/down pid node -->
-   <node name="controller" pkg="pid" type="controller" ns="rov/pid/vertical" output="screen" >
+   <node name="controller" pkg="pid" type="controller" ns="rovpid/vertical" output="screen" >
       <param name="Kp" value="5.0" />
       <param name="Ki" value="0.0" />
       <param name="Kd" value="0.1" />

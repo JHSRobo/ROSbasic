@@ -36,6 +36,9 @@ Setup the ros_lib file for arduino serial
 RPI Camera node setup
 * See raspicam_node README.md documentation
 
+ROS PIDs library
+* `sudo apt install ros-kinetic-pid`
+
 ### Network Setup
 
 What things you need to do so that the ROS network operates properly

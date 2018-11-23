@@ -55,13 +55,13 @@ Once the network connection has been verified (on bottomside `ping master` / on 
 * Make sure both work without entering a password
 
 #### Network Setup DEBUG
-* IF you recieve `/usr/bin/ssh-copy-id: ERROR: ssh: connect to host bottomside port 22: Connection refused` go to the opposite machine from the one you recieved it on and run the following:
+* IF you receive `/usr/bin/ssh-copy-id: ERROR: ssh: connect to host bottomside port 22: Connection refused` go to the opposite machine from the one you received it on and run the following:
     * `sudo rm /etc/ssh/sshd_config`
     * `sudo apt-get purge openssh-server`
     * `sudo apt-get install openssh-server`
     * `./sshSetup.sh`
 
-Other usefull links for common problems:
+Other useful links for common problems:
 * https://superuser.com/questions/421004/how-to-fix-warning-about-ecdsa-host-key
 * https://askubuntu.com/questions/762541/ubuntu-16-04-ssh-sign-and-send-pubkey-signing-failed-agent-refused-operation
 * https://answers.ros.org/question/41446/a-is-not-in-your-ssh-known_hosts-file/
@@ -122,6 +122,6 @@ See also the list of [contributors](https://github.com/Michael-Equi/ROV_Test_Ben
 
 ## Acknowledgments
 
-* README Tempalte source https://gist.github.com/PurpleBooth/109311bb0361f32d87a2
+* README Template source https://gist.github.com/PurpleBooth/109311bb0361f32d87a2
 * Inspiration
 * etc

@@ -65,7 +65,7 @@ ros::Publisher solenoid_control; //!<Temporary TCU solenoid controller
 * @param[in,out] axis Takes in a reference to the axis (a_axis, l_axisLR/FB, v_axis)
 */
 void bilinearCalc(double &axis){
-    if((bilinearThreshold * -0.32768)<= axis && axis < (bilinearThreshold * 0.32767)){ //middle range
+    if((bilinearThreshold * -0.32768)<= axis && axis <= (bilinearThreshold * 0.32767)){ //middle range
         axis/=bilinearRatio;
 
     } else if((bilinearThreshold * 0.32767) < axis && axis <= 0.32767) { //upper range

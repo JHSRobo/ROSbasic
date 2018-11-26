@@ -27,7 +27,7 @@ Node name:
 Topics:
 
 * `rov/bno055`:
-  Publishes `geometry_msgs/Imu` Contains quaternion orientation, linear acceleration (m/s^2), and angular velocity (rads/s) .
+  Publishes `sensor_msgs/Imu` Contains quaternion orientation, linear acceleration (m/s^2), and angular velocity (rads/s) .
 
 * `rov/bno055_info`:
   Publishes `bno055_info` Contains the information on the IMUs calibrartion (accel, gyro, magno, sys) status and tempurature (celcius).

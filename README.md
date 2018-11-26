@@ -60,6 +60,8 @@ Once the network connection has been verified (on bottomside `ping master` / on 
     * `sudo apt-get purge openssh-server`
     * `sudo apt-get install openssh-server`
     * `./sshSetup.sh`
+* If topside and bottomside aren't communicating do the following:
+    * ping 192.168.1.100 from bottomside, and 192.168.1.111 from topside (If they don't communicate, make sure all the hardware is setup correctly. Also check your virtual machine network settings, and make sure it is bridging to the network (directly connected to physical network and replicating physical connection state)
 
 Other useful links for common problems:
 * https://superuser.com/questions/421004/how-to-fix-warning-about-ecdsa-host-key

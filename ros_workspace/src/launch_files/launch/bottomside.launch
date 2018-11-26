@@ -60,11 +60,6 @@
   </node>
 
   !-- launch all the sensors -->
-  <node type="sht31_ros.py" pkg="sht31" name="sht31_node"/>
-  <node type="bmp280_ros.py" pkg="bmp280" name="bmp280_node"/>
-  <node type="ms5837_ros.py" pkg="ms5837" name="ms5837_node">
-    <param name="fluidDensity" value="997"/>
-  </node>
-  <node type="bno055_ros.py" pkg="bno055" name="bno055_node"/>
+  <node type="talker.py" pkg="sensor_readout" name="sensor_interface"/>
 
 </launch>

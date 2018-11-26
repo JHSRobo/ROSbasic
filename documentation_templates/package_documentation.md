@@ -19,7 +19,7 @@ What is the goal of the code and why it was done the way it was. How does this a
 
 ### node_name
 
-* Node Inforation
+* Node Information
  * What exactly deos this Node do 
  * Where does it run
  * What are its dependencies 
@@ -50,7 +50,7 @@ Parameters/Reconfigs:
 
 ### other_node_name (if applicable)
 
-* Node Inforation
+* Node Information
  * What exactly deos this Node do 
  * Where does it run
  * What are its dependencies 

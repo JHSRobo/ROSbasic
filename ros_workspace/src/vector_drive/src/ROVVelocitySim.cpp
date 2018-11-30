@@ -31,7 +31,7 @@ double calcDragForce(double velocity)
 }
 
 double calcThrustForce(int thrustPercentage);
-
+double findLegLength(double hypotenuse);
 
 ros::publisher vert_vel_pub; //publishes calculated vertical velocity vector
 ros::publisher lat_vel_pub; //publishes calculated lateral velocity vector
@@ -84,4 +84,58 @@ void vertCallback(const vector_drive::thrusterpercents::ConstPtr &thrust)
     timestep = (ros::Time::now() - vertTime).toSec();
     vertTime = ros::Time::now();
     zVel += (2 * calcThrustForce(thrust->t1) + calcDragForce(zVel)) * timestep;
+    vert_vel_pub.publish(zVel);
+}
+
+void horizCallback(const vector_drive::thrusterpercents::ConstPtr &thrust)
+{
+    timestep = (ros::Time::now() - horizTime).toSec();
+    horizTime = ros::Time::now();
+
+    /*
+    * assuming all thruster are at 90 degree angles from each other and 45 from the linear axes of the rov
+    * (thrusters form an x-shape with rov in the middle)
+    *   \ /
+    *   ROV
+    *   / \
+    * here's the thruster positions we're working with (I think):
+    *
+    *       front
+    *       t3 t4
+    *  left t1 t2 right
+    *       back
+    *
+    * forward for a thruster is assumed to be a positive thrusterPercent and a >1500 pwm pulse width (bluerobotics t100 spec)
+    *   t3 forward is upper-right (/)
+    *     positive y, negative x
+    *   t4 forward is upper-left  (\)
+    *     positive y, positive x
+    *   t1 forward is upper-left  (\)
+    *     positive y, positive x
+    *   t2 forward is upper-right (/)
+    *     positive y, negative x
+    *
+    * decomposing/change of basis of a thruster thrust vector is finding the leg length
+    * of a 45-45-90 triangle, which is just the sqrt of the hypotenuse divided by 2
+    * we have to multiply the leg length by either -1 or 1 depending on the thruster and thruster percentage
+    * to figure out what to multiply by, divide thruster percent by abs(thruster percent) to get + or -1
+    * then check the forward direction of the thruster and multiply based off that
+    *
+    * in /rov/cmd_vel (and therefore, the pid setpoints), forward is positive and <<LEFT>> is positive,
+    * so left has to mean a positive velocity and forward has to be a positive velocity
+    * //TODO find out if up is positive or not (we really gotta find the throttle)
+    * at this point, we've just gone off the assumption that up is positive
+    *
+    * also, y is longitudinal, and x is lateral
+    */
+
+    xVel += timestep * (calcDragForce(xVel) + findLegLength(calcThrustForce(thrust->t1)) - findLegLength(calcThrustForce(thrust->t2)) - findLegLength(calcThrustForce(thrust->t3)) + findLegLength(calcThrustForce(thrust->t4)));
+    yVel += timestep * (calcDragForce(yVel) + findLegLength(calcThrustForce(thrust->t1)) + findLegLength(calcThrustForce(thrust->t2)) + findLegLength(calcThrustForce(thrust->t3)) + findLegLength(calcThrustForce(thrust->t4)));
+    lat_vel_pub.publish(xVel);
+    long_vel_pub.publish(yVel);
+  }
+
+double findLegLength(double hypotenuse)
+{
+    return sqrt(abs(hypotenuse)) * hypotenuse / abs(hypotenuse)
 }

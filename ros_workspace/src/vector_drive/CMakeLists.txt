@@ -198,6 +198,10 @@ include_directories(
 # catkin_add_nosetests(test)
 
 
+add_executable(rov_vel_sim src/rov_vel_sim.cpp)
+target_link_libraries(rov_vel_sim ${catkin_LIBRARIES})
+add_dependencies(rov_vel_sim vector_drive_generate_messages_cpp)
+
 add_executable(horiz_drive src/horiz_drive.cpp)
 target_link_libraries(horiz_drive ${catkin_LIBRARIES})
 add_dependencies(horiz_drive vector_drive_generate_messages_cpp)

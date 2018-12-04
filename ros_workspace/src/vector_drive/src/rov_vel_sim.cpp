@@ -1,7 +1,7 @@
 #include <ros/ros.h>
 #include <geometry_msgs/Twist.h>
 #include <std_msgs/Float64.h>
-
+#include <iostream>
 //custom message for holding 4 int32 thruster percents
 #include "vector_drive/thrusterPercents.h"
 
@@ -11,6 +11,12 @@ const double maxReverseThrust = 1.85; //max thrust of T100 (N); T200 is 4.1
 const double fluidDensity = 997; //density of water (kg/m^3)
 const double refArea = 0.3251606; //ROV's reference area i.e. area facing direction of movement (m^2)
 const double cD = 2.5; //drag coefficient for calculating drag force (best guesstimate)
+const double rovMass = 16; //kg
+
+/*since at 0.1 m/s, our reynolds number is a million, we can consider the guesstimated cd a constant
+For sharp-cornered bluff bodies, like square cylinders and plates held transverse
+to the flow direction, this equation is applicable with the drag coefficient as a
+constant value when the Reynolds number is greater than 1000. -Wikipedia*/
 
 double xVel = 0;
 double yVel = 0;
@@ -18,16 +24,13 @@ double zVel = 0;
 
 ros::Time vertTime;
 ros::Time horizTime;
-double timestep;
-
-/*since at 0.1 m/s, our reynolds number is a million, we can consider the guesstimated cd a constant
-For sharp-cornered bluff bodies, like square cylinders and plates held transverse
-to the flow direction, this equation is applicable with the drag coefficient as a
-constant value when the Reynolds number is greater than 1000. -Wikipedia*/
+double horizTimestep;
+double vertTimestep;
 
 double calcDragForce(double velocity)
 {
-    return (0.5 * fluidDensity * velocity * velocity * cD * refArea);
+    if(velocity == 0){return 0;}
+    return (0.5 * fluidDensity * velocity * velocity * cD * refArea) * velocity / abs(velocity);
 }
 
 double calcThrustForce(int thrustPercentage);
@@ -40,8 +43,18 @@ ros::Publisher long_vel_pub; //publishes calculated longitudinal velocity vector
 ros::Subscriber horiz_sub;
 ros::Subscriber vert_sub;
 
+void horizCalc();
+void vertCalc();
+
 void horizCallback(const vector_drive::thrusterPercents::ConstPtr &thrust);
 void vertCallback(const vector_drive::thrusterPercents::ConstPtr &thrust);
+
+int T1 = 0;
+int T2 = 0;
+int T3 = 0;
+int T4 = 0;
+int T5 = 0;
+int T6 = 0;
 
 int main(int argc, char **argv)
 {
@@ -63,7 +76,11 @@ int main(int argc, char **argv)
     horiz_sub = n.subscribe("rov/cmd_horizontal_vdrive", 1, horizCallback);
     vert_sub = n.subscribe("rov/cmd_vertical_vdrive", 1, vertCallback);
 
-    ros::spin();
+    while(1){
+        ros::spinOnce();
+        horizCalc();
+        vertCalc();
+    }
 
     return 0;
 }
@@ -81,19 +98,38 @@ double calcThrustForce(int thrustPercentage)
 
 void vertCallback(const vector_drive::thrusterPercents::ConstPtr &thrust)
 {
-    std_msgs::Float64 zVel_msg;
-    timestep = (ros::Time::now() - vertTime).toSec();
-    vertTime = ros::Time::now();
-    zVel += (2 * calcThrustForce(thrust->t1) + calcDragForce(zVel)) * timestep;
-    zVel_msg.data = zVel;
-    vert_vel_pub.publish(zVel_msg);
+    T5 = thrust->t1;
+    T6 = T5;
+    vertCalc();
 }
 
 void horizCallback(const vector_drive::thrusterPercents::ConstPtr &thrust)
 {
+    T1 = thrust->t1;
+    T2 = thrust->t2;
+    T3 = thrust->t3;
+    T4 = thrust->t4;
+    horizCalc();
+}
+
+
+
+
+void vertCalc()
+{
+    std_msgs::Float64 zVel_msg;
+    vertTimestep = (ros::Time::now() - vertTime).toSec();
+    vertTime = ros::Time::now();
+    zVel += (2 * calcThrustForce(T5) - calcDragForce(zVel)) * vertTimestep;
+    zVel_msg.data = zVel;
+    vert_vel_pub.publish(zVel_msg);
+}
+
+void horizCalc()
+{
     std_msgs::Float64 xVel_msg;
     std_msgs::Float64 yVel_msg;
-    timestep = (ros::Time::now() - horizTime).toSec();
+    horizTimestep = (ros::Time::now() - horizTime).toSec();
     horizTime = ros::Time::now();
 
     /*
@@ -133,17 +169,20 @@ void horizCallback(const vector_drive::thrusterPercents::ConstPtr &thrust)
     * also, y is longitudinal, and x is lateral
     */
 
-    xVel += timestep * (calcDragForce(xVel) + findLegLength(calcThrustForce(thrust->t1)) - findLegLength(calcThrustForce(thrust->t2)) - findLegLength(calcThrustForce(thrust->t3)) + findLegLength(calcThrustForce(thrust->t4)));
-    yVel += timestep * (calcDragForce(yVel) + findLegLength(calcThrustForce(thrust->t1)) + findLegLength(calcThrustForce(thrust->t2)) + findLegLength(calcThrustForce(thrust->t3)) + findLegLength(calcThrustForce(thrust->t4)));
+    xVel += horizTimestep * (findLegLength(calcThrustForce(T1)) - findLegLength(calcThrustForce(T2)) - findLegLength(calcThrustForce(T3)) + findLegLength(calcThrustForce(T4)) - calcDragForce(xVel));
+    yVel += horizTimestep * (findLegLength(calcThrustForce(T1)) + findLegLength(calcThrustForce(T2)) + findLegLength(calcThrustForce(T3)) + findLegLength(calcThrustForce(T4)) - calcDragForce(yVel));
 
     xVel_msg.data = xVel;
     yVel_msg.data = yVel;
 
     lat_vel_pub.publish(xVel_msg);
     long_vel_pub.publish(yVel_msg);
+    std::cout << "yVel: " << yVel << "\n";
+    std::cout << "horizTimestep: " << horizTimestep << "\n";
   }
 
 double findLegLength(double hypotenuse)
 {
+    if (hypotenuse == 0) {return 0;}
     return sqrt(abs(hypotenuse)) * hypotenuse / abs(hypotenuse);
 }

@@ -66,12 +66,12 @@ void vertCalc();
 void horizCallback(const vector_drive::thrusterPercents::ConstPtr &thrust);
 void vertCallback(const vector_drive::thrusterPercents::ConstPtr &thrust);
 
-int T1 = 0;
-int T2 = 0;
-int T3 = 0;
-int T4 = 0;
-int T5 = 0;
-int T6 = 0;
+int T1 = 1500;
+int T2 = 1500;
+int T3 = 1500;
+int T4 = 1500;
+int T5 = 1500;
+int T6 = 1500;
 
 int main(int argc, char **argv)
 {
@@ -111,6 +111,10 @@ double calcThrustForce(int dutyCycle){
   //regressing some points from the bluerobotics t100 graph
   //https://www.bluerobotics.com/store/thrusters/t100-t200-thrusters/t100-thruster/
   //return(0.0000000297138*std::pow(dutyCycle, 3)-0.00012908*std::pow(dutyCycle, 2)+0.19387*dutyCycle-100.496198);          //lbs
+  if (1450 < dutyCycle && dutyCycle < 1550)
+  {
+    return 0;
+  }
   return(0.000000013299668*std::pow(dutyCycle, 3)-0.00005769384*std::pow(dutyCycle, 2)+0.0866075898*dutyCycle-44.91965613); //Newtons
 
 }
@@ -139,7 +143,7 @@ void vertCalc()
     std_msgs::Float64 zVel_msg;
     vertTimestep = (ros::Time::now() - vertTime).toSec();
     vertTime = ros::Time::now();
-    zVel += (2 * calcThrustForce(T5) - calcDragForce(zVel)) * vertTimestep;
+    zVel += (2 * calcThrustForce(T5) + calcDragForce(zVel)) * vertTimestep;
     zVel_msg.data = zVel;
     vert_vel_pub.publish(zVel_msg);
 }
@@ -191,9 +195,11 @@ void horizCalc()
     std::cout << "yVel: " << yVel << "\n";
     std::cout << "Y-axis Drag force: " << calcDragForce(yVel) << "\n";
 
-    yVel += horizTimestep * (findLegLength(calcThrustForce(T1)) + findLegLength(calcThrustForce(T2)) + findLegLength(calcThrustForce(T3)) + findLegLength(calcThrustForce(T4)) - calcDragForce(yVel));
-    xVel += horizTimestep * (findLegLength(calcThrustForce(T1)) - findLegLength(calcThrustForce(T2)) - findLegLength(calcThrustForce(T3)) + findLegLength(calcThrustForce(T4)) - calcDragForce(xVel));
+    yVel += horizTimestep * (findLegLength(calcThrustForce(T1)) + findLegLength(calcThrustForce(T2)) + findLegLength(calcThrustForce(T3)) + findLegLength(calcThrustForce(T4)) + calcDragForce(yVel));
+    xVel += horizTimestep * (findLegLength(calcThrustForce(T1)) - findLegLength(calcThrustForce(T2)) - findLegLength(calcThrustForce(T3)) + findLegLength(calcThrustForce(T4)) + calcDragForce(xVel));
 
+    std::cout << "T1: " << T1 << "\n";
+    std::cout << "calc T1: " << calcThrustForce(T1) << "\n";
 //   FOR DEBBUGGING (no drag force)
 //   yVel += horizTimestep * (findLegLength(calcThrustForce(T1)) + findLegLength(calcThrustForce(T2)) + findLegLength(calcThrustForce(T3)) + findLegLength(calcThrustForce(T4)));
 //   xVel += horizTimestep * (findLegLength(calcThrustForce(T1)) - findLegLength(calcThrustForce(T2)) - findLegLength(calcThrustForce(T3)) + findLegLength(calcThrustForce(T4)));

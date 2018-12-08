@@ -33,7 +33,7 @@ double vertTimestep;
 * @breif returns a number mapped proportioanlly from one range of numbers to another
 * @param[in] input Value to be mapped
 * @param[in] inMax The maximum value for the range of the input
-* @param[in] inMin The minimum value for the range of the input
+* @param[in] inMin The minimumocity sqaured: 0 value for the range of the input
 * @param[in] outMin The minimum value for the range of the output
 * @param[in] outMax The maximum value for the range of the output
 * @return The input trnslated proportionally from range in to range out
@@ -46,7 +46,6 @@ T map(T input, T inMin, T inMax, T outMin, T outMax){
 
 double calcDragForce(double velocity)
 {
-  std::cout << "Velocity sqaured: " << std::pow(velocity, 2) << '\n';
   if (velocity > 0) {return(0.5 * fluidDensity * std::pow(velocity, 2) * cD * refArea * -1);}
   else              {return(0.5 * fluidDensity * std::pow(velocity, 2) * cD * refArea);}
 }
@@ -206,7 +205,7 @@ void horizCalc()
     lat_vel_pub.publish(xVel_msg);   //fb
     long_vel_pub.publish(yVel_msg);  //lr
     std::cout << "yVel: " << yVel << "\n";
-    std::cout << "horizTimestep: " << horizTimestep << "\n";
+    std::cout << "horizTimestep: " << horizTimestep << "\n\n";
   }
 
 double findLegLength(double hypotenuse)

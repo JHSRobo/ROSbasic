@@ -2,6 +2,7 @@
 #include <geometry_msgs/Twist.h>
 #include <std_msgs/Float64.h>
 #include <iostream>
+#include <cmath> // for sqrt() function
 //custom message for holding 4 int32 thruster percents
 #include "vector_drive/thrusterPercents.h"
 
@@ -26,6 +27,23 @@ ros::Time vertTime;
 ros::Time horizTime;
 double horizTimestep;
 double vertTimestep;
+
+
+/**
+* @breif returns a number mapped proportioanlly from one range of numbers to another
+* @param[in] input Value to be mapped
+* @param[in] inMax The maximum value for the range of the input
+* @param[in] inMin The minimum value for the range of the input
+* @param[in] outMin The minimum value for the range of the output
+* @param[in] outMax The maximum value for the range of the output
+* @return The input trnslated proportionally from range in to range out
+*/
+template <class T>
+T map(T input, T inMin, T inMax, T outMin, T outMax){
+    T output = (input - inMin) * (outMax - outMin) / (inMax - inMin) + outMin;
+    return output;
+}
+
 
 double calcDragForce(double velocity)
 {
@@ -65,6 +83,7 @@ int main(int argc, char **argv)
     ros::NodeHandle n;
 
     //ROS velocity publishers for pids
+    //PLEASE KEEP LR/FB lat/long naming convention consistant!!!
     vert_vel_pub = n.advertise<std_msgs::Float64>("rovpid/vertical/state", 1);
     lat_vel_pub = n.advertise<std_msgs::Float64>("rovpid/leftright/state", 1);
     long_vel_pub = n.advertise<std_msgs::Float64>("rovpid/frontback/state", 1);
@@ -76,39 +95,38 @@ int main(int argc, char **argv)
     horiz_sub = n.subscribe("rov/cmd_horizontal_vdrive", 1, horizCallback);
     vert_sub = n.subscribe("rov/cmd_vertical_vdrive", 1, vertCallback);
 
-    while(1){
+    ros::Rate rate(100); //100Hz update rate to prevent divide by 0 induced by floating point precision errors
+
+    while(ros::ok()){
         ros::spinOnce();
         horizCalc();
         vertCalc();
+        rate.sleep();
     }
 
     return 0;
 }
 
-double calcThrustForce(int thrustPercentage)
-{
-    //thrust percentages go from -1000 to 1000
-    //pwm widths go from 1100 to 1900
-    thrustPercentage = thrustPercentage * 0.4 + 1500; //convert thrust percent to pwm width so we can use the neat graphs bluerobotics has
-    if (thrustPercentage <=1550 && thrustPercentage >= 1450) {return 0;} //t100 has a small deadzone
-    //regressing some points from the bluerobotics t100 graph
-    if (thrustPercentage < 1450) {return thrustPercentage * 0.00526491178571 - 7.462449664287;}  //r2 of 0.9865113971
-    if (thrustPercentage > 1550) {return thrustPercentage * 0.00750371427428 - 11.760354953715;} //r2 of 0.996488047
+//Updated regressed formula
+double calcThrustForce(int dutyCycle){
+  //regressing some points from the bluerobotics t100 graph
+  //https://www.bluerobotics.com/store/thrusters/t100-t200-thrusters/t100-thruster/
+  return(0.0000000297138*std::pow(dutyCycle, 3)-0.00012908*std::pow(dutyCycle, 2)+0.19387*dutyCycle-100.496198);
 }
 
 void vertCallback(const vector_drive::thrusterPercents::ConstPtr &thrust)
 {
-    T5 = thrust->t1;
-    T6 = T5;
-    vertCalc();
+  T1 = map(thrust->t1, -1000, 1000, 1100, 1900);
+  T2 = map(thrust->t2, -1000, 1000, 1100, 1900);
+  vertCalc();
 }
 
 void horizCallback(const vector_drive::thrusterPercents::ConstPtr &thrust)
 {
-    T1 = thrust->t1;
-    T2 = thrust->t2;
-    T3 = thrust->t3;
-    T4 = thrust->t4;
+    T1 = map(thrust->t1, -1000, 1000, 1100, 1900);
+    T2 = map(thrust->t2, -1000, 1000, 1100, 1900);
+    T3 = map(thrust->t3, -1000, 1000, 1100, 1900);
+    T4 = map(thrust->t4, -1000, 1000, 1100, 1900);
     horizCalc();
 }
 
@@ -146,9 +164,9 @@ void horizCalc()
     *       back
     *
     * forward for a thruster is assumed to be a positive thrusterPercent and a >1500 pwm pulse width (bluerobotics t100 spec)
-    *   t3 forward is upper-right (/)
+    *   t3 forward is bottom-right (/)
     *     positive y, negative x
-    *   t4 forward is upper-left  (\)
+    *   t4 forward is bottom-left  (\)
     *     positive y, positive x
     *   t1 forward is upper-left  (\)
     *     positive y, positive x
@@ -169,20 +187,23 @@ void horizCalc()
     * also, y is longitudinal, and x is lateral
     */
 
-    xVel += horizTimestep * (findLegLength(calcThrustForce(T1)) - findLegLength(calcThrustForce(T2)) - findLegLength(calcThrustForce(T3)) + findLegLength(calcThrustForce(T4)) - calcDragForce(xVel));
-    yVel += horizTimestep * (findLegLength(calcThrustForce(T1)) + findLegLength(calcThrustForce(T2)) + findLegLength(calcThrustForce(T3)) + findLegLength(calcThrustForce(T4)) - calcDragForce(yVel));
+//    yVel += horizTimestep * (findLegLength(calcThrustForce(T1)) + findLegLength(calcThrustForce(T2)) + findLegLength(calcThrustForce(T3)) + findLegLength(calcThrustForce(T4)) - calcDragForce(yVel));
+//    xVel += horizTimestep * (findLegLength(calcThrustForce(T1)) - findLegLength(calcThrustForce(T2)) - findLegLength(calcThrustForce(T3)) + findLegLength(calcThrustForce(T4)) - calcDragForce(xVel));
+
+    yVel += horizTimestep * (findLegLength(calcThrustForce(T1)) + findLegLength(calcThrustForce(T2)) + findLegLength(calcThrustForce(T3)) + findLegLength(calcThrustForce(T4)));
+    xVel += horizTimestep * (findLegLength(calcThrustForce(T1)) - findLegLength(calcThrustForce(T2)) - findLegLength(calcThrustForce(T3)) + findLegLength(calcThrustForce(T4)));
+
 
     xVel_msg.data = xVel;
     yVel_msg.data = yVel;
 
-    lat_vel_pub.publish(xVel_msg);
-    long_vel_pub.publish(yVel_msg);
+    long_vel_pub.publish(xVel_msg); //fb
+    lat_vel_pub.publish(yVel_msg);  //lr
     std::cout << "yVel: " << yVel << "\n";
     std::cout << "horizTimestep: " << horizTimestep << "\n";
   }
 
 double findLegLength(double hypotenuse)
 {
-    if (hypotenuse == 0) {return 0;}
-    return sqrt(abs(hypotenuse)) * hypotenuse / abs(hypotenuse);
+    return(hypotenuse/sqrt(2)); //45 45 90 triangle sides = 1 1 sqrt(2)
 }

@@ -8,9 +8,9 @@
       <param name="Kp" value="5.0" />
       <param name="Ki" value="0.0" />
       <param name="Kd" value="0.1" />
-      <param name="upper_limit" value="10" />
-      <param name="lower_limit" value="-10" />
-      <param name="windup_limit" value="10" />
+      <param name="upper_limit" value="1" />
+      <param name="lower_limit" value="-1" />
+      <param name="windup_limit" value="0.5" />
       <param name="max_loop_frequency" value="100.0" />
       <param name="min_loop_frequency" value="100.0" />
    </node>
@@ -20,9 +20,9 @@
       <param name="Kp" value="5.0" />
       <param name="Ki" value="0.0" />
       <param name="Kd" value="0.1" />
-      <param name="upper_limit" value="10" />
-      <param name="lower_limit" value="-10" />
-      <param name="windup_limit" value="10" />
+      <param name="upper_limit" value="1" />
+      <param name="lower_limit" value="-1" />
+      <param name="windup_limit" value="0.5" />
       <param name="max_loop_frequency" value="100.0" />
       <param name="min_loop_frequency" value="100.0" />
    </node>
@@ -32,22 +32,23 @@
       <param name="Kp" value="5.0" />
       <param name="Ki" value="0.0" />
       <param name="Kd" value="0.1" />
-      <param name="upper_limit" value="10" />
-      <param name="lower_limit" value="-10" />
-      <param name="windup_limit" value="10" />
+      <param name="upper_limit" value="1" />
+      <param name="lower_limit" value="-1" />
+      <param name="windup_limit" value="0.5" />
       <param name="max_loop_frequency" value="100.0" />
       <param name="min_loop_frequency" value="100.0" />
    </node>
 
+   <!-- Need to add rotational PID algorithms -->
+
 
  <!-- vertical vector drive node -->
-    <node pkg="vector_drive" type="vert_drive" name="vert_drive"/>
+  <node pkg="vector_drive" type="vert_drive" name="vert_drive"/>
 
  <!-- harware interface -->
-   <node respawn="true" pkg="hardware_interface" type="hw_thruster_controller_interface.py"
-	name="hw_thruster_controller_interface">
-	<param name="thrusterControllerPort" value="/dev/ttyACM0"/>
-   </node>
+  <node respawn="true" pkg="hardware_interface" type="hw_thruster_controller_interface.py"	name="hw_thruster_controller_interface">
+    <param name="thrusterControllerPort" value="/dev/ttyACM0"/>
+  </node>
 
   <!-- start rpi pilot cameras -->
   <node type="raspicam_node" pkg="raspicam_node" name="raspicam_node" output="screen">

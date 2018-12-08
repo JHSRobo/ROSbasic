@@ -19,7 +19,6 @@
 
 
 ros::Publisher pub;  //!< Publishes thrusterPercent (-1000 to 1000) message for thruster 1, 2, 3, and 4
-ros::Subscriber sub; //!< Subscribes to rov/cmd_vel in order to get command/control vectors for vector drive algorithm
 ros::Subscriber pid_lr_sub; //!< Subscribes to rovpid/leftright/control_effort in order to get command/control values for vector drive algorithm
 ros::Subscriber pid_fb_sub; //!< Subscribes to rovpid/leftright/control_effort in order to get command/control values for vector drive algorithm
 
@@ -206,7 +205,6 @@ int main(int argc, char **argv)
     pub = n.advertise<vector_drive::thrusterPercents>("rov/cmd_horizontal_vdrive", 1);
 
     //ROS subscriber to get vectors from the joystick control input
-    sub = n.subscribe("rov/cmd_vel", 1, commandVectorCallback);
     pid_lr_sub = n.subscribe("rovpid/leftright/control_effort", 1, transverseCallback);
     pid_fb_sub = n.subscribe("rovpid/frontback/control_effort", 1, longitudinalCallback);
 

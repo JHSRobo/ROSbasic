@@ -258,7 +258,9 @@ int main(int argc, char **argv)
 
 
     //setup publishers and subscriber
-    vel_pub = n.advertise<geometry_msgs::Twist>("rov/cmd_vel", 1);
+    vel_pub = n.advertise<geometry_msgs::Twist>("rov/cmd_vel", 1); //Simple 3D vector for legacy system compliance
+
+    //Main PID topics
     pid_v_pub = n.advertise<std_msgs::Float64>("rovpid/vertical/setpoint", 1);
     pid_lr_pub = n.advertise<std_msgs::Float64>("rovpid/leftright/setpoint", 1);
     pid_fb_pub = n.advertise<std_msgs::Float64>("rovpid/frontback/setpoint", 1);

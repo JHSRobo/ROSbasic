@@ -103,16 +103,16 @@ void joyHorizontalCallback(const sensor_msgs::Joy::ConstPtr& joy){
             l_axisLR = joy->axes[linearJoyAxisFBIndex] * l_scale;
             break;
         case 2 : //back side is front
-            l_axisLR = joy->axes[linearJoyAxisLRIndex] * l_scale * -1;
-            l_axisFB = joy->axes[linearJoyAxisFBIndex] * l_scale * -1;
+            l_axisLR = joy->axes[linearJoyAxisLRIndex] * l_scale;
+            l_axisFB = joy->axes[linearJoyAxisFBIndex] * l_scale;
             break;
         case 3 : //right side is front
             l_axisFB = joy->axes[linearJoyAxisLRIndex] * l_scale * -1;
             l_axisLR = joy->axes[linearJoyAxisFBIndex] * l_scale * -1;
             break;
         default: //front side is front
-            l_axisLR = joy->axes[linearJoyAxisLRIndex] * l_scale;
-            l_axisFB = joy->axes[linearJoyAxisFBIndex] * l_scale;
+            l_axisLR = joy->axes[linearJoyAxisLRIndex] * l_scale * -1;
+            l_axisFB = joy->axes[linearJoyAxisFBIndex] * l_scale * -1;
             break;
         }
 

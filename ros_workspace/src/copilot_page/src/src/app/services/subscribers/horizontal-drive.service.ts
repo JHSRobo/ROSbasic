@@ -22,7 +22,7 @@ export class HorizontalDriveService {
     // @ts-ignore
     const horizontalDriveListener = new ROSLIB.Topic({
       ros: this.ros,
-      name: '/rov/cmd_vertical_vdrive',
+      name: '/rov/cmd_horizontal_vdrive',
       messageType: 'vector_drive/thrusterPercents'
     });
 

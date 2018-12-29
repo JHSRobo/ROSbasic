@@ -24,13 +24,13 @@ export class ThrustersComponent implements OnInit {
     constructor(private horizontaldriveService: HorizontalDriveService, private verticaldriveService: VerticalDriveService) {}
 
     thrustToPercent(msg) {
-        msg = (msg + 500) / 10;
+        msg = msg / 10;
         return msg;
     }
 
     ngOnInit() {
         $(".dial").knob({
-            'min': 0,
+            'min': -100,
             'max': 100,
             'width': '100%',
             'height': '100%',

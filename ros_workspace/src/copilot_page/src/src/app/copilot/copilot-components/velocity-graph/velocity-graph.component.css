@@ -1,21 +1,16 @@
+body {
+    background-color: rgb(34, 45, 58);
+}
+
 .container {
+    position: static;
+    width: 100%;
+    height: 100%;
+}
+
+.frame {
     position: relative;
-    text-align: center;
-}
-
-.image {
-    position: absolute;
-    border: 1px solid red;
-}
-
-#outside-circle {
-
-}
-
-#inner-circle {
-
-}
-
-#crosshairs {
-
+    height: 100%;
+    left: 50px;
+    top: 15px;
 }

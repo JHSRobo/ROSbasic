@@ -1,0 +1,13 @@
+.dial > h2{
+    margin: 0;
+}
+
+.dial {
+    height: 150%;
+    width: 150%;
+}
+
+/*mat-card-actions {*/
+    /*width: 100%;*/
+    /*height: 100%;*/
+/*}*/

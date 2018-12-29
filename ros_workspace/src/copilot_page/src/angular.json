@@ -33,6 +33,7 @@
               "./node_modules/jquery/dist/jquery.min.js",
               "./node_modules/hammerjs/hammer.min.js",
               "./node_modules/eventemitter2/lib/eventemitter2.js",
+              "./node_modules/snapsvg/dist/snap.svg-min.js"
             ]
           },
           "configurations": {

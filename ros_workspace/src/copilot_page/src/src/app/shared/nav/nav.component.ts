@@ -44,7 +44,7 @@ export class NavComponent implements OnInit {
     }
 
     inversionChange(number: number) { // Toggles UI and code, doesn't publish to topic
-        console.log(number + " Inversion Change Function");
+        // console.log(number + " Inversion Change Function");
         // Change inversion number
         this.inversion = number;
         // Opens snackbar that displays inversion number
@@ -110,7 +110,7 @@ export class NavComponent implements OnInit {
 
         this.inversionService.initialize();
         this.inversionService.getData().subscribe((msg) => {
-            console.log(msg + " Get Data");
+            // console.log(msg + " Get Data");
             try {
                 // Changes inversion if it's not the same and it exists in the message (avoids bug)
                 (this.inversion !== msg.data && msg !== undefined) ? this.inversionChange(msg.data) : null;

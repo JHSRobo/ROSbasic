@@ -3,45 +3,6 @@
  <!-- horizontal vector drive node -->
    <node pkg="vector_drive" type="horiz_drive" name="horiz_drive"/>
 
- <!-- horizontal front/back pid node -->
-   <node name="controller" pkg="pid" type="controller" ns="rovpid/frontback" output="screen" >
-      <param name="Kp" value="5.0" />
-      <param name="Ki" value="0.0" />
-      <param name="Kd" value="0.1" />
-      <param name="upper_limit" value="1" />
-      <param name="lower_limit" value="-1" />
-      <param name="windup_limit" value="0.5" />
-      <param name="max_loop_frequency" value="100.0" />
-      <param name="min_loop_frequency" value="100.0" />
-   </node>
-
- <!-- horizontal left/right pid node -->
-   <node name="controller" pkg="pid" type="controller" ns="rovpid/leftright" output="screen" >
-      <param name="Kp" value="5.0" />
-      <param name="Ki" value="0.0" />
-      <param name="Kd" value="0.1" />
-      <param name="upper_limit" value="1" />
-      <param name="lower_limit" value="-1" />
-      <param name="windup_limit" value="0.5" />
-      <param name="max_loop_frequency" value="100.0" />
-      <param name="min_loop_frequency" value="100.0" />
-   </node>
-
- <!-- vertical up/down pid node -->
-   <node name="controller" pkg="pid" type="controller" ns="rovpid/vertical" output="screen" >
-      <param name="Kp" value="5.0" />
-      <param name="Ki" value="0.0" />
-      <param name="Kd" value="0.1" />
-      <param name="upper_limit" value="1" />
-      <param name="lower_limit" value="-1" />
-      <param name="windup_limit" value="0.5" />
-      <param name="max_loop_frequency" value="100.0" />
-      <param name="min_loop_frequency" value="100.0" />
-   </node>
-
-   <!-- Need to add rotational PID algorithms -->
-
-
  <!-- vertical vector drive node -->
   <node pkg="vector_drive" type="vert_drive" name="vert_drive"/>
 
@@ -68,5 +29,7 @@
     <param name="fluidDensity" value="997"/>
   </node>
   <node type="bno055_ros.py" pkg="bno055" name="bno055_node"/>
+
+  <include file="$(find launch_files)/launch/pid.launch"/>
 
 </launch>

@@ -1,9 +1,0 @@
-<mat-card class="dashboard-card">
-  <app-card-header [card-name]="name"></app-card-header>
-  <mat-card-content class="success-warn-theme">
-    <h1 id="time" class="mb-4">{{ minutes }}:{{ seconds }}</h1>
-    <button mat-raised-button (click)="startTimer()" color="accent" *ngIf="stopped" class="mx-3 px-4"> <h1>Start</h1> </button>
-    <button mat-raised-button (click)="stopTimer()" color="warn" *ngIf="!stopped" class="mx-3 px-4"> <h1>Stop</h1> </button>
-    <button mat-raised-button (click)="resetTimer()" color="warn" [disabled]="!stopped"  class="mx-3 px-4"><h1>Reset</h1></button>
-  </mat-card-content>
-</mat-card>

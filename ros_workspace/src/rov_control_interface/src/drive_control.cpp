@@ -41,6 +41,7 @@ double v_axis(0);   //!< Holds the value of the vertical control axis
 
 
 bool thrustEN(false); //!<thrusters enabled (True = yes, False = default = no)
+bool useJoyVerticalAxis(false); //!< Holds the state that determins wether the joysticks vertical input or the throttles vertical input gets used
 
 
 //! inversion -> 1 Front, 2 Left, 3 Back, 4 Right
@@ -94,7 +95,7 @@ void joyHorizontalCallback(const sensor_msgs::Joy::ConstPtr& joy){
 
     //once copilot interface is created the params will be replaced with topics (inversion + sensitivity)
 
-    //check if thrusters disabled (temporary until addition of a dynamic_reconfigure)
+    //check if thrusters disabled
     if (thrustEN) {
 
         //joystick message
@@ -102,23 +103,26 @@ void joyHorizontalCallback(const sensor_msgs::Joy::ConstPtr& joy){
         //int32[] buttons         the buttons measurements from a joystick
 
         //store axes variables and handle 4 cases of inversion
-        a_axis = joy->axes[angularJoyAxisIndex] * a_scale;
+        a_axis = joy->axes[angularJoyAxisIndex] * a_scale * -1; //changing sign makes rotate right positive
+
+        //NOTE: right and rotate right are negative on the joystick's LR axis
+        //multiple LR axis by -1 in base position (front-front, etc.)to make right positive
 
         switch (inversion){
-        case 1 : //left side is front
-            l_axisFB = joy->axes[linearJoyAxisLRIndex] * l_scale;
+        case 1 : //right side is front
+            l_axisFB = joy->axes[linearJoyAxisLRIndex] * l_scale * -1;
             l_axisLR = joy->axes[linearJoyAxisFBIndex] * l_scale;
             break;
         case 2 : //back side is front
-            l_axisLR = joy->axes[linearJoyAxisLRIndex] * l_scale * -1;
+            l_axisLR = joy->axes[linearJoyAxisLRIndex] * l_scale;
             l_axisFB = joy->axes[linearJoyAxisFBIndex] * l_scale * -1;
             break;
-        case 3 : //right side is front
-            l_axisFB = joy->axes[linearJoyAxisLRIndex] * l_scale * -1;
+        case 3 : //left side is front
+            l_axisFB = joy->axes[linearJoyAxisLRIndex] * l_scale;
             l_axisLR = joy->axes[linearJoyAxisFBIndex] * l_scale * -1;
             break;
         default: //front side is front
-            l_axisLR = joy->axes[linearJoyAxisLRIndex] * l_scale;
+            l_axisLR = joy->axes[linearJoyAxisLRIndex] * l_scale * -1;
             l_axisFB = joy->axes[linearJoyAxisFBIndex] * l_scale;
             break;
         }
@@ -129,7 +133,10 @@ void joyHorizontalCallback(const sensor_msgs::Joy::ConstPtr& joy){
         bilinearCalc(a_axis);
         bilinearCalc(l_axisLR);
         bilinearCalc(l_axisFB);
-        bilinearCalc(v_axis);
+        if(useJoyVerticalAxis){
+          v_axis = joy->axes[verticalJoyAxisIndex] * v_scale * -1;
+          bilinearCalc(v_axis);
+        }
 
 
 
@@ -173,17 +180,18 @@ void joyVerticalCallback(const sensor_msgs::Joy::ConstPtr& joy){
 
       //once copilot interface is created the params will be replaced with topics (inversion + sensitivity)
 
-      //check if thrusters disabled (temporary until addition of a dynamic_reconfigure)
+      //check if thrusters disabled
       if (thrustEN) {
 
           //joystick message
           //float32[] axes          the axes measurements from a joystick
           //int32[] buttons         the buttons measurements from a joystick
 
-          //store axes variables and handle 4 cases of inversion
-          v_axis = joy->axes[verticalThrottleAxis] * v_scale;
-
-          bilinearCalc(v_axis);
+          if(!useJoyVerticalAxis){
+            //store axes variables and handle 4 cases of inversion
+            v_axis = joy->axes[verticalThrottleAxis] * v_scale * -1;
+            bilinearCalc(v_axis);
+          }
 
       } else {
 
@@ -256,6 +264,7 @@ int main(int argc, char **argv)
 
     ros::NodeHandle n;
 
+    n.getParam("/useJoyVerticalAxis", useJoyVerticalAxis); //Check the parameter server for useJoyVerticalAxis
 
     //setup publishers and subscriber
     vel_pub = n.advertise<geometry_msgs::Twist>("rov/cmd_vel", 1); //Simple 3D vector for legacy system compliance

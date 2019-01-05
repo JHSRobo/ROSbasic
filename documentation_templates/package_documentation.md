@@ -4,25 +4,25 @@
 
 ## Overview Description
 
-Pargraph on how this package fits into the overall architecture. What its nodes do and what is their general (common) purpose. Why do nodes in this package belong in this package?
+Paragraph on how this package fits into the overall architecture. What its nodes do and what is their general (common) purpose. Why do nodes in this package belong in this package?
 
 ## Goal and User Experience
 
 What is the goal of the code and why it was done the way it was. How does this add to the user experience. What should the user experience with this code be like (some packages will have a lot more on this than others), provide examples and walk through the features. This will help with tech report.
 
-## Build Instructions 
+## Build Instructions
 
-* Anything extra steps for buidling this package and running the nodes (ex. install)
+* Anything extra steps for building this package and running the nodes (ex. install)
   * `sudo apt-get install ...`
 
 ## Nodes
 
 ### node_name
 
-* Node Information
- * What exactly deos this Node do 
+* Node Inforation
+ * What exactly deos this Node do
  * Where does it run
- * What are its dependencies 
+ * What are its dependencies
  * Any other extra information that should be known about this node (dynamic reconfigs, params, etc.)
 
 example ---------------------------------------------------------------------------------------------
@@ -51,22 +51,26 @@ Parameters/Reconfigs:
 ### other_node_name (if applicable)
 
 * Node Information
- * What exactly deos this Node do 
+<<<<<<< HEAD
+ * What exactly deos this Node do
+=======
+ * What exactly does this Node do
+>>>>>>> development
  * Where does it run
- * What are its dependencies 
+ * What are its dependencies
  * Any other extra information that should be known about this node (dynamic reconfigs, params, etc.)
- 
+
 
 ## Launch Information
- 
+
 Any details about launch files and what they do goes here.
 Any remapping information goes here.
 
 ## Troubleshooting
 
-## Contributors 
+## Contributors
 
-* Current maintaner: 
+* Current maintainer:
 
 * Contributors:
   * name (anyone who writes stuff into this package) - role (what was the work said person did)
@@ -74,5 +78,3 @@ Any remapping information goes here.
 ## Helpful Resources
 
 * Links, information, external articles that were helpful in creating anything in this package
-
-

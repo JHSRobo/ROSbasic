@@ -116,10 +116,11 @@ const vector_drive::thrusterPercents& vectorMath(const double &linearX, const do
     //deadzone handled by joy package
 
     //Motor calculations
-    double T1 = linearX - linearY - angularX;
-    double T2 = -linearX - linearY + angularX;
-    double T3 = -linearX + linearY - angularX;
-    double T4 = linearX + linearY + angularX;
+    //See: https://drive.google.com/file/d/11VF0o0OYVaFGKFvbYtnrmOS0e6yM6IxH/view
+    double T1 = linearX + linearY + angularX;
+    double T2 = -linearX + linearY - angularX;
+    double T3 = -linearX - linearY + angularX;
+    double T4 = linearX - linearY - angularX;
 
 
     //Normalize the values so that no motor outputs over 100% thrust

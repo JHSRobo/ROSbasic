@@ -11,9 +11,17 @@ The goal of this project is to develop preseason software technologies based on 
 These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. See deployment for notes on how to deploy the project on the main ROV system (Master).
 
 FOLLOW:
-*  https://docs.google.com/document/d/1C32ucQTIAsE2H7u9OERmmCfyc6WzUvhrB2U6_GgZuWg/edit?usp=sharing
+*  https://docs.google.com/document/d/1tYhxP1HbuTF7Nzl1WnGgJKkUe-KNsBEhQZDjsyUwQTU/edit
 
 *Always run IDE's from terminal if on Ubuntu (just type the name of the IDE in terminal and click enter ex. clion)*
+
+### Launching/Running 
+
+Follow Test Bench Setup Steps if Running on Test Bench
+* https://docs.google.com/document/d/1srYgNUE4k3DVHkUv1TwUJawfUWw6kGkveDhAvulWMZ0/edit#heading=h.wyzbdb7zgifi
+
+Locally:
+* https://docs.google.com/document/d/16LQRhCJBEe_hL-SV67Vvk3oH7I2nqO0X7NjB1t-9Mtg/edit#heading=h.v4rl9rent2ka
 
 ### Prerequisites
 
@@ -72,8 +80,29 @@ Other useful links for common problems:
 
 A step by step series of examples that tell you how to get a development env running
 
-On your Raspberry Pi 3 B make sure you are running ubuntu mate 16.04 (image here https://drive.google.com/open?id=1497jupJ2dBQqy_o_x5JBPTjY3lto7-rI)
+On your Raspberry Pi 3B make sure you are running ubuntu mate 16.04 (image here https://drive.google.com/open?id=1497jupJ2dBQqy_o_x5JBPTjY3lto7-rI)
 * cat /etc/os-release
+
+### Setup Topside Peripheral Communication
+* run `sudo usermod -a -G dialout $USER` to give proper permissions to USB interface programs (similar to `sudo chmod a+rw /dev/tty...`)
+
+### Simulation Setup
+
+* See https://uuvsimulator.github.io/installation.html#creating-and-configuring-a-workspace
+* Check to see if gazebo version 7 is installed `gazebo --version`
+* Run `sudo apt-get update` and `sudo apt-get upgrade`
+* In the ros_workspace run `git submodule init` and `git submodule update`
+* In ros_workspace run `rosdep install --from-paths src --ignore-src --rosdistro=kinetic -y`
+* Run `sudo apt-get install protobuf-compiler protobuf-c-compiler`
+* Connect a powerfull computer to the ROS Master by running `export ROS_MASTER_URI=http://ip_to_master:11311` and `export ROS_IP=ip_of_computer`
+   * Make sure the master and simulation computers can ping each other and if network problems persist make sure the computers can ssh into each other
+* Run `catkin_make`
+   * If you receive this error `make[2]: *** No rule to make target '/home/michael/catkin_ws/src/uuv_simulator/uuv_gazebo_plugins/uuv_gazebo_plugins/PROTOBUF_PROTOC_EXECUTABLE-NOTFOUND', needed by 'uuv_simulator/uuv_gazebo_plugins uuv_gazebo_plugins/Double.pb.cc'.  Stop. CMakeFiles/Makefile2:4699: recipe for target 'uuv_simulator/uuv_gazebo_plugins/uuv_gazebo_plugins/CMakeFiles/uuv_gazebo_plugins_msgs.dir/all' failed` then remove the /build /devel and /install folders with `rm -R` and retry steps 1 - 8
+* `catkin_make install` <- May not be needed (check on next install)
+* `source devel/setup.bash`
+* `roslaunch rov_descripion full_systems_launch.launch` or `roslaunch rov_descripion partial_systems_launch.launch` and `roslaunch simulate_rov.launch` on another machine
+* `rosrun rov_description simulation_interface.py`
+
 
 ##UPDATES NEEDED BELOW THIS POINT
 --------------------------------

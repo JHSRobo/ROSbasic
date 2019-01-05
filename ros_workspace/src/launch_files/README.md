@@ -4,20 +4,22 @@
 
 Package for container all the major topside and bottomside launch files.
 
-## Build Instructions 
+## Build Instructions
 
-* Make sure all the dependencies are present 
-* Make sure all dependant packages are built and able to be launched
- 
+* Make sure all the dependencies are present
+* Make sure all dependent packages are built and able to be launched
+
 
 ## Launch Information
- 
+
 Any details about launch files and what they do goes here.
 Any remapping information goes here.
 
 ## Troubleshooting
 
-## Contributors 
+If the controller that you are using for verticals is not working make sure that the `useJoyVerticalAxis` value is set properly.
+
+## Contributors
 
 * Current maintaner: Michael Equi
 
@@ -27,5 +29,3 @@ Any remapping information goes here.
 ## Helpful Resources
 
 * Links, information, external articles that were helpful in creating anything in this package
-
-

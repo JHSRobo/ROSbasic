@@ -1,8 +1,13 @@
 <launch>
+
+ <!-- Use the joysticks vertical axis for controlling the vertical thrusters -->
+  <arg name="useJoyVerticalAxis" default="true" />
+  <param name="useJoyVerticalAxis" value="$(arg useJoyVerticalAxis)" />
+
  <!-- joystick -> vectorCommand-->
   <node pkg="rov_control_interface" type="drive_control" name="drive_control"/>
 
- <!-- Joystick joy node -->
+ <!-- Joy node -->
   <node respawn="true" pkg="joy"
         type="joy_node" name="rov_joy" >
     <remap from="joy" to="joy/joy1"/>
@@ -10,15 +15,12 @@
     <param name="deadzone" value="0.1" />
   </node>
 
-<!--  Throttle joy node -->
-  <node respawn="true" pkg="joy"
-        type="joy_node" name="rov_throttle" >
-    <remap from="joy" to="joy/joy2"/>
-    <param name="dev" type="string" value="/dev/input/js1" />
-    <param name="deadzone" value="0.1" />
-  </node>
-
- <!-- Thrusters Enabled -->
-  <param name="thrustersEnabled" value="false" />
+  <!--  Throttle joy node -->
+    <node respawn="true" pkg="joy"
+          type="joy_node" name="rov_throttle" >
+      <remap from="joy" to="joy/joy2"/>
+      <param name="dev" type="string" value="/dev/input/js1" />
+      <param name="deadzone" value="0.1" />
+    </node>
 
 </launch>

@@ -41,7 +41,9 @@ double v_axis(0);   //!< Holds the value of the vertical control axis
 
 
 bool thrustEN(false); //!<thrusters enabled (True = yes, False = default = no)
-bool useJoyVerticalAxis(false); //!< Holds the state that determins wether the joysticks vertical input or the throttles vertical input gets used
+
+//change this as a launch parameter in topside.launch
+bool useJoyVerticalAxis(true); //!< Holds the state that determins wether the joysticks vertical input or the throttles vertical input gets used
 
 
 //! inversion -> 1 Front, 2 Left, 3 Back, 4 Right

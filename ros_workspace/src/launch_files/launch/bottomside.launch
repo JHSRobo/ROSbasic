@@ -29,7 +29,8 @@
     <param name="fluidDensity" value="997"/>
   </node>
   <node type="bno055_ros.py" pkg="bno055" name="bno055_node"/>
+  <node type="sensor-hat.py" pkg="sensor_readout" name="sensor_interface"/>
 
+  <!-- pids -->
   <include file="$(find launch_files)/launch/pid.launch"/>
-
 </launch>

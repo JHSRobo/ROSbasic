@@ -1,5 +1,5 @@
 <launch>
-  <!-- horizontal front/back pid node -->
+  <!-- horizontal front/back y longitudinal pid node -->
     <node name="controller" pkg="pid" type="controller" ns="rovpid/frontback" output="screen" >
        <param name="Kp" value="5.0" />
        <param name="Ki" value="0.0" />
@@ -11,7 +11,7 @@
        <param name="min_loop_frequency" value="100.0" />
     </node>
 
-  <!-- horizontal left/right pid node -->
+  <!-- horizontal left/right x lateral pid node -->
     <node name="controller" pkg="pid" type="controller" ns="rovpid/leftright" output="screen" >
        <param name="Kp" value="5.0" />
        <param name="Ki" value="0.0" />
@@ -23,7 +23,7 @@
        <param name="min_loop_frequency" value="100.0" />
     </node>
 
-  <!-- vertical up/down pid node -->
+  <!-- vertical up/down z vertical pid node -->
     <node name="controller" pkg="pid" type="controller" ns="rovpid/vertical" output="screen" >
        <param name="Kp" value="5.0" />
        <param name="Ki" value="0.0" />
@@ -35,7 +35,7 @@
        <param name="min_loop_frequency" value="100.0" />
     </node>
 
-    <!-- Need to add rotational PID algorithms -->
+    <!-- angular yaw pid node -->
     <node name="controller" pkg="pid" type="controller" ns="rovpid/yaw" output="screen" >
        <param name="Kp" value="5.0" />
        <param name="Ki" value="0.0" />

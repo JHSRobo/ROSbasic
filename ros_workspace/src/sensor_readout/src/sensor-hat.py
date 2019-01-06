@@ -1,7 +1,6 @@
 #!/usr/bin/env python
 
 import rospy
-import datetime
 import math
 from sense_hat import SenseHat
 from std_msgs.msg import Header
@@ -16,20 +15,20 @@ start_pitch = calibration['pitch']
 start_yaw = calibration['yaw']
 
 #start times for integration
-prev_x_time = rospy.get_rostime()
-prev_y_time = rospy.get_rostime()
-prev_z_time = rospy.get_rostime()
-prev_roll_time = rospy.get_rostime()
-prev_pitch_time = rospy.get_rostime()
-prev_yaw_time = rospy.get_rostime()
+x_time = rospy.get_rostime()
+y_time = rospy.get_rostime()
+z_time = rospy.get_rostime()
+roll_time = rospy.get_rostime()
+pitch_time = rospy.get_rostime()
+yaw_time = rospy.get_rostime()
 
 #start vels for integration
-prev_x_vel = 0
-prev_y_vel = 0
-prev_z_vel = 0
-prev_roll_vel = 0
-prev_pitch_vel = 0
-prev_yaw_vel = 0
+x_vel = 0
+y_vel = 0
+z_vel = 0
+angular_velocity_yaw = 0
+angular_velocity_roll = 0
+angular_velocity_pitch = 0
 
 def talker():
 	temp_pub = rospy.Publisher('rov/int_temperature', Temperature, queue_size = 1) #Publisher for the different sensors: Temperature, Humidity, Pressure,
@@ -61,30 +60,31 @@ def talker():
 			start_time = start_time + 1000000
 
 #integrate velocity
-		prev_x_vel += acceleration['x'] * ((rospy.get_rostime - prev_x_time).to_sec())
-		prev_x_time = rospy.get_rostime()
+		x_vel += acceleration['x'] * ((rospy.get_rostime - prev_x_time).to_sec())
+		x_time = rospy.get_rostime()
 
-		prev_y_vel += acceleration['y'] * ((rospy.get_rostime - prev_y_time).to_sec())
-		prev_y_time = rospy.get_rostime()
+		y_vel += acceleration['y'] * ((rospy.get_rostime - prev_y_time).to_sec())
+		y_time = rospy.get_rostime()
 
-		prev_z_vel += acceleration['z'] * ((rospy.get_rostime - prev_z_time).to_sec())
-		prev_z_time = rospy.get_rostime()
+		z_vel += acceleration['z'] * ((rospy.get_rostime - prev_z_time).to_sec())
+		z_time = rospy.get_rostime()
 
 #integrate angular velocity
-		angular_velocity_roll = (orientation['roll'] - start_roll) / (int(datetime.time.__str__(datetime.time.microsecond))
- - start_time) * 1000000
-		angular_velocity_pitch = (orientation['pitch'] - start_pitch) / (int(datetime.time.__str__(datetime.time.microsecond))
- - start_time) * 1000000
-		angular_velocity_yaw = (orientation['yaw'] - start_yaw) / (int(datetime.time.__str__(datetime.time.microsecond))
- - start_time) * 1000000
+		angular_velocity_roll = (orientation['roll'] - start_roll) / ((rospy.get_rostime - roll_time).to_sec())
+		roll_time = rospy.get_rostime()
+		start_roll = orientation['roll']
+
+		angular_velocity_pitch = (orientation['pitch'] - start_pitch) / ((rospy.get_rostime - pitch_time).to_sec())
+		pitch_time = rospy.get_rostime()
+		start_pitch = orientation['pitch']
+
+		angular_velocity_yaw = (orientation['yaw'] - start_yaw) / ((rospy.get_rostime - yaw_time).to_sec())
+		yaw_time = rospy.get_rostime()
+		start_yaw = orientation['yaw']
+
 		message.angular_velocity.x, message.angular_velocity.y, message.angular_velocity.z = (angular_velocity_roll, angular_velocity_pitch, angular_velocity_yaw)
 
 		imu_pub.publish(message)
-
-		start_roll = orientation['roll']
-		start_pitch = orientation['pitch']
-		start_yaw = orientation['yaw']
-		start_time = int(datetime.time.__str__(datetime.time.microsecond))
 
 		rate.sleep()
 

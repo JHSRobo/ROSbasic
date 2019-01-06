@@ -4,6 +4,7 @@ import rospy
 import math
 from sense_hat import SenseHat
 from std_msgs.msg import Header
+from std_msgs.msg import Float64
 from tf.transformations import quaternion_from_euler
 from sensor_msgs.msg import Imu, Temperature, RelativeHumidity, FluidPressure
 
@@ -37,6 +38,16 @@ def talker():
 
 	imu_pub = rospy.Publisher("rov/imu", Imu, queue_size = 1) #Imu publisher
 
+	x_vel_pub = rospy.Publisher('rovpid/leftright/state', Float64, queue_size = 1)
+	y_vel_pub = rospy.Publisher('rovpid/frontback/state', Float64, queue_size = 1)
+	z_vel_pub = rospy.Publisher('rovpid/vertical/state', Float64, queue_size = 1)
+	yaw_vel_pub = rospy.Publisher('rovpid/yaw/state', Float64, queue_size = 1)
+
+	x_msg = Float64()
+	y_msg = Float64()
+	z_msg = Float64()
+	yaw_msg = Float64()
+
 	rate = rospy.Rate(60)
 	while not rospy.is_shutdown():
 		header = Header()
@@ -62,25 +73,33 @@ def talker():
 #integrate velocity
 		x_vel += acceleration['x'] * ((rospy.get_rostime - prev_x_time).to_sec())
 		x_time = rospy.get_rostime()
+		x_msg.data = x_vel
+		x_vel_pub.publish(x_msg)
 
 		y_vel += acceleration['y'] * ((rospy.get_rostime - prev_y_time).to_sec())
 		y_time = rospy.get_rostime()
+		y_msg.data = y_vel
+		y_vel_pub.publish(y_msg)
 
 		z_vel += acceleration['z'] * ((rospy.get_rostime - prev_z_time).to_sec())
 		z_time = rospy.get_rostime()
+		z_msg.data = z_vel
+		z_vel_pub.publish(z_msg)
 
 #integrate angular velocity
-		angular_velocity_roll = (orientation['roll'] - start_roll) / ((rospy.get_rostime - roll_time).to_sec())
+		roll_vel = (orientation['roll'] - start_roll) / ((rospy.get_rostime - roll_time).to_sec())
 		roll_time = rospy.get_rostime()
 		start_roll = orientation['roll']
 
-		angular_velocity_pitch = (orientation['pitch'] - start_pitch) / ((rospy.get_rostime - pitch_time).to_sec())
+		pitch_vel = (orientation['pitch'] - start_pitch) / ((rospy.get_rostime - pitch_time).to_sec())
 		pitch_time = rospy.get_rostime()
 		start_pitch = orientation['pitch']
 
-		angular_velocity_yaw = (orientation['yaw'] - start_yaw) / ((rospy.get_rostime - yaw_time).to_sec())
+		yaw_vel = (orientation['yaw'] - start_yaw) / ((rospy.get_rostime - yaw_time).to_sec())
 		yaw_time = rospy.get_rostime()
 		start_yaw = orientation['yaw']
+		yaw_msg.data = yaw_vel
+		yaw_vel_pub.publish(yaw_msg)
 
 		message.angular_velocity.x, message.angular_velocity.y, message.angular_velocity.z = (angular_velocity_roll, angular_velocity_pitch, angular_velocity_yaw)
 

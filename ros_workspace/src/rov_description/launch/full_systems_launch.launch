@@ -1,6 +1,6 @@
 <launch>
 
-  <include file="$(find rov_description)/launch/simulate_rov.launch"/>
+  <include file="$(find rov_description)/launch/simulate_rov_pool.launch"/>
 
 
   <!-- Topside -->

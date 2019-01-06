@@ -97,9 +97,10 @@ def updateDepth(pressure):
         # float64 depth
         # float64 altitudeM
     #https://www.grc.nasa.gov/www/k-12/WindTunnel/Activities/fluid_pressure.html
-    #P=r*g*h
+    #P=r*g*h (r=rho/density of fluid, g=gravity, h=height of liquid)
     #density = 100kg/m^3, g=9.8, fluid_pressure must be converted to pascal (*1000)
-    depth = 1000*9.8/(pressure.fluid_pressure*1000)
+    #(pressure.fluid_pressure*1000)/(1000*9.8) -> 1000 cancels out
+    depth = pressure.fluid_pressure/9.8
     temp = 27.6 + (2*random.random()-1) #degrees C +- 1
     msg = ms5837_data()
     msg.depth = depth

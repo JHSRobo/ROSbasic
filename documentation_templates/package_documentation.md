@@ -10,7 +10,12 @@ Paragraph on how this package fits into the overall architecture. What its nodes
 
 What is the goal of the code and why it was done the way it was. How does this add to the user experience. What should the user experience with this code be like (some packages will have a lot more on this than others), provide examples and walk through the features. This will help with tech report.
 
-## Build Instructions
+
+## Requirements
+
+List the steps that should be taken to make sure this package is meeting its requirements and functioning as intended.
+
+## Build Instructions 
 
 * Anything extra steps for building this package and running the nodes (ex. install)
   * `sudo apt-get install ...`

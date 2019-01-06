@@ -7,16 +7,16 @@ def callback(data):
     GPIO.setmode(GPIO.BOARD)
     GPIO.setup(35, GPIO.OUT)
     GPIO.setup(36, GPIO.OUT)
-    if data == 1:
+    if data.data == 1:
         GPIO.output(35, GPIO.LOW)
         GPIO.output(36, GPIO.LOW)
-    if data == 2:
+    if data.data == 2:
         GPIO.output(35, GPIO.LOW)
         GPIO.output(36, GPIO.HIGH)
-    if data == 3:
+    if data.data == 3:
         GPIO.output(35, GPIO.HIGH)
         GPIO.output(36, GPIO.LOW)
-    if data == 4:
+    if data.data == 4:
         GPIO.output(35, GPIO.HIGH)
         GPIO.output(36, GPIO.HIGH)
 

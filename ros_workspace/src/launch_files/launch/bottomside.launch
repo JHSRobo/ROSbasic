@@ -9,7 +9,7 @@
  <!-- harware interface -->
    <node respawn="true" pkg="hardware_interface" type="hw_thruster_controller_interface.py"
 	    name="hw_thruster_controller_interface">
-      <param name="thrusterControllerPort" value="/dev/ttyACM0"/>
+      <param name="thrusterControllerPort" value="/dev/ttyUSB0"/>
    </node>
 
   <!-- start rpi pilot cameras -->

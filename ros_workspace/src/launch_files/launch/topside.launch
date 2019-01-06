@@ -1,7 +1,7 @@
 <launch>
 <!-- ROV topside control interface -->
    <include file="$(find rov_control_interface)/launch/control_interface.launch">
-     <arg name="useJoyVerticalAxis" value="true" />
+     <arg name="useJoyVerticalAxis" value="false" />
   </include>
 
  <!-- temp copilot interface -->

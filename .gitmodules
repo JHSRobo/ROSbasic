@@ -22,9 +22,9 @@
 [submodule "ros_workspace/sketchbook/libraries/Adafruit_INA219"]
 	path = ros_workspace/sketchbook/libraries/Adafruit_INA219
 	url = https://github.com/adafruit/Adafruit_INA219.git
-[submodule "ros_workspace/src/Copilot-Page"]
-	path = ros_workspace/src/Copilot-Page
-	url = https://github.com/JHSRobo/Copilot-Page
+[submodule "ros_workspace/src/copilot-page"]
+	path = ros_workspace/src/copilot-page
+	url = https://github.com/JHSRobo/copilot-page
 [submodule "ros_workspace/src/uuv_simulator"]
 	path = ros_workspace/src/uuv_simulator
 	url = https://github.com/uuvsimulator/uuv_simulator.git

@@ -15,7 +15,7 @@ What is the goal of the code and why it was done the way it was. How does this a
 
 List the steps that should be taken to make sure this package is meeting its requirements and functioning as intended.
 
-## Build Instructions 
+## Build Instructions
 
 * Anything extra steps for building this package and running the nodes (ex. install)
   * `sudo apt-get install ...`
@@ -24,7 +24,7 @@ List the steps that should be taken to make sure this package is meeting its req
 
 ### node_name
 
-* Node Inforation
+* Node Information
  * What exactly deos this Node do
  * Where does it run
  * What are its dependencies
@@ -57,7 +57,11 @@ Parameters/Reconfigs:
 
 * Node Information
 <<<<<<< HEAD
+<<<<<<< HEAD
  * What exactly deos this Node do
+=======
+ * What exactly does this Node do
+>>>>>>> development
 =======
  * What exactly does this Node do
 >>>>>>> development

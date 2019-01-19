@@ -9,6 +9,8 @@
     <mapping directory="$PROJECT_DIR$/drivers/smbus2" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/ros_workspace/sketchbook/libraries/Adafruit_INA219" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/ros_workspace/sketchbook/libraries/Adafruit_SHT31" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/ros_workspace/src/copilot-page" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/ros_workspace/src/usb_cam" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/ros_workspace/src/uuv_simulator" vcs="Git" />
   </component>
 </project>

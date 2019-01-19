@@ -1,20 +1,20 @@
-### Rename to README.md when placed in package (Delete this sentence)
-
-# package_name
+# rov_description
 
 ## Overview Description
 
-Paragraph on how this package fits into the overall architecture. What its nodes do and what is their general (common) purpose. Why do nodes in this package belong in this package?
+Provides the URDF descriptions, the world models, and the simulation interface programs in order to launch a simulation of all the ROV systems.
 
 ## Goal and User Experience
 
-What is the goal of the code and why it was done the way it was. How does this add to the user experience. What should the user experience with this code be like (some packages will have a lot more on this than others), provide examples and walk through the features. This will help with tech report.
+The goal of this package is to provide a hardware abstracted environment to test core software elements including drive mechanics, user interface, and autonomous systems. The entire simulation and software environments can be launched by a `full_systems_launch`. The hydrodynamic model of the ROV has been tuned to feel as close to the actual ROV as possible to allow for sufficient proof of concept testing of PID algorithms.
 
 ## Build Instructions
 
-* See the main README for simulation setup instructions
+* Run `sudo apt-get install protobuf-compiler protobuf-c-compiler`
+* catkin_make
 
 ## Nodes
+* `simulation_interface`
 
 ### node_name
 
@@ -65,6 +65,7 @@ Any remapping information goes here.
 
 * If updating the mesh from solid works make sure that you select the option "Do not translate stl output data to positive space"
 * Note: The default axis in solid works are flipped -> In order to fix it add a new coordinate system from the `add reference geometry` tool and flip the y and z axis
+* If the simulation fails to load try running the default gazebo empty_world (this may take a while to load initially) and then try the pool_world again.
 
 ## Contributors
 

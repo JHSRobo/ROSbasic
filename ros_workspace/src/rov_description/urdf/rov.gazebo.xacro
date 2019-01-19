@@ -3,7 +3,7 @@
 
     <xacro:property name="cob" value="0.00037196 0.001 0.01"/>
     <!-- ROV mass = 9.80543312 -->
-    <xacro:property name="volume" value="0.00985"/> <!-- ROV is slightly positively bouyant at 0.0099m^3 -->
+    <xacro:property name="volume" value="0.0099"/> <!-- ROV is slightly positively bouyant at 0.0099m^3 -->
 
     <xacro:macro name="rov_hydro_model" params="namespace">
         <link name="${namespace}/base_link">

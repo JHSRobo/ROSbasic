@@ -17,9 +17,7 @@
 
 #include <dynamic_reconfigure/server.h>
 #include <copilot_interface/copilotControlParamsConfig.h>
-#include <rov_control_interface/rov_sensitivity.h>
 
-//Temporary
 #include <std_msgs/UInt8.h> //For camera Pub
 #include <std_msgs/Bool.h>  //For tcu relay and solenoid controller Pub
 
@@ -44,7 +42,7 @@ double v_axis(0);   //!< Holds the value of the vertical control axis
 bool thrustEN(false); //!<thrusters enabled (True = yes, False = default = no)
 
 //change this as a launch parameter in topside.launch
-bool useJoyVerticalAxis(false); //!< Holds the state that determins wether the joysticks vertical input or the throttles vertical input gets used
+bool useJoyVerticalAxis(true); //!< Holds the state that determins wether the joysticks vertical input or the throttles vertical input gets used
 
 
 //! inversion -> 1 Front, 2 Left, 3 Back, 4 Right
@@ -270,11 +268,11 @@ void controlCallback(copilot_interface::copilotControlParamsConfig &config, uint
     inversion_pub.publish(inversionMsg);
 
     // Sensitivty Publisher
-    rov_control_interface::rov_sensitivity sensitivityMsg;
-    sensitivityMsg.l_scale = l_scale;
-    sensitivityMsg.a_scale = a_scale;
-    sensitivityMsg.v_scale = v_scale;
-    sensitivity_pub.publish(sensitivityMsg);
+//     rov_control_interface::rov_sensitivity sensitivityMsg;
+//     sensitivityMsg.l_scale = l_scale;
+//     sensitivityMsg.a_scale = a_scale;
+//     sensitivityMsg.v_scale = v_scale;
+//     sensitivity_pub.publish(sensitivityMsg);
 
     // Thrusters Enabled Publisher
     std_msgs::Bool thrusterStatusMsg;
@@ -295,11 +293,11 @@ void inversionCallback(const std_msgs::UInt8::ConstPtr& data) {
 * @breif What the node does when copilot sensitivity setting publishes a new message
 * @param[in] "rov_control_interface/rov_sensitivity." message that is recieved when the sensitivty setting is changed
 */
-void sensitivityCallback(const rov_control_interface::rov_sensitivity::ConstPtr& data) {
-  l_scale = data->l_scale;
-  a_scale = data->a_scale;
-  v_scale = data->v_scale;
-}
+// void sensitivityCallback(const rov_control_interface::rov_sensitivity::ConstPtr& data) {
+//   l_scale = data->l_scale;
+//   a_scale = data->a_scale;
+//   v_scale = data->v_scale;
+// }
 
 /**
 * @breif What the node does when thruster status topic publishes a new message
@@ -336,7 +334,7 @@ int main(int argc, char **argv)
     power_control = n.advertise<std_msgs::Bool>("tcu/main_relay", 3);       //Relay pub
     solenoid_control = n.advertise<std_msgs::Bool>("tcu/main_solenoid", 3); //Solenoid pub
     inversion_pub = n.advertise<std_msgs::UInt8>("rov/inversion", 3);
-    sensitivity_pub = n.advertise<rov_control_interface::rov_sensitivity>("rov/sensitivity", 3);
+//     sensitivity_pub = n.advertise<rov_control_interface::rov_sensitivity>("rov/sensitivity", 3);
     thruster_status_pub = n.advertise<std_msgs::Bool>("rov/thruster_status", 3);
 
     //setup dynamic reconfigure

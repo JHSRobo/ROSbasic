@@ -5,8 +5,8 @@
        <param name="Ki" value="0.0" />
        <param name="Kd" value="0.1" />
        <param name="setpoint_topic" value="/rov/cmd_vel/linear/y" />
-       <param name="topic_from_controller" value="" />
-       <param name="topic_from_plant" value="" />
+       <param name="topic_from_controller" value="/rov/control_effort/linear/y" />
+       <param name="topic_from_plant" value="/rov/linear_velocity/y" />
        <param name="upper_limit" value="1" />
        <param name="lower_limit" value="-1" />
        <param name="windup_limit" value="0.5" />
@@ -20,8 +20,8 @@
        <param name="Ki" value="0.0" />
        <param name="Kd" value="0.1" />
        <param name="setpoint_topic" value="/rov/cmd_vel/linear/x" />
-       <param name="topic_from_controller" value="" />
-       <param name="topic_from_plant" value="" />
+       <param name="topic_from_controller" value="/rov/control_effort/linear/x" />
+       <param name="topic_from_plant" value="/rov/linear_velocity/x" />
        <param name="upper_limit" value="1" />
        <param name="lower_limit" value="-1" />
        <param name="windup_limit" value="0.5" />
@@ -35,8 +35,8 @@
        <param name="Ki" value="0.0" />
        <param name="Kd" value="0.1" />
        <param name="setpoint_topic" value="/rov/cmd_vel/linear/z" />
-       <param name="topic_from_controller" value="" />
-       <param name="topic_from_plant" value="" />
+       <param name="topic_from_controller" value="/rov/control_effort/linear/z" />
+       <param name="topic_from_plant" value="/rov/linear_velocity/z" />
        <param name="upper_limit" value="1" />
        <param name="lower_limit" value="-1" />
        <param name="windup_limit" value="0.5" />
@@ -50,8 +50,8 @@
        <param name="Ki" value="0.0" />
        <param name="Kd" value="0.1" />
        <param name="setpoint_topic" value="/rov/cmd_vel/angular/x" />
-       <param name="topic_from_controller" value="" />
-       <param name="topic_from_plant" value="" />
+       <param name="topic_from_controller" value="/rov/control_effort/angular/x" />
+       <param name="topic_from_plant" value="/rov/imu/angular_velocity/x" />
        <param name="upper_limit" value="1" />
        <param name="lower_limit" value="-1" />
        <param name="windup_limit" value="0.5" />
@@ -65,8 +65,8 @@
        <param name="Ki" value="0.0" />
        <param name="Kd" value="0.1" />
        <param name="setpoint_topic" value="/rov/cmd_vel/angular/y" />
-       <param name="topic_from_controller" value="" />
-       <param name="topic_from_plant" value="" />
+       <param name="topic_from_controller" value="/rov/control_effort/angular/y" />
+       <param name="topic_from_plant" value="/rov/imu/angular_velocity/y" />
        <param name="upper_limit" value="1" />
        <param name="lower_limit" value="-1" />
        <param name="windup_limit" value="0.5" />
@@ -81,8 +81,8 @@
        <param name="Ki" value="0.0" />
        <param name="Kd" value="0.1" />
        <param name="setpoint_topic" value="/rov/cmd_vel/angular/z" />
-       <param name="topic_from_controller" value="" />
-       <param name="topic_from_plant" value="" />
+       <param name="topic_from_controller" value="/rov/control_effort/angular/z" />
+       <param name="topic_from_plant" value="/rov/imu/angular_velocity/z" />
        <param name="upper_limit" value="1" />
        <param name="lower_limit" value="-1" />
        <param name="windup_limit" value="0.5" />

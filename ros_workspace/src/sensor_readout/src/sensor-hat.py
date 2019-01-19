@@ -42,6 +42,8 @@ def talker():
 	y_vel_pub = rospy.Publisher('rovpid/frontback/state', Float64, queue_size = 1)
 	z_vel_pub = rospy.Publisher('rovpid/vertical/state', Float64, queue_size = 1)
 	yaw_vel_pub = rospy.Publisher('rovpid/yaw/state', Float64, queue_size = 1)
+	pitch_vel_pub = rospy.Publisher('rovpid/pitch/state', Float64, queue_size = 1)
+	roll_vel_pub = rospy.Publisher('rovpid/roll/state', Float64, queue_size = 1)
 
 	x_msg = Float64()
 	y_msg = Float64()
@@ -90,10 +92,14 @@ def talker():
 		roll_vel = (orientation['roll'] - start_roll) / ((rospy.get_rostime - roll_time).to_sec())
 		roll_time = rospy.get_rostime()
 		start_roll = orientation['roll']
+		roll_msg.data = roll_vel
+		roll_vel_pub.publish(roll_msg)
 
 		pitch_vel = (orientation['pitch'] - start_pitch) / ((rospy.get_rostime - pitch_time).to_sec())
 		pitch_time = rospy.get_rostime()
 		start_pitch = orientation['pitch']
+		pitch_msg.data = pitch_vel
+		pitch_vel_pub.publish(pitch_msg)
 
 		yaw_vel = (orientation['yaw'] - start_yaw) / ((rospy.get_rostime - yaw_time).to_sec())
 		yaw_time = rospy.get_rostime()

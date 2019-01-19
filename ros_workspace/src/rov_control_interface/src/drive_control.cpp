@@ -58,11 +58,6 @@ ros::Publisher vel_pub; //!<publisher that publishes a Twist message containing 
 ros::Subscriber joy_sub1; //!<subscriber to the logitech joystick
 ros::Subscriber joy_sub2; //!<subscriber to the thrustmaster throttle
 
-//pid pubs
-ros::Publisher pid_v_pub; //!<publisher that publishes a Float64 message containing vertical command velocity
-ros::Publisher pid_lr_pub; //!<publisher that publishes a Float64 message containing transverse (left/right) command velocity
-ros::Publisher pid_fb_pub; //!<publisher that publishes a Float64 message containing longitudinal (front/back) command velocity
-
 
 ros::Subscriber inversion_sub; //!<subscriber to inversion from copilota
 ros::Subscriber sensitivity_sub; //!<subscriber to sensitivity from copilot
@@ -158,13 +153,6 @@ void joyHorizontalCallback(const sensor_msgs::Joy::ConstPtr& joy){
 
     //publish the vector values -> build up command vector message
     geometry_msgs::Twist commandVectors;
-    std_msgs::Float64 v_axis_msg;
-    std_msgs::Float64 l_axisLR_msg;
-    std_msgs::Float64 l_axisFB_msg;
-
-    v_axis_msg.data = v_axis;
-    l_axisLR_msg.data = l_axisLR;
-    l_axisFB_msg.data = l_axisFB;
 
     commandVectors.linear.x = l_axisLR;
     commandVectors.linear.y = l_axisFB;
@@ -177,9 +165,6 @@ void joyHorizontalCallback(const sensor_msgs::Joy::ConstPtr& joy){
     commandVectors.angular.z = 0;
 
     vel_pub.publish(commandVectors);
-    pid_v_pub.publish(v_axis_msg);
-    pid_lr_pub.publish(l_axisLR_msg);
-    pid_fb_pub.publish(l_axisFB_msg);
 
 }
 
@@ -208,13 +193,6 @@ void joyVerticalCallback(const sensor_msgs::Joy::ConstPtr& joy){
 
       //publish the vector values -> build up command vector message
       geometry_msgs::Twist commandVectors;
-      std_msgs::Float64 v_axis_msg;
-      std_msgs::Float64 l_axisLR_msg;
-      std_msgs::Float64 l_axisFB_msg;
-
-      v_axis_msg.data = v_axis;
-      l_axisLR_msg.data = l_axisLR;
-      l_axisFB_msg.data = l_axisFB;
 
       commandVectors.linear.x = l_axisLR;
       commandVectors.linear.y = l_axisFB;
@@ -227,9 +205,6 @@ void joyVerticalCallback(const sensor_msgs::Joy::ConstPtr& joy){
       commandVectors.angular.z = 0;
 
       vel_pub.publish(commandVectors);
-      pid_v_pub.publish(v_axis_msg);
-      pid_lr_pub.publish(l_axisLR_msg);
-      pid_fb_pub.publish(l_axisFB_msg);
 }
 
 
@@ -319,11 +294,6 @@ int main(int argc, char **argv)
 
     //setup publishers and subscriber
     vel_pub = n.advertise<geometry_msgs::Twist>("rov/cmd_vel", 1); //Simple 3D vector for legacy system compliance
-
-    //Main PID topics
-    pid_v_pub = n.advertise<std_msgs::Float64>("rovpid/vertical/setpoint", 1);
-    pid_lr_pub = n.advertise<std_msgs::Float64>("rovpid/leftright/setpoint", 1);
-    pid_fb_pub = n.advertise<std_msgs::Float64>("rovpid/frontback/setpoint", 1);
 
     joy_sub1 = n.subscribe<sensor_msgs::Joy>("joy/joy1", 2, &joyHorizontalCallback);
     joy_sub2 = n.subscribe<sensor_msgs::Joy>("joy/joy2", 2, &joyVerticalCallback);

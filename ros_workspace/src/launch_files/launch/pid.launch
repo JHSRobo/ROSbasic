@@ -1,9 +1,12 @@
 <launch>
   <!-- horizontal front/back y longitudinal pid node -->
-    <node name="controller" pkg="pid" type="controller" ns="rovpid/frontback" output="screen" >
+    <node name="long_pid" pkg="pid" type="controller" output="screen" >
        <param name="Kp" value="5.0" />
        <param name="Ki" value="0.0" />
        <param name="Kd" value="0.1" />
+       <param name="setpoint_topic" value="/rov/cmd_vel/linear/y" />
+       <param name="topic_from_controller" value="" />
+       <param name="topic_from_plant" value="" />
        <param name="upper_limit" value="1" />
        <param name="lower_limit" value="-1" />
        <param name="windup_limit" value="0.5" />
@@ -12,10 +15,13 @@
     </node>
 
   <!-- horizontal left/right x lateral pid node -->
-    <node name="controller" pkg="pid" type="controller" ns="rovpid/leftright" output="screen" >
+    <node name="lat_pid" pkg="pid" type="controller" output="screen" >
        <param name="Kp" value="5.0" />
        <param name="Ki" value="0.0" />
        <param name="Kd" value="0.1" />
+       <param name="setpoint_topic" value="/rov/cmd_vel/linear/x" />
+       <param name="topic_from_controller" value="" />
+       <param name="topic_from_plant" value="" />
        <param name="upper_limit" value="1" />
        <param name="lower_limit" value="-1" />
        <param name="windup_limit" value="0.5" />
@@ -24,10 +30,13 @@
     </node>
 
   <!-- vertical up/down z vertical pid node -->
-    <node name="controller" pkg="pid" type="controller" ns="rovpid/vertical" output="screen" >
+    <node name="vert_pid" pkg="pid" type="controller" output="screen" >
        <param name="Kp" value="5.0" />
        <param name="Ki" value="0.0" />
        <param name="Kd" value="0.1" />
+       <param name="setpoint_topic" value="/rov/cmd_vel/linear/z" />
+       <param name="topic_from_controller" value="" />
+       <param name="topic_from_plant" value="" />
        <param name="upper_limit" value="1" />
        <param name="lower_limit" value="-1" />
        <param name="windup_limit" value="0.5" />
@@ -35,11 +44,29 @@
        <param name="min_loop_frequency" value="100.0" />
     </node>
 
-    <!-- angular yaw pid node -->
-    <node name="controller" pkg="pid" type="controller" ns="rovpid/yaw" output="screen" >
+    <!-- angular x yaw pid node -->
+    <node name="yaw_pid" pkg="pid" type="controller" output="screen" >
        <param name="Kp" value="5.0" />
        <param name="Ki" value="0.0" />
        <param name="Kd" value="0.1" />
+       <param name="setpoint_topic" value="/rov/cmd_vel/angular/x" />
+       <param name="topic_from_controller" value="" />
+       <param name="topic_from_plant" value="" />
+       <param name="upper_limit" value="1" />
+       <param name="lower_limit" value="-1" />
+       <param name="windup_limit" value="0.5" />
+       <param name="max_loop_frequency" value="100.0" />
+    </node>
+
+    <!-- angular y pitch pid node -->
+    <!-- setpoint always 0 -->
+    <node name="pitch_pid" pkg="pid" type="controller" output="screen" >
+       <param name="Kp" value="5.0" />
+       <param name="Ki" value="0.0" />
+       <param name="Kd" value="0.1" />
+       <param name="setpoint_topic" value="/rov/cmd_vel/angular/y" />
+       <param name="topic_from_controller" value="" />
+       <param name="topic_from_plant" value="" />
        <param name="upper_limit" value="1" />
        <param name="lower_limit" value="-1" />
        <param name="windup_limit" value="0.5" />
@@ -47,23 +74,15 @@
        <param name="min_loop_frequency" value="100.0" />
     </node>
 
-    <!-- angular pitch pid node -->
-    <node name="controller" pkg="pid" type="controller" ns="rovpid/pitch" output="screen" >
+    <!-- angular z roll pid node -->
+    <!-- setpoint always 0 -->
+    <node name="roll_pid" pkg="pid" type="controller" output="screen" >
        <param name="Kp" value="5.0" />
        <param name="Ki" value="0.0" />
        <param name="Kd" value="0.1" />
-       <param name="upper_limit" value="1" />
-       <param name="lower_limit" value="-1" />
-       <param name="windup_limit" value="0.5" />
-       <param name="max_loop_frequency" value="100.0" />
-       <param name="min_loop_frequency" value="100.0" />
-    </node>
-
-    <!-- angular roll pid node -->
-    <node name="controller" pkg="pid" type="controller" ns="rovpid/roll" output="screen" >
-       <param name="Kp" value="5.0" />
-       <param name="Ki" value="0.0" />
-       <param name="Kd" value="0.1" />
+       <param name="setpoint_topic" value="/rov/cmd_vel/angular/z" />
+       <param name="topic_from_controller" value="" />
+       <param name="topic_from_plant" value="" />
        <param name="upper_limit" value="1" />
        <param name="lower_limit" value="-1" />
        <param name="windup_limit" value="0.5" />

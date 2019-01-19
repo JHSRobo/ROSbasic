@@ -36,6 +36,7 @@
 
  <!-- launch all the sensors -->
   <node type="sensor-hat.py" pkg="sensor_readout" name="sensor_interface"/>
+  <node type="linear_velocity" pkg="sensor_readout" name="linear_velocity"/>
 
   <!-- pids -->
   <include file="$(find launch_files)/launch/pid.launch"/>

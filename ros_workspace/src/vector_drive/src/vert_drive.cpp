@@ -1,7 +1,7 @@
 //Doc mainpage written in horiz_drive.cpp
 
 #include <ros/ros.h>
-#include <std_msgs/Float64.h>
+#include <geometry_msgs/Twist.h>
 
 //custom message for holding 4 int32 thruster percents
 #include "vector_drive/thrusterPercents.h"
@@ -54,11 +54,11 @@ T map(T input, T inMin, T inMax, T outMin, T outMax){
 * @param[in] vel vel Input from the joystick, ros_control_interface and ROS Control PID algorithms
 */
 
-void verticalCallback(const std_msgs::Float64::ConstPtr& vel)
+void verticalCallback(const geometry_msgs::Twist::ConstPtr& vel)
 {
     //only deals with values pertaining to vertical "vector" drive
     //vertical value
-    double linearZ = vel->data;
+    double linearZ = vel->angular.z;
 
     double T5 = linearZ*1000;
     double T6 = linearZ*1000;
@@ -87,7 +87,7 @@ int main(int argc, char **argv)
     pub = n.advertise<vector_drive::thrusterPercents>("rov/cmd_vertical_vdrive", 1);
 
     //ROS subscriber to get vectors from the joystick control input
-    sub = n.subscribe("rovpid/vertical/control_effort", 1, verticalCallback);
+    sub = n.subscribe("rov/control_effort", 1, verticalCallback);
 
     ros::spin();
 

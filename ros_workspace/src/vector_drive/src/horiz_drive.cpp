@@ -19,8 +19,7 @@
 
 
 ros::Publisher pub;  //!< Publishes thrusterPercent (-1000 to 1000) message for thruster 1, 2, 3, and 4
-ros::Subscriber pid_lr_sub; //!< Subscribes to rovpid/leftright/control_effort in order to get command/control values for vector drive algorithm
-ros::Subscriber pid_fb_sub; //!< Subscribes to rovpid/leftright/control_effort in order to get command/control values for vector drive algorithm
+ros::Subscriber sub;  //!< Subscribes to rov/control_effort in order to get command/control vectors for vector drive algorithm
 
 vector_drive::thrusterPercents thrustPercents; //!< Message being published by pub
 
@@ -30,8 +29,8 @@ double axisAngular = 0;
 //template classes for simple functions
 
 /**
-* @breif constrians value between min and max inclusive. Value is returned by reference.
-* @param[in,out] value input to be constrianed
+* @breif constrains value between min and max inclusive. Value is returned by reference.
+* @param[in,out] value input to be constrained
 * @param[in] min The minimum value that "value" should be able to be
 * @param[in] max The maximum value that "value" should be able to be
 */
@@ -155,40 +154,21 @@ const vector_drive::thrusterPercents& vectorMath(const double &linearX, const do
 * @param[in] vel Input from the joystick, ros_control_interface and ROS Control PID algorithms
 */
 
+
 void commandVectorCallback(const geometry_msgs::Twist::ConstPtr& vel)
 {
     //only deals with values pertaining to horizontal vector drive
 
-    //angular
-    axisAngular = vel->angular.x;
-
-    vectorMath(axisLR, axisFB, axisAngular);
-
-    //publish message
-    pub.publish(thrustPercents);
-}
-
-void transverseCallback(const std_msgs::Float64::ConstPtr& vel)
-{
-    //only deals with values pertaining to horizontal vector drive
-
     //linear (L-R)
-    axisLR = vel->data;
-
-    vectorMath(axisLR, axisFB, axisAngular);
-
-    //publish message
-    pub.publish(thrustPercents);
-}
-
-void longitudinalCallback(const std_msgs::Float64::ConstPtr& vel)
-{
-    //only deals with values pertaining to horizontal vector drive
+    double linearX = vel->linear.x;
 
     //linear (F-B)
-    axisFB = vel->data;
+    double linearY = vel->linear.y;
 
-    vectorMath(axisLR, axisFB, axisAngular);
+    //angular
+    double angularX = vel->angular.x;
+
+    vectorMath(linearX, linearY, angularX);
 
     //publish message
     pub.publish(thrustPercents);
@@ -205,9 +185,9 @@ int main(int argc, char **argv)
     //ROS publisher to send thruster percent to hardware control node for CAN transmission
     pub = n.advertise<vector_drive::thrusterPercents>("rov/cmd_horizontal_vdrive", 1);
 
-    //ROS subscriber to get vectors from the joystick control input
-    pid_lr_sub = n.subscribe("rovpid/leftright/control_effort", 1, transverseCallback);
-    pid_fb_sub = n.subscribe("rovpid/frontback/control_effort", 1, longitudinalCallback);
+    //ROS subscriber to get vectors from the pid control_effort
+    sub = n.subscribe("rov/control_effort", 1, commandVectorCallback);
+
 
 
 

@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 import rospy
-import datetime
+import time
 import math
 from sense_hat import SenseHat
 from std_msgs.msg import Header
@@ -14,7 +14,7 @@ calibration = sense.get_orientation_radians()
 start_roll = calibration['roll']
 start_pitch = calibration['pitch']
 start_yaw = calibration['yaw']
-start_time = int(datetime.time.__str__(datetime.time.microsecond))
+start_time = int(time.time()) * 1000
 
 def talker():
 	temp_pub = rospy.Publisher('rov/int_temperature', Temperature, queue_size = 1) #Publisher for the different sensors: Temperature, Humidity, Pressure,
@@ -42,15 +42,10 @@ def talker():
 		orientation = sense.get_orientation_radians() #roll pitch and yaw
 		message.orientation.x, message.orientation.y, message.orientation.z, message.orientation.w = quaternion_from_euler(orientation['roll'], orientation['pitch'], orientation['yaw']) #converts the degrees returned by get_orientation() to radians then uses all 4 directions into a quaternion, then publishes it
 		
-		if (int(datetime.time.__str__(datetime.time.microsecond))) < start_time:
-			start_time = start_time + 1000000
-
-		angular_velocity_roll = (orientation['roll'] - start_roll) / (int(datetime.time.__str__(datetime.time.microsecond))
- - start_time) * 1000000
-		angular_velocity_pitch = (orientation['pitch'] - start_pitch) / (int(datetime.time.__str__(datetime.time.microsecond))
- - start_time) * 1000000
-		angular_veloctiy_yaw = (orientation['yaw'] - start_yaw) / (int(datetime.time.__str__(datetime.time.microsecond))
- - start_time) * 1000000
+		current_time = int(time.time()) * 1000
+		angular_velocity_roll = (orientation['roll'] - start_roll) / ((current_time - start_time) * 1000)
+		angular_velocity_pitch = (orientation['pitch'] - start_pitch) / (((current_time - start_time) * 1000)
+		angular_veloctiy_yaw = (orientation['yaw'] - start_yaw) / ((current_time - start_time) * 1000)
 		message.angular_velocity.x, message.angular_velocity.y, message.angular_velocity.z = (angular_velocity_roll, angular_velocity_pitch, angular_velocity_yaw)
 		
 		imu_pub.publish(message)
@@ -58,7 +53,7 @@ def talker():
 		start_roll = orientation['roll']
 		start_pitch = orientation['pitch']
 		start_yaw = orientation['yaw']
-		start_time = int(datetime.time.__str__(datetime.time.microsecond))
+		start_time = int(time.time()) * 1000
 		
 		rate.sleep()
 

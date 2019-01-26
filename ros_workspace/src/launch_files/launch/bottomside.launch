@@ -6,6 +6,9 @@
  <!-- vertical vector drive node -->
   <node pkg="vector_drive" type="vert_drive" name="vert_drive"/>
 
+  <!-- pid output merger node -->
+  <node pkg="vector_drive" type="pid_output_merger" name="pid_output_merger" />
+
  <!-- harware interface -->
    <node respawn="true" pkg="hardware_interface" type="hw_thruster_controller_interface.py"
 	    name="hw_thruster_controller_interface">

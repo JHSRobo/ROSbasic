@@ -10,6 +10,7 @@ project(vector_drive)
 find_package(catkin REQUIRED COMPONENTS
   roscpp
   std_msgs
+  geometry_msgs
   message_generation
  )
 
@@ -209,3 +210,7 @@ add_dependencies(horiz_drive vector_drive_generate_messages_cpp)
 add_executable(vert_drive src/vert_drive.cpp)
 target_link_libraries(vert_drive ${catkin_LIBRARIES})
 add_dependencies(vert_drive vector_drive_generate_messages_cpp)
+
+add_executable(pid_output_merger src/pid_output_merger.cpp)
+target_link_libraries(pid_output_merger ${catkin_LIBRARIES})
+add_dependencies(pid_output_merger vector_drive_generate_messages_cpp)

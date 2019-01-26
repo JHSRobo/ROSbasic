@@ -107,7 +107,7 @@ On your Raspberry Pi 3B make sure you are running ubuntu mate 16.04 (image here 
    * If you receive this error `make[2]: *** No rule to make target '/home/michael/catkin_ws/src/uuv_simulator/uuv_gazebo_plugins/uuv_gazebo_plugins/PROTOBUF_PROTOC_EXECUTABLE-NOTFOUND', needed by 'uuv_simulator/uuv_gazebo_plugins uuv_gazebo_plugins/Double.pb.cc'.  Stop. CMakeFiles/Makefile2:4699: recipe for target 'uuv_simulator/uuv_gazebo_plugins/uuv_gazebo_plugins/CMakeFiles/uuv_gazebo_plugins_msgs.dir/all' failed` then remove the /build /devel and /install folders with `rm -R` and retry steps 1 - 8
 * `catkin_make install` <- May not be needed (check on next install)
 * `source devel/setup.bash`
-* `roslaunch rov_descripion full_systems_launch.launch` or `roslaunch rov_descripion partial_systems_launch.launch` and `roslaunch simulate_rov.launch` on another machine
+* `roslaunch rov_description full_systems_launch.launch` or `roslaunch rov_description partial_systems_launch.launch` and `roslaunch simulate_rov.launch` on another machine
 * `rosrun rov_description simulation_interface.py`
 
 

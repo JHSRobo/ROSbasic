@@ -13,7 +13,7 @@
    </node>
 
    <!-- camera switching -->
-   <node pkg="hardware_interface" type="cameraSwitch.py" name="cameraSwitch"></node>
+   <node pkg="hardware_interface" ns="rov" type="cameraSwitch.py" name="cameraSwitch"/>
 
   <!-- start rpi pilot cameras -->
   <node type="raspicam_node" pkg="raspicam_node" name="raspicam_node" output="screen">
@@ -33,6 +33,9 @@
  <node pkg="drq1250" type="drq1250_ros.py" name="drq1250_2" args="0x0A">
    <remap from="rov/drq1250" to="rov/drq1250_2"/>
  </node>
+
+ <!-- start reading the depth sensor -->
+  <node pkg="ms5837" name="depth_sensor" type="ms5837_ros.py"/>
 
  <!-- launch all the sensors -->
   <node type="sensor-hat.py" pkg="sensor_readout" name="sensor_interface"/>

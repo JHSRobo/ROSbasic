@@ -4,21 +4,18 @@ import rospy
 from std_msgs.msg import UInt8
 
 def callback(data):
-    GPIO.setmode(GPIO.BOARD)
-    GPIO.setup(35, GPIO.OUT)
-    GPIO.setup(36, GPIO.OUT)
-    if data.data == 1:
-        GPIO.output(35, GPIO.LOW)
-        GPIO.output(36, GPIO.LOW)
     if data.data == 2:
         GPIO.output(35, GPIO.LOW)
         GPIO.output(36, GPIO.HIGH)
-    if data.data == 3:
+    elif data.data == 3:
         GPIO.output(35, GPIO.HIGH)
         GPIO.output(36, GPIO.LOW)
-    if data.data == 4:
+    elif data.data == 4:
         GPIO.output(35, GPIO.HIGH)
         GPIO.output(36, GPIO.HIGH)
+    else:
+        GPIO.output(35, GPIO.LOW)
+        GPIO.output(36, GPIO.LOW)
 
 def listener():
 
@@ -27,7 +24,14 @@ def listener():
     # anonymous=True flag means that rospy will choose a unique
     # name for our 'listener' node so that multiple listeners can
     # run simultaneously.
-    rospy.init_node('drive_control', anonymous=True)
+    rospy.init_node('drive_control')
+
+    #setup GPIO that will be used for the camera Mux
+    #GPIO36(19) = A0
+    #GPIO35(16) = A1
+    GPIO.setmode(GPIO.BOARD)
+    PIO.setup(35, GPIO.OUT)
+    GPIO.setup(36, GPIO.OUT)
 
     rospy.Subscriber("camera_select", UInt8, callback)
 

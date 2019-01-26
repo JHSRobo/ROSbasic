@@ -16,7 +16,9 @@ start_pitch = calibration['pitch']
 start_yaw = calibration['yaw']
 start_time = int(time.time()) * 1000
 
+
 def talker():
+
 	temp_pub = rospy.Publisher('rov/int_temperature', Temperature, queue_size = 1) #Publisher for the different sensors: Temperature, Humidity, Pressure,
 	pressure_pub = rospy.Publisher('rov/int_pressure', FluidPressure, queue_size = 1)
 	humidity_pub = rospy.Publisher('rov/int_humidity', RelativeHumidity, queue_size = 1)
@@ -25,6 +27,7 @@ def talker():
 
 	rate = rospy.Rate(60)
 	while not rospy.is_shutdown():
+		global calibration, start_roll, start_pitch, start_yaw, start_time
 		header = Header()
 		header.stamp = rospy.Time.now()
 		header.frame_id = 'sensor_data'
@@ -41,20 +44,23 @@ def talker():
 
 		orientation = sense.get_orientation_radians() #roll pitch and yaw
 		message.orientation.x, message.orientation.y, message.orientation.z, message.orientation.w = quaternion_from_euler(orientation['roll'], orientation['pitch'], orientation['yaw']) #converts the degrees returned by get_orientation() to radians then uses all 4 directions into a quaternion, then publishes it
-		
-		current_time = int(time.time()) * 1000
-		angular_velocity_roll = (orientation['roll'] - start_roll) / ((current_time - start_time) * 1000)
-		angular_velocity_pitch = (orientation['pitch'] - start_pitch) / (((current_time - start_time) * 1000)
-		angular_veloctiy_yaw = (orientation['yaw'] - start_yaw) / ((current_time - start_time) * 1000)
+
+		elapsed_time = (int(time.time()) * 1000) - start_time
+		if elapsed_time <= 0:
+			elapsed_time = max(1, elapsed_time)
+
+		angular_velocity_roll = (orientation['roll'] - start_roll) / (elapsed_time * 1000)
+		angular_velocity_pitch = (orientation['pitch'] - start_pitch) / (elapsed_time * 1000)
+		angular_velocity_yaw = (orientation['yaw'] - start_yaw) / (elapsed_time * 1000)
 		message.angular_velocity.x, message.angular_velocity.y, message.angular_velocity.z = (angular_velocity_roll, angular_velocity_pitch, angular_velocity_yaw)
-		
+
 		imu_pub.publish(message)
 
 		start_roll = orientation['roll']
 		start_pitch = orientation['pitch']
 		start_yaw = orientation['yaw']
 		start_time = int(time.time()) * 1000
-		
+
 		rate.sleep()
 
 if __name__ == '__main__':

@@ -50,6 +50,13 @@ Setup the ros_lib file for arduino serial
 RPI Camera node setup
 * See raspicam_node README.md documentation
 
+Turn RPI Safemode OFF
+* Type cd /boot on the bottomside RPI
+* Type sudo nano config.txt
+* Type CTRL + W and then search for avoid_safe and hit enter
+* Go to the bottom of the section and uncomment avoid_safemode=1
+* Type CTRL + X and then Y to exit
+
 ### Network Setup
 
 What things you need to do so that the ROS network operates properly

@@ -15,14 +15,14 @@ sudo restart ssh
 mkdir ~/.ssh
 chmod 700 ~/.ssh
 ssh-keygen -t rsa
+roboip="$(hostname -I | sed -e 's/ //g')" #get ip address and remove whitespace
 
-if [ $ROS_HOSTNAME == "master" ]; then
+if [ "$roboip" = "192.168.1.100" ]; then
    ssh-copy-id -i ~/.ssh/id_rsa.pub bottomside
-elif [ $ROS_HOSTNAME == "bottomside" ]; then
+elif [ "$roboip" = "192.168.1.111" ]; then
    ssh-copy-id -i ~/.ssh/id_rsa.pub master
 else
    echo "Error setting up ssh keys for ROS! "
-   sudo ~/Desktop/ROV_Test_Bench/scripts/setupROSNetwork.sh
 fi
 
 

@@ -13,7 +13,7 @@ function clion(){
       else
          read -p "Source of ${ROSWorkspace}/devel/setup.bash failed do you wish to continue (t/f)? " continue
          if [ $continue != "t" ]; then
-            read -p "Eneter the ROS package you would like to source: " ROSWorkspace
+            read -p "Enter the ROS package you would like to source: " ROSWorkspace
          fi
       fi
 
@@ -35,7 +35,7 @@ function webstorm(){
       else
          read -p "Source of ${ROSWorkspace}/devel/setup.bash failed do you wish to continue (t/f)? " continue
          if [ $continue != "t" ]; then
-            read -p "Eneter the ROS package you would like to source: " ROSWorkspace
+            read -p "Enter the ROS package you would like to source: " ROSWorkspace
          fi
       fi
 
@@ -57,7 +57,7 @@ function pycharm(){
       else
          read -p "Source of ${ROSWorkspace}/devel/setup.bash failed do you wish to continue (t/f)? " continue
          if [ $continue != "t" ]; then
-            read -p "Eneter the ROS package you would like to source: " ROSWorkspace
+            read -p "Enter the ROS package you would like to source: " ROSWorkspace
          fi
       fi
 

@@ -8,9 +8,12 @@
 
  <!-- harware interface -->
    <node respawn="true" pkg="hardware_interface" type="hw_thruster_controller_interface.py"
-	name="hw_thruster_controller_interface">
-	<param name="thrusterControllerPort" value="/dev/ttyACM0"/>
+	    name="hw_thruster_controller_interface">
+      <param name="thrusterControllerPort" value="/dev/ttyUSB0"/>
    </node>
+
+   <!-- camera switching -->
+   <node pkg="hardware_interface" ns="rov" type="cameraSwitch.py" name="cameraSwitch"/>
 
   <!-- start rpi pilot cameras -->
   <node type="raspicam_node" pkg="raspicam_node" name="raspicam_node" output="screen">
@@ -22,12 +25,19 @@
     <param name="camera_frame_id" value="pilot_cam"/>
   </node>
 
-  !-- launch all the sensors -->
-  <node type="sht31_ros.py" pkg="sht31" name="sht31_node"/>
-  <node type="bmp280_ros.py" pkg="bmp280" name="bmp280_node"/>
-  <node type="ms5837_ros.py" pkg="ms5837" name="ms5837_node">
-    <param name="fluidDensity" value="997"/>
-  </node>
-  <node type="bno055_ros.py" pkg="bno055" name="bno055_node"/>
+ <!-- start reading sensor data from DRQ1250s -->
+ <node pkg="drq1250" type="drq1250_ros.py" name="drq1250_1" args="0x08">
+   <remap from="rov/drq1250" to="rov/drq1250_1"/>
+ </node>
+
+ <node pkg="drq1250" type="drq1250_ros.py" name="drq1250_2" args="0x0A">
+   <remap from="rov/drq1250" to="rov/drq1250_2"/>
+ </node>
+
+ <!-- start reading the depth sensor -->
+  <node pkg="ms5837" name="depth_sensor" type="ms5837_ros.py"/>
+
+ <!-- launch all the sensors -->
+  <node type="sensor-hat.py" pkg="sensor_readout" name="sensor_interface"/>
 
 </launch>

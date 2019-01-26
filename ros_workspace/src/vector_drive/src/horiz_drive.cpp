@@ -6,7 +6,7 @@
 * @section intro_sec Introduction
 * This code contains implementations for converting horizontal and vertical control vectors into individual thruster percents (multiplied by 10 for more accuracy without needing to be stored as doubles) from -1000 to 1000
 * @section compile_sec Compilation
-* Compile using catkin_make in the ros_workspace directory. 
+* Compile using catkin_make in the ros_workspace directory.
 */
 
 
@@ -18,7 +18,7 @@
 
 
 ros::Publisher pub;  //!< Publishes thrusterPercent (-1000 to 1000) message for thruster 1, 2, 3, and 4
-ros::Subscriber sub; //!< Subscribes to rov/cmd_vel in order to get command/control vectors for vector drive algorithm   
+ros::Subscriber sub; //!< Subscribes to rov/cmd_vel in order to get command/control vectors for vector drive algorithm
 
 vector_drive::thrusterPercents thrustPercents; //!< Message being published by pub
 
@@ -26,7 +26,7 @@ vector_drive::thrusterPercents thrustPercents; //!< Message being published by p
 
 /**
 * @breif constrians value between min and max inclusive. Value is returned by reference.
-* @param[in,out] value input to be constrianed 
+* @param[in,out] value input to be constrianed
 * @param[in] min The minimum value that "value" should be able to be
 * @param[in] max The maximum value that "value" should be able to be
 */
@@ -84,7 +84,7 @@ T min(T value1, T value2){
 * @param[in] inMin The minimum value for the range of the input
 * @param[in] outMin The minimum value for the range of the output
 * @param[in] outMax The maximum value for the range of the output
-* @return The input trnslated proportionally from range in to range out 
+* @return The input trnslated proportionally from range in to range out
 */
 template <class T>
 T map(T input, T inMin, T inMax, T outMin, T outMax){
@@ -111,10 +111,11 @@ const vector_drive::thrusterPercents& vectorMath(const double &linearX, const do
     //deadzone handled by joy package
 
     //Motor calculations
-    double T1 = linearX - linearY - angularX;
-    double T2 = -linearX - linearY + angularX;
-    double T3 = -linearX + linearY - angularX;
-    double T4 = linearX + linearY + angularX;
+    //See: https://drive.google.com/file/d/11VF0o0OYVaFGKFvbYtnrmOS0e6yM6IxH/view
+    double T1 = linearX + linearY + angularX;
+    double T2 = -linearX + linearY - angularX;
+    double T3 = -linearX - linearY + angularX;
+    double T4 = linearX - linearY - angularX;
 
 
     //Normalize the values so that no motor outputs over 100% thrust
@@ -187,4 +188,3 @@ int main(int argc, char **argv)
 
     return 0;
 }
-

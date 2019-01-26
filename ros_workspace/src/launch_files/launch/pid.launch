@@ -1,6 +1,6 @@
 <launch>
   <!-- horizontal front/back y longitudinal pid node -->
-    <node name="long_pid" pkg="pid" type="controller" output="screen" >
+    <node name="controller" pkg="pid" type="controller" output="screen" ns="long_pid" >
        <param name="Kp" value="5.0" />
        <param name="Ki" value="0.0" />
        <param name="Kd" value="0.1" />
@@ -12,7 +12,7 @@
     </node>
 
   <!-- horizontal left/right x lateral pid node -->
-    <node name="lat_pid" pkg="pid" type="controller" output="screen" >
+    <node name="controller" pkg="pid" type="controller" output="screen" ns="lat_pid" >
        <param name="Kp" value="5.0" />
        <param name="Ki" value="0.0" />
        <param name="Kd" value="0.1" />
@@ -24,7 +24,7 @@
     </node>
 
   <!-- vertical up/down z vertical pid node -->
-    <node name="vert_pid" pkg="pid" type="controller" output="screen" >
+    <node name="controller" pkg="pid" type="controller" output="screen" ns="vert_pid">
        <param name="Kp" value="5.0" />
        <param name="Ki" value="0.0" />
        <param name="Kd" value="0.1" />
@@ -36,7 +36,7 @@
     </node>
 
     <!-- angular x yaw pid node -->
-    <node name="yaw_pid" pkg="pid" type="controller" output="screen" >
+    <node name="controller" pkg="pid" type="controller" output="screen" ns="yaw_pid">
        <param name="Kp" value="5.0" />
        <param name="Ki" value="0.0" />
        <param name="Kd" value="0.1" />
@@ -48,7 +48,7 @@
 
     <!-- angular y pitch pid node -->
     <!-- setpoint always 0 -->
-    <node name="pitch_pid" pkg="pid" type="controller" output="screen" >
+    <node name="controller" pkg="pid" type="controller" output="screen" ns="pitch_pid">
        <param name="Kp" value="5.0" />
        <param name="Ki" value="0.0" />
        <param name="Kd" value="0.1" />
@@ -61,7 +61,7 @@
 
     <!-- angular z roll pid node -->
     <!-- setpoint always 0 -->
-    <node name="roll_pid" pkg="pid" type="controller" output="screen" >
+    <node name="controller" pkg="pid" type="controller" output="screen" ns="roll_pid">
        <param name="Kp" value="5.0" />
        <param name="Ki" value="0.0" />
        <param name="Kd" value="0.1" />
@@ -71,5 +71,23 @@
        <param name="max_loop_frequency" value="100.0" />
        <param name="min_loop_frequency" value="100.0" />
     </node>
+
+    <!-- topic_tools transform nodes to break up /rov/cmd_vel to pid setpoint topics-->
+    <node name="publish_long_setpoint" pkg="topic_tools" type="transform" args="/rov/cmd_vel /long_pid/setpoint std_msgs/Float64 m.linear.y" />
+    <node name="publish_lat_setpoint" pkg="topic_tools" type="transform" args="/rov/cmd_vel /lat_pid/setpoint std_msgs/Float64 m.linear.x" />
+    <node name="publish_vert_setpoint" pkg="topic_tools" type="transform" args="/rov/cmd_vel /vert_pid/setpoint std_msgs/Float64 m.linear.z" />
+    <node name="publish_yaw_setpoint" pkg="topic_tools" type="transform" args="/rov/cmd_vel /yaw_pid/setpoint std_msgs/Float64 m.angular.x" />
+    <node name="publish_pitch_setpoint" pkg="topic_tools" type="transform" args="/rov/cmd_vel /pitch_pid/setpoint std_msgs/Float64 m.angular.y" />
+    <node name="publish_roll_setpoint" pkg="topic_tools" type="transform" args="/rov/cmd_vel /roll_pid/setpoint std_msgs/Float64 m.angular.z" />
+
+    <!-- topic_tools transform nodes to break up /rov/imu to pid state topics-->
+    <node name="publish_yaw_state" pkg="topic_tools" type="transform" args="/rov/imu /yaw_pid/state std_msgs/Float64 m.angular_velocity.x" />
+    <node name="publish_pitch_state" pkg="topic_tools" type="transform" args="/rov/imu /pitch_pid/state std_msgs/Float64 m.angular_velocity.y" />
+    <node name="publish_roll_state" pkg="topic_tools" type="transform" args="/rov/imu /roll_pid/state std_msgs/Float64 m.angular_velocity.z" />
+
+    <!-- topic_tools transform nodes to break up /rov/cmd_vel to pid setpoint topics-->
+    <node name="publish_long_state" pkg="topic_tools" type="transform" args="/rov/linear_velocity /long_pid/state std_msgs/Float64 m.y" />
+    <node name="publish_lat_state" pkg="topic_tools" type="transform" args="/rov/linear_velocity /lat_pid/state std_msgs/Float64 m.x" />
+    <node name="publish_vert_state" pkg="topic_tools" type="transform" args="/rov/linear_velocity /vert_pid/state std_msgs/Float64 m.z" />
 
   </launch>

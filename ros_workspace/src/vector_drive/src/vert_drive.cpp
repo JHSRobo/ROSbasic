@@ -58,12 +58,13 @@ void verticalCallback(const geometry_msgs::Twist::ConstPtr& vel)
 {
     //only deals with values pertaining to vertical "vector" drive
     //positive z rolls port to top to starboard (counterclockwise facing front of ROV)
-    double linearZ = vel->angular.z;
+    double angularZ = vel->angular.z;
+    double linearZ = vel->linear.z;
 
-    double T5 = linearZ*-1000;
-    double T6 = linearZ*1000;
-    double T7 = linearZ*-1000;
-    double T8 = linearZ*1000;
+    double T5 = linearZ*1000 + angularZ*-1000;
+    double T6 = linearZ*1000 + angularZ*1000;
+    double T7 = linearZ*1000 + angularZ*-1000;
+    double T8 = linearZ*1000 + angularZ*1000;
 
     thrustPercents.t1 = T5;
     thrustPercents.t2 = T6;

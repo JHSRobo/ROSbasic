@@ -75,7 +75,7 @@ ros::Publisher thruster_status_pub; //!<Publishes thruster status from copilot
 
 /**
 * @brief Controls variable joystick sensitivity. Small movements that use a small percent of the maximum control vector magnitude have a lower sensitivity than larger movements with the joystick.
-* @param[in,out] axis Takes in a reference to the axis (a_axis, l_axisLR/FB, v_axis)
+* @param[in,out] axis Takes in a reference to the axis (a_axis, l_axisLR/FB, v_axis) from -1 to 1
 */
 void expDrive (double &axis, double &driveExp)
 {
@@ -126,7 +126,7 @@ void joyHorizontalCallback(const sensor_msgs::Joy::ConstPtr& joy){
 
 
 
-        //apply the bilinear ratio on all axis
+        //apply the exponetial ratio on all axis
         expDrive(a_axis, driveExp);
         expDrive(l_axisLR, driveExp);
         expDrive(l_axisFB, driveExp);

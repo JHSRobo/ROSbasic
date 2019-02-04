@@ -112,6 +112,7 @@ const vector_drive::thrusterPercents& vectorMath(const double &linearX, const do
 
     //Motor calculations
     //See: https://drive.google.com/file/d/11VF0o0OYVaFGKFvbYtnrmOS0e6yM6IxH/view
+    //TODO prevent thrustpercents from going out of 1000 to -1000 range
     double T1 = linearX + linearY + angularX;
     double T2 = -linearX + linearY - angularX;
     double T3 = -linearX - linearY + angularX;

@@ -120,7 +120,7 @@ const vector_drive::thrusterPercents& vectorMath(const double &linearX, const do
 
 
     //Normalize the values so that no motor outputs over 100% thrust
-    double maxMotor = max(max(max(abs(T1), abs(T2)), T3), T4);
+    double maxMotor = max(max(max(abs(T1), abs(T2)), abs(T3)), abs(T4));
     double maxInput = max(max(abs(linearX), abs(linearY)), abs(angularX));
 
     if(maxMotor == 0)

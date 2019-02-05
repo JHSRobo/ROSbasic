@@ -30,7 +30,7 @@ def listener():
     #GPIO36(19) = A0
     #GPIO35(16) = A1
     GPIO.setmode(GPIO.BOARD)
-    PIO.setup(35, GPIO.OUT)
+    GPIO.setup(35, GPIO.OUT)
     GPIO.setup(36, GPIO.OUT)
 
     rospy.Subscriber("camera_select", UInt8, callback)

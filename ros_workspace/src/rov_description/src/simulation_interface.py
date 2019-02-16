@@ -113,7 +113,7 @@ verticals  = rospy.Subscriber("rov/cmd_horizontal_vdrive", thrusterPercents, upd
 horzontals = rospy.Subscriber("rov/cmd_vertical_vdrive", thrusterPercents, updateHoriz)
 
 #Simulated camera multiplexer
-cameraMux = rospy.Subscriber("/camera_select", UInt8, updateCameraMux)
+cameraMux = rospy.Subscriber("/rov/camera_select", UInt8, updateCameraMux)
 
 #Subscribe and proccess all video streams
 videoStream1 = rospy.Subscriber("rov/camera1/image_raw", Image, updateVideoStreams)

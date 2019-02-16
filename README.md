@@ -50,8 +50,17 @@ Setup the ros_lib file for arduino serial
 RPI Camera node setup
 * See raspicam_node README.md documentation
 
+
 ROS PIDs library
 * `sudo apt install ros-kinetic-pid`
+
+Turn RPI Safemode OFF
+* Type cd /boot on the bottomside RPI
+* Type sudo nano config.txt
+* Type CTRL + W and then search for avoid_safe and hit enter
+* Go to the bottom of the section and uncomment avoid_safemode=1
+* Type CTRL + X and then Y to exit
+
 
 ### Network Setup
 
@@ -109,6 +118,19 @@ On your Raspberry Pi 3B make sure you are running ubuntu mate 16.04 (image here 
 * `source devel/setup.bash`
 * `roslaunch rov_description full_systems_launch.launch` or `roslaunch rov_description partial_systems_launch.launch` and `roslaunch simulate_rov.launch` on another machine
 * `rosrun rov_description simulation_interface.py`
+
+### Intel Realsense Setup instructions
+## Ubuntu
+
+* Follow the instructions here https://github.com/intel-ros/realsense
+* Test using `roslaunch realsense2_camera rs_camera.launch`
+
+Note: The resolution of the realsense camera should always run at 1280x720 for the D415 and 848x480 for the D435
+
+## RP 3B+
+
+* Follow the instructions here https://github.com/intel-ros/realsense
+* Test using `roslaunch realsense2_camera rs_camera.launch`
 
 
 ##UPDATES NEEDED BELOW THIS POINT

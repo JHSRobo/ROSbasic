@@ -16,7 +16,7 @@ def listener():
     # Launches trout grout node
     rospy.init_node('trout_grout')
 
-    GPIO.setmode(GPPIO.BOARD)
+    GPIO.setmode(GPIO.BOARD)
     GPIO.setup(38, GPIO.OUT)
 
     rospy.Subscriber("rov/trout_grout", Bool, callback)

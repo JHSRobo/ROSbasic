@@ -4,6 +4,8 @@ This document provides information on each current ROS Topic, with the purpose a
 
 * `/rov/camera_select`: Current selected camera from the copilot page
   * std_msgs/Float64
+* `/rov/electromagnet_control`: Current selected camera from the copilot page
+  * std_msgs/Bool
 * `/rov/sensitivity`: Sensitivity settings for ROV drive control
   * rov_control_interface/rov_sensitivity
 * `/rov/inverstion`: Inversion status depending on camera

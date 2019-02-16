@@ -1,12 +1,12 @@
 #!/usr/bin/env python
 import RPi.GPIO as GPIO
 import rospy
-from std_msgs.msg import UInt8
+from std_msgs.msg import Bool
 
 def callback(data):
-    if data.data == 1:
+    if data.data == True:
         GPIO.output(37, GPIO.HIGH)
-    elif data.data == 0:
+    elif data.data == False:
         GPIO.output(37, GPIO.LOW)
 
 def listener():
@@ -22,7 +22,7 @@ def listener():
     GPIO.setmode(GPIO.BOARD)
     GPIO.setup(37, GPIO.OUT)
 
-    rospy.Subscriber("electromagnet_control", UInt8, callback)
+    rospy.Subscriber("electromagnet_control", Bool, callback)
 
     # spin() simply keeps python from exiting until this node is stopped
     rospy.spin()

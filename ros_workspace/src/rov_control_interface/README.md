@@ -2,7 +2,7 @@
 
 ## Description
 
-Edit the command vector from the joystick. TEMPORARILY serve as the copilot page server and handle camera switching and the tcu board. Manages features such as bilinear threshold, 4-way inversion, and joystick sensitivity.
+Edit the command vector from the joystick. Serve as the backup copilot page server, handle camera switching, and handle the tcu board. Manages features such as bilinear threshold, 4-way inversion, and joystick sensitivity.
 
 ## Goal
 
@@ -46,7 +46,7 @@ Parameters/Reconfigs:
 
 *  `copilot_interface/copilotControlParamsConfig`: Secondary copilot interface through a dynamic reconfigure that contains all the params for a fully functional ROV. See copilot_interface/cfg dir for more info.
 
-* `/useJoyVerticalAxis`: Parameter used to select whether the throttle or the joystick is responsible for controlling verticals. Good for when the throttle is not readily available. 
+* `/useJoyVerticalAxis`: Parameter used to select whether the throttle or the joystick is responsible for controlling verticals. Good for when the throttle is not readily available.
 
 
 

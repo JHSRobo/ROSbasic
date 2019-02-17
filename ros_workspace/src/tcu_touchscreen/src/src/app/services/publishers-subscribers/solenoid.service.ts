@@ -1,11 +1,11 @@
 import { Injectable } from '@angular/core';
 import '../../../assets/roslib.js';
-import {BehaviorSubject, Observable} from "rxjs";
+import {BehaviorSubject, Observable} from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
-export class SolenoidService{
+export class SolenoidService {
 
   // Creates object with the ROS library
     // @ts-ignore <= Makes ts happy, wont error

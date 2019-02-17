@@ -6,7 +6,7 @@
  * Copyright (c) 2013 hij1nx
  * Licensed under the MIT license.
  */
-;!function(undefined) {
+!function(undefined) {
 
   var isArray = Array.isArray ? Array.isArray : function _isArray(obj) {
     return Object.prototype.toString.call(obj) === "[object Array]";

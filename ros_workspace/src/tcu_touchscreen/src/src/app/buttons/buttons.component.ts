@@ -2,14 +2,14 @@ import {Component, OnInit} from '@angular/core';
 import { PowerService } from '../services/publishers-subscribers/power.service';
 import { SolenoidService } from '../services/publishers-subscribers/solenoid.service';
 import { SafetyService } from '../services/publishers-subscribers/safety.service';
-import { BooleanModel } from "../services/boolean.model";
+import { BooleanModel } from '../services/boolean.model';
 
 @Component({
   selector: 'app-buttons',
   templateUrl: './buttons.component.html',
   styleUrls: ['./buttons.component.css']
 })
-export class ButtonsComponent implements OnInit{
+export class ButtonsComponent implements OnInit {
 
     constructor(
         public powerService: PowerService,

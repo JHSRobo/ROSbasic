@@ -11,6 +11,10 @@ def callback(data):
     else:
         GPIO.output(38, GPIO.LOW)
 
+def hook():
+    GPIO.cleanup()
+    rospy.loginfo("Trout Grout  node shutdown successfully")
+
 def listener():
 
     # Launches trout grout node
@@ -21,6 +25,8 @@ def listener():
 
     rospy.Subscriber("rov/trout_grout", Bool, callback)
 
+    #shutdown hook releases the GPIO when the node is killed
+    rospy.on_shutdown(hook)
     rospy.spin()
 
 if __name__=='__main__':

@@ -9,6 +9,10 @@ def callback(data):
     elif data.data == False:
         GPIO.output(37, GPIO.LOW)
 
+def hook():
+    GPIO.cleanup()
+    rospy.loginfo("Electromagnet node shutdown successfully")
+
 def listener():
 
     # In ROS, nodes are uniquely named. If two nodes with the same
@@ -24,6 +28,8 @@ def listener():
 
     rospy.Subscriber("electromagnet_control", Bool, callback)
 
+    #shutdown hook releases the GPIO when the node is killed
+    rospy.on_shutdown(hook)
     # spin() simply keeps python from exiting until this node is stopped
     rospy.spin()
 

@@ -14,6 +14,7 @@
 
    <!-- camera switching -->
    <node pkg="hardware_interface" ns="rov" type="cameraSwitch.py" name="cameraSwitch"/>
+   <node pkg="hardware_interface" ns="rov" type="hw_electromagnet_control.py" name="hw_electromagnet_control"/>
 
   <!-- start rpi pilot cameras -->
   <node type="raspicam_node" pkg="raspicam_node" name="raspicam_node" output="screen">
@@ -26,18 +27,21 @@
   </node>
 
  <!-- start reading sensor data from DRQ1250s -->
- <node pkg="drq1250" type="drq1250_ros.py" name="drq1250_1" args="0x08">
+ <!-- respawn setup to restart the node every 30 seconds if it dies-->
+ <node pkg="drq1250" type="drq1250_ros.py" name="drq1250_1" args="0x08" respawn="true" respawn_delay="30">
    <remap from="rov/drq1250" to="rov/drq1250_1"/>
  </node>
 
- <node pkg="drq1250" type="drq1250_ros.py" name="drq1250_2" args="0x0A">
+ <node pkg="drq1250" type="drq1250_ros.py" name="drq1250_2" args="0x0A" respawn="true" respawn_delay="30">
    <remap from="rov/drq1250" to="rov/drq1250_2"/>
  </node>
 
  <!-- start reading the depth sensor -->
-  <node pkg="ms5837" name="depth_sensor" type="ms5837_ros.py"/>
+ <!-- respawn setup to restart the node every 30 seconds if it dies-->
+  <node pkg="ms5837" name="depth_sensor" type="ms5837_ros.py" respawn="true" respawn_delay="30"/>
 
  <!-- launch all the sensors -->
-  <node type="sensor-hat.py" pkg="sensor_readout" name="sensor_interface"/>
+ <!-- respawn setup to restart the node every 30 seconds if it dies-->
+  <node type="sensor-hat.py" pkg="sensor_readout" name="sensor_interface" respawn="true" respawn_delay="30"/>
 
 </launch>

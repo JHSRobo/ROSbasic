@@ -18,6 +18,10 @@ def callback(data):
         GPIO.output(35, GPIO.LOW)
         GPIO.output(36, GPIO.LOW)
 
+def hook():
+    GPIO.cleanup()
+    rospy.loginfo("Camera node shutdown successfully")
+
 def listener():
 
     # In ROS, nodes are uniquely named. If two nodes with the same
@@ -36,6 +40,8 @@ def listener():
 
     rospy.Subscriber("camera_select", UInt8, callback)
 
+    #shutdown hook releases the GPIO when the node is killed
+    rospy.on_shutdown(hook)
     # spin() simply keeps python from exiting until this node is stopped
     rospy.spin()
 

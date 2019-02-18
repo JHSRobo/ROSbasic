@@ -15,6 +15,8 @@
    <!-- camera switching -->
    <node pkg="hardware_interface" ns="rov" type="cameraSwitch.py" name="cameraSwitch"/>
    <node pkg="hardware_interface" ns="rov" type="hw_electromagnet_control.py" name="hw_electromagnet_control"/>
+   <node pkg="hardware_interface" ns="rov" type="trout_grout_control.py" name="trout_grout_control"/>
+
 
   <!-- start rpi pilot cameras -->
   <node type="raspicam_node" pkg="raspicam_node" name="raspicam_node" output="screen">

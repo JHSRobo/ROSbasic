@@ -3,7 +3,6 @@
 import rospy
 import time
 import math
-import time
 from sense_hat import SenseHat
 from std_msgs.msg import Header
 from tf.transformations import quaternion_from_euler
@@ -12,9 +11,9 @@ from sensor_msgs.msg import Imu, Temperature, RelativeHumidity, FluidPressure
 sense = SenseHat()
 sense.set_imu_config(True, True, True) #compass, gyro, accele
 calibration = sense.get_orientation_radians()
-start_roll = calibration['yaw']
-start_pitch = calibration['roll']
-start_yaw = calibration['pitch	']
+start_roll = calibration['roll']
+start_pitch = calibration['pitch']
+start_yaw = calibration['yaw']
 start_time = int(time.time()) * 1000
 
 
@@ -41,24 +40,25 @@ def talker():
 		message.header = header
 
 		acceleration = sense.get_accelerometer_raw() #x y and z G force, not rounded
-		message.linear_acceleration.x, message.linear_acceleration.y, message.linear_acceleration.z = (acceleration['x'] * 9.80665, acceleration['z'] * 9.80665, acceleration['y'] * 9.80665) #9.80665 is gs to newtons; WITH 
+		message.linear_acceleration.x, message.linear_acceleration.y, message.linear_acceleration.z = (acceleration['x'] * 9.80665, acceleration['y'] * 9.80665, acceleration['z'] * 9.80665) #9.80665 is gs to newtons
 
 		orientation = sense.get_orientation_radians() #roll pitch and yaw
-		message.orientation.x, message.orientation.y, message.orientation.z, message.orientation.w = quaternion_from_euler(orientation['roll'], orientation['pitch'], orientation['yaw']) #converts the degrees returned by get_orientation() to radians then uses all 4 directions into a quaternion, then publishes the data
+		message.orientation.x, message.orientation.y, message.orientation.z, message.orientation.w = quaternion_from_euler(orientation['roll'], orientation['pitch'], orientation['yaw']) #converts the degrees returned by get_orientation() to radians then uses all 4 directions into a quaternion, then publishes it
+
 		elapsed_time = (int(time.time()) * 1000) - start_time
 		if elapsed_time <= 0:
 			elapsed_time = max(1, elapsed_time)
 
-		angular_velocity_roll = (orientation['yaw'] - start_roll) / (elapsed_time * 1000)
-		angular_velocity_pitch = (orientation['roll'] - start_pitch) / (elapsed_time * 1000)
-		angular_velocity_yaw = (orientation['pitch'] - start_yaw) / (elapsed_time * 1000)
-
+		angular_velocity_roll = (orientation['roll'] - start_roll) / (elapsed_time * 1000)
+		angular_velocity_pitch = (orientation['pitch'] - start_pitch) / (elapsed_time * 1000)
+		angular_velocity_yaw = (orientation['yaw'] - start_yaw) / (elapsed_time * 1000)
 		message.angular_velocity.x, message.angular_velocity.y, message.angular_velocity.z = (angular_velocity_roll, angular_velocity_pitch, angular_velocity_yaw)
 
 		imu_pub.publish(message)
-		start_roll = orientation['yaw']
-		start_pitch = orientation['roll']
-		start_yaw = orientation['pitch']
+
+		start_roll = orientation['roll']
+		start_pitch = orientation['pitch']
+		start_yaw = orientation['yaw']
 		start_time = int(time.time()) * 1000
 
 		rate.sleep()

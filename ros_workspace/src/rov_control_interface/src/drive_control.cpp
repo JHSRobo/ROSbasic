@@ -19,7 +19,7 @@
 
 #include <std_msgs/UInt8.h> //For camera Pub
 #include <std_msgs/Bool.h>  //For tcu relay and solenoid controller Pub
-#include <rov_control_interface/rov_sensitivity.h>
+
 
 const int linearJoyAxisFBIndex(1); //!<forward-backward axis index in the joy topic array from the logitech Extreme 3D Pro
 const int linearJoyAxisLRIndex(0); //!<left-right axis index in the joy topic array from the logitech Extreme 3D Pro
@@ -53,9 +53,6 @@ const double bilinearRatio(1.5);
 //! At what percent of the joysticks axis magnitude (-1 to 1) to apply the additional thrust
 const double bilinearThreshold(1.0 / bilinearRatio);
 
-//! Exponent for Drive Power Calculations
-double driveExp = 1.4;
-
 ros::Publisher vel_pub; //!<publisher that publishes a Twist message containing 2 non-standard Vector3 data sets
 ros::Subscriber joy_sub1; //!<subscriber to the logitech joystick
 ros::Subscriber joy_sub2; //!<subscriber to the thrustmaster throttle
@@ -71,15 +68,21 @@ ros::Publisher inversion_pub; //!<Inversion status publisher
 ros::Publisher sensitivity_pub; //!<Publishes sensitivity from copilot
 ros::Publisher thruster_status_pub; //!<Publishes thruster status from copilot
 
-
-
 /**
-* @brief Controls variable joystick sensitivity. Small movements that use a small percent of the maximum control vector magnitude have a lower sensitivity than larger movements with the joystick.
-* @param[in,out] axis Takes in a reference to the axis (a_axis, l_axisLR/FB, v_axis) from -1 to 1
+* @brief Controls variable joystick sensitivity. Small movements that use a small percent of the maximum control vecotr magnitude have a lower sensitivity than larger movements with the joystick.
+* @param[in,out] axis Takes in a reference to the axis (a_axis, l_axisLR/FB, v_axis)
 */
-void expDrive (double &axis, double &driveExp)
-{
-    axis = copysign((pow(fabs(axis), driveExp)), axis); // Copies
+void bilinearCalc(double &axis){
+    if((bilinearThreshold * -0.32768)<= axis && axis < (bilinearThreshold * 0.32767)){ //middle range
+        axis/=bilinearRatio;
+
+    } else if((bilinearThreshold * 0.32767) < axis && axis <= 0.32767) { //upper range
+        axis = (bilinearRatio * axis) + ((bilinearRatio * -0.32767) + 0.32767);
+
+    } else if(-0.32768 <= axis && axis < (bilinearThreshold * -0.32768)){//lower range
+        axis = (bilinearRatio * axis) + ((bilinearRatio * 0.32768) - 0.32768);
+
+    }
 }
 
 
@@ -126,13 +129,13 @@ void joyHorizontalCallback(const sensor_msgs::Joy::ConstPtr& joy){
 
 
 
-        //apply the exponetial ratio on all axis
-        expDrive(a_axis, driveExp);
-        expDrive(l_axisLR, driveExp);
-        expDrive(l_axisFB, driveExp);
+        //apply the bilinear ratio on all axis
+        bilinearCalc(a_axis);
+        bilinearCalc(l_axisLR);
+        bilinearCalc(l_axisFB);
         if(useJoyVerticalAxis){
           v_axis = joy->axes[verticalJoyAxisIndex] * v_scale * -1;
-          expDrive(v_axis, driveExp);
+          bilinearCalc(v_axis);
         }
 
 
@@ -177,7 +180,7 @@ void joyVerticalCallback(const sensor_msgs::Joy::ConstPtr& joy){
           if(!useJoyVerticalAxis){
             //store axes variables and handle 4 cases of inversion
             v_axis = joy->axes[verticalThrottleAxis] * v_scale * -1;
-            expDrive(v_axis, driveExp);
+            bilinearCalc(v_axis);
           }
 
       } else {
@@ -238,11 +241,11 @@ void controlCallback(copilot_interface::copilotControlParamsConfig &config, uint
     inversion_pub.publish(inversionMsg);
 
     // Sensitivty Publisher
-     rov_control_interface::rov_sensitivity sensitivityMsg;
-     sensitivityMsg.l_scale = l_scale;
-     sensitivityMsg.a_scale = a_scale;
-     sensitivityMsg.v_scale = v_scale;
-     sensitivity_pub.publish(sensitivityMsg);
+//     rov_control_interface::rov_sensitivity sensitivityMsg;
+//     sensitivityMsg.l_scale = l_scale;
+//     sensitivityMsg.a_scale = a_scale;
+//     sensitivityMsg.v_scale = v_scale;
+//     sensitivity_pub.publish(sensitivityMsg);
 
     // Thrusters Enabled Publisher
     std_msgs::Bool thrusterStatusMsg;
@@ -263,11 +266,11 @@ void inversionCallback(const std_msgs::UInt8::ConstPtr& data) {
 * @breif What the node does when copilot sensitivity setting publishes a new message
 * @param[in] "rov_control_interface/rov_sensitivity." message that is recieved when the sensitivty setting is changed
 */
- void sensitivityCallback(const rov_control_interface::rov_sensitivity::ConstPtr& data) {
-   l_scale = data->l_scale;
-   a_scale = data->a_scale;
-   v_scale = data->v_scale;
- }
+// void sensitivityCallback(const rov_control_interface::rov_sensitivity::ConstPtr& data) {
+//   l_scale = data->l_scale;
+//   a_scale = data->a_scale;
+//   v_scale = data->v_scale;
+// }
 
 /**
 * @breif What the node does when thruster status topic publishes a new message
@@ -297,7 +300,7 @@ int main(int argc, char **argv)
     power_control = n.advertise<std_msgs::Bool>("tcu/main_relay", 3);       //Relay pub
     solenoid_control = n.advertise<std_msgs::Bool>("tcu/main_solenoid", 3); //Solenoid pub
     inversion_pub = n.advertise<std_msgs::UInt8>("rov/inversion", 3);
-    sensitivity_pub = n.advertise<rov_control_interface::rov_sensitivity>("rov/sensitivity", 3);
+//     sensitivity_pub = n.advertise<rov_control_interface::rov_sensitivity>("rov/sensitivity", 3);
     thruster_status_pub = n.advertise<std_msgs::Bool>("rov/thruster_status", 3);
 
     //setup dynamic reconfigure

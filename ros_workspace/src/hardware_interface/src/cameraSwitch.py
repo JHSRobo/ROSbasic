@@ -3,7 +3,6 @@ import RPi.GPIO as GPIO
 import rospy
 from std_msgs.msg import UInt8
 
-# Callback function that runs every time a new message is
 def callback(data):
     if data.data == 2:
         GPIO.output(35, GPIO.LOW)
@@ -17,10 +16,6 @@ def callback(data):
     else:
         GPIO.output(35, GPIO.LOW)
         GPIO.output(36, GPIO.LOW)
-
-def hook():
-    GPIO.cleanup()
-    rospy.loginfo("Camera node shutdown successfully")
 
 def listener():
 
@@ -40,8 +35,6 @@ def listener():
 
     rospy.Subscriber("camera_select", UInt8, callback)
 
-    #shutdown hook releases the GPIO when the node is killed
-    rospy.on_shutdown(hook)
     # spin() simply keeps python from exiting until this node is stopped
     rospy.spin()
 

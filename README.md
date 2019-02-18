@@ -117,19 +117,6 @@ On your Raspberry Pi 3B make sure you are running ubuntu mate 16.04 (image here 
 * `roslaunch rov_description full_systems_launch.launch` or `roslaunch rov_description partial_systems_launch.launch` and `roslaunch simulate_rov.launch` on another machine
 * `rosrun rov_description simulation_interface.py`
 
-### Intel Realsense Setup instructions
-## Ubuntu
-
-* Follow the instructions here https://github.com/intel-ros/realsense
-* Test using `roslaunch realsense2_camera rs_camera.launch`
-
-Note: The resolution of the realsense camera should always run at 1280x720 for the D415 and 848x480 for the D435
-
-## RP 3B+
-
-* Follow the instructions here https://github.com/intel-ros/realsense
-* Test using `roslaunch realsense2_camera rs_camera.launch`
-
 
 ##UPDATES NEEDED BELOW THIS POINT
 --------------------------------

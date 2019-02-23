@@ -88,7 +88,6 @@ void expDrive (double &axis, double &driveExp)
 * @param[in] joy "sensor_msgs/Joy" message that is recieved when the joystick publsihes a new message
 */
 void joyHorizontalCallback(const sensor_msgs::Joy::ConstPtr& joy){
-
     //once copilot interface is created the params will be replaced with topics (inversion + sensitivity)
 
     //check if thrusters disabled
@@ -159,12 +158,10 @@ void joyHorizontalCallback(const sensor_msgs::Joy::ConstPtr& joy){
 }
 
 void joyVerticalCallback(const sensor_msgs::Joy::ConstPtr& joy){
-
       //once copilot interface is created the params will be replaced with topics (inversion + sensitivity)
 
       //check if thrusters disabled
       if (thrustEN) {
-
           //joystick message
           //float32[] axes          the axes measurements from a joystick
           //int32[] buttons         the buttons measurements from a joystick

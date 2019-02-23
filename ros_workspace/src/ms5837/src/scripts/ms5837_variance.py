@@ -21,15 +21,18 @@ def calculate(array):
 
 
 def callback(msg):
-    data.append(msg.data.depth)
+    global time
+    data.append(msg.depth)
     time += 1
+    print(time)
     if time >= 2000:
         calculate(data)
 
 
 def main():
+    rospy.init_node('test_node')
     while not rospy.is_shutdown():
-        rospy.Subscriber('rov/ms5837', ms5837_data.msg, callback)
+        rospy.Subscriber('rov/ms5837', ms5837_data, callback)
         rospy.spin()
 
 

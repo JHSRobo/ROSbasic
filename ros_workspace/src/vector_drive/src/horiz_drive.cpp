@@ -76,7 +76,6 @@ T min(T value1, T value2){
         return value1;
     return value2;
 }
-
 /**
 * @breif returns a number mapped proportioanlly from one range of numbers to another
 * @param[in] input Value to be mapped

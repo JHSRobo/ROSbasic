@@ -4,7 +4,6 @@ import rospy
 from ms5837.msg import ms5837_data
 
 data = []
-global time
 time = 0
 
 

@@ -1,6 +1,6 @@
 # Version Changes
 
-### v2.18 Changes [ RELEASE ]
+### v2.18 Changes
     Software Changes
     * Added depth sensor
     * Added sensitivity 

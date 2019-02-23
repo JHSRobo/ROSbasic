@@ -2,7 +2,7 @@
 
 The goal of this project is to develop preseason software technologies based on ROS. This project will explorer development paths and verify new technologies before more permanent hardware development. Key areas of testing are cameras, vector drive, controllers, and PID algortihms. Additionally new workflows/integration tactics are to be tested and documented (Travis CI, Docker, node documentation, doxygen). This project will expire at the beginning of the 2018-2019 robotics season.   
 
-![GitHub contributors](https://img.shields.io/github/contributors/JHSRobo/ROSbasic)
+![GitHub contributors](https://img.shields.io/github/contributors/JHSRobo/ROSBasic.svg)
 
 Release    
 [![Build Status](https://travis-ci.com/JHSRobo/ROSbasic.svg?branch=release)](https://travis-ci.com/JHSRobo/ROSbasic)

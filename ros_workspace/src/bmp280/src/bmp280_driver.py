@@ -52,7 +52,7 @@ class BMP280:
 		calibrationSuccess = False 
 		attempts = 0
 		self.tfine = 0
-		while not calibrationSuccess and attempts < 10):
+		while not calibrationSuccess and attempts < 10:
 			try:
 				self.loadCalibration()
 				with SMBusWrapper(1) as bus:

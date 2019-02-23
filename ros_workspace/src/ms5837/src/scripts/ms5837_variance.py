@@ -20,7 +20,6 @@ def calculate(array):
 
 
 def callback(msg):
-    global time
     data.append(msg.depth)
     time += 1
     print(time)

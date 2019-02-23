@@ -1,7 +1,7 @@
 # Version Changes
 
-## v2.18 Changes
-###  Software Changes
+### v2.18 Changes
+    Software Changes
     * Added depth sensor
     * Added sensitivity 
     * Added trout grout to launch files
@@ -12,11 +12,11 @@
     * Fixed little driving errors
     * Fixed sensor hat 
 
-###  Hardware Changes
+    Hardware Changes
     * Added I2C Oscillator
     * Added Electromagnet
     
-###  Task Changes
+    Task Changes
     * Activate Trout Grout motor
     * Activate Electromagnet 
  

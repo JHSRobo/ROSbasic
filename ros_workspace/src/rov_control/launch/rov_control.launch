@@ -3,6 +3,7 @@
 <!-- Need to determine wether to use aligned image or not, optical flow or BOW -->
 
 <arg name="realRealsense" default="true"/>
+<arg name="displayOdom" default="true"/> <!-- RTAB viewer not implemented yet-->
 
 <include file="$(find rov_description)/launch/visualize_rov.launch">
   <arg name="display" value="true"/>
@@ -11,41 +12,47 @@
 <group ns="rov">
 
   <group if="$(arg realRealsense)">
-    <!-- Start the intel realsense camera -->
-    <!-- See https://github.com/intel-ros/realsense/blob/development/README.md -->
-    <include file="$(find realsense2_camera)/launch/includes/nodelet.launch.xml"/>
-      <arg name="serial_no"           value=""/>
-      <arg name="json_file_path"      value=""/>
-      <arg name="camera"              value="realsense_cam"/>
+    <!-- name of camera -->
+    <group ns="realsense_cam">
+      <!-- Start the intel realsense camera -->
+      <!-- See https://github.com/intel-ros/realsense/blob/development/README.md -->
+      <include file="$(find realsense2_camera)/launch/includes/nodelet.launch.xml">
+        <arg name="serial_no"           value=""/>
+        <arg name="json_file_path"      value=""/>
+        <arg name="tf_prefix"           value="realsense_cam"/>
 
-      <arg name="depth_width"         value="848"/>
-      <arg name="depth_height"        value="480"/>
-      <arg name="enable_depth"        value="true"/>
+        <arg name="base_frame_id"       value="camera_link"/>
 
-      <arg name="infra_width"         value="848"/>
-      <arg name="infra_height"        value="480"/>
-      <arg name="enable_infra1"       value="false"/>
-      <arg name="enable_infra2"       value="false"/>
+        <arg name="depth_width"         value="848"/>
+        <arg name="depth_height"        value="480"/>
+        <arg name="enable_depth"        value="true"/>
 
-      <arg name="color_width"         value="848"/>
-      <arg name="color_height"        value="480"/>
-      <arg name="enable_color"        value="true"/>
+        <arg name="infra_width"         value="848"/>
+        <arg name="infra_height"        value="480"/>
+        <arg name="enable_infra1"       value="false"/>
+        <arg name="enable_infra2"       value="false"/>
 
-      <arg name="depth_fps"           value="6"/>
-      <arg name="infra_fps"           value="6"/>
-      <arg name="color_fps"           value="6"/>
+        <arg name="color_width"         value="848"/>
+        <arg name="color_height"        value="480"/>
+        <arg name="enable_color"        value="true"/>
 
-      <arg name="enable_pointcloud"         value="false"/>
-      <arg name="pointcloud_texture_stream" value="RS2_STREAM_COLOR"/>
-      <arg name="pointcloud_texture_index"  value="0"/>
+        <!-- 6,15,30,60,90 -->
+        <arg name="depth_fps"           value="15"/>
+        <arg name="infra_fps"           value="15"/>
+        <arg name="color_fps"           value="15"/>
 
-      <arg name="enable_sync"           value="false"/>
-      <arg name="align_depth"           value="false"/>
+        <arg name="enable_pointcloud"         value="false"/>
+        <arg name="pointcloud_texture_stream" value="RS2_STREAM_COLOR"/>
+        <arg name="pointcloud_texture_index"  value="0"/>
 
-      <arg name="filters"               value=""/>
-      <arg name="clip_distance"         value="10"/>
-      <arg name="initial_reset"         value="true"/>
-    </include>
+        <arg name="enable_sync"           value="false"/>
+        <arg name="align_depth"           value="false"/>
+
+        <arg name="filters"               value=""/>
+        <arg name="clip_distance"         value="10"/>
+        <arg name="initial_reset"         value="true"/>
+      </include>
+    </group>
   </group>
 
   <!-- Start gathering visual odometry -->
@@ -55,6 +62,10 @@
     <remap from="rgb/camera_info" to="realsense_cam/color/camera_info"/>
     <remap from="depth/image" to="realsense_cam/depth/image_rect_raw"/>
     <rosparam command="load" file="$(find rov_control)/config/rov_rtab_params.yaml"/>
+
+    <!-- http://wiki.ros.org/rtabmap_ros/Tutorials/Advanced%20Parameter%20Tuning -->
+    <!-- Correspondences 0=Features Matching, 1=Optical Flow -->
+    <param name="Vis/CorType" type="" value="1"/>
   </node>
 
   <!-- Start Fusing IMU, VO, and Depth Sensor Odometry -->

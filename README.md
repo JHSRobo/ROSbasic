@@ -2,6 +2,8 @@
 
 The goal of this project is to develop preseason software technologies based on ROS. This project will explorer development paths and verify new technologies before more permanent hardware development. Key areas of testing are cameras, vector drive, controllers, and PID algortihms. Additionally new workflows/integration tactics are to be tested and documented (Travis CI, Docker, node documentation, doxygen). This project will expire at the beginning of the 2018-2019 robotics season.   
 
+![GitHub contributors](https://img.shields.io/github/contributors/JHSRobo/ROSBasic.svg)
+
 Release    
 [![Build Status](https://travis-ci.com/JHSRobo/ROSbasic.svg?branch=release)](https://travis-ci.com/JHSRobo/ROSbasic)
 [![CodeFactor](https://www.codefactor.io/repository/github/jhsrobo/rosbasic/badge)](https://www.codefactor.io/repository/github/jhsrobo/rosbasic)
@@ -131,52 +133,18 @@ Note: The resolution of the realsense camera should always run at 1280x720 for t
 * Test using `roslaunch realsense2_camera rs_camera.launch`
 
 
-##UPDATES NEEDED BELOW THIS POINT
---------------------------------
-
-## Running the tests
-
-Explain how to run the automated tests for this system (travis CI)
-
-### Break down into end to end tests
-
-Explain what these tests test and why
-
-```
-Give an example
-```
-
-### And coding style tests
-
-Explain what these tests test and why (coveralls)
-
-```
-Give an example
-```
-
-## Deployment
-
-Add additional notes about how to deploy this on a live system (docker)
-
 ## Built With
 
-* [Dropwizard](http://www.dropwizard.io/1.0.2/docs/) - The web framework used
-* [Maven](https://maven.apache.org/) - Dependency Management
-* [ROME](https://rometools.github.io/rome/) - Used to generate RSS Feeds
+* [Robotics Operating System](http://wiki.ros.org/kinetic) - The web framework used
+* [Travis CI](https://travis-ci.com/) - Continious integration
 
-## Contributing
-
-Please read [CONTRIBUTING.md](https://github.com/Michael-Equi/ROV_Test_Bench/blob/development/CONTRIBUTING.md) for details on our code of conduct, and the process for submitting pull requests to us.
-
-## Versioning
-
-We use [SemVer](http://semver.org/) for versioning. For the versions available, see the [tags on this repository](https://github.com/your/project/tags).
 
 ## Authors
 
 * **Michael Equi** - *Initial work*
+* **Andrew Grindstaff** - *Finishing work*
 
-See also the list of [contributors](https://github.com/Michael-Equi/ROV_Test_Bench/graphs/contributors) who participated in this project.
+See also the list of [contributors](https://github.com/JHSRobo/ROSbasic) who participated in this project.
 
 ## Acknowledgments
 

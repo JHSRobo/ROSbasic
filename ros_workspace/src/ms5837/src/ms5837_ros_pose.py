@@ -15,14 +15,14 @@ header.frame_id = 'ms5837_pose_data'
 header.stamp = rospy.Time.now()
 ros_msg.header = header
 ros_msg.pose.pose.position.z = 0
-ros_msg.pose.covariance[9] =
+ros_msg.pose.covariance[8] = 0.0001349092722
 
 
 def callback(msg):
 	header.frame_id = 'ms5837_pose_data'
 	header.stamp = rospy.Time.now()
 	ros_msg.header = header
-	ros_msg.pose.pose.position.z = msg.data.depth - zero_value
+	ros_msg.pose.pose.position.z = msg.depth - zero_value
 	pub.publish(ros_msg)
 
 

@@ -11,11 +11,11 @@ time = 0
 def calculate(array):
     mean = 0
     total = 0
-    for i in range(0, len(array)):
-        mean += array[i]
+    for point in array:
+        mean += point
     mean /= len(array)
-    for i in range(0, len(array)):
-        total += (array[i] - mean) * (array[i] - mean)
+    for point in array:
+        total += (point - mean) * (point - mean)
     total /= len(array)
     print(total)
 
@@ -38,4 +38,3 @@ def main():
 
 if __name__ == '__main__':
     main()
-

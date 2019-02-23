@@ -17,7 +17,7 @@ def callback(msg):
 	pub.publish(ros_msg)
 
 
-def zeroing():
+def zeroing(zero_value):
 	zero_value += ros_msg.angular.z
 
 
@@ -25,7 +25,7 @@ def publisher():
 	# set up ros stuff
 	while not rospy.is_shutdown():
 		rospy.init_node('ms5837_twist')
-		rospy.Service('zero_depth_sensor', None, zeroing)
+		rospy.Service('zero_depth_sensor', None, zeroing(zero_value))
 		rospy.Subscriber('rov/ms5837', ms5837_data.msg, callback)
 		rospy.spin()
 

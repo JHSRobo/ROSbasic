@@ -18,5 +18,8 @@
     
     Task Changes
     * Activate Trout Grout motor
-    * Activate Electromagnet 
+    * Activate Electromagnet
+    
+    Test Sheet
+    https://docs.google.com/spreadsheets/d/1CVg81HBP-IM_X-lDEVpPyWG2BjTNVhsTBobLcjMEPIA/edit#gid=0
  

@@ -1,5 +1,7 @@
 #http://wiki.ros.org/rtabmap_ros#Visual_Odometry
 
+#NOTE This file is NOT be working
+
 frame_id: "rov/base_link"
 odom_frame_id: "odom"
 publish_tf: "false"

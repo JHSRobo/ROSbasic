@@ -62,10 +62,10 @@
     <remap from="rgb/camera_info" to="realsense_cam/color/camera_info"/>
     <remap from="depth/image" to="realsense_cam/depth/image_rect_raw"/>
     <rosparam command="load" file="$(find rov_control)/config/rov_rtab_params.yaml"/>
+    <param name="publish_tf" type="bool" value="false"/>
 
     <!-- http://wiki.ros.org/rtabmap_ros/Tutorials/Advanced%20Parameter%20Tuning -->
-    <!-- Correspondences 0=Features Matching, 1=Optical Flow -->
-    <param name="Vis/CorType" type="" value="1"/>
+    <param name="Vis/CorType" type="int" value="1"/> <!-- Correspondences 0=Features Matching, 1=Optical Flow -->
   </node>
 
   <!-- Start Fusing IMU, VO, and Depth Sensor Odometry -->

@@ -92,7 +92,6 @@ namespace ros {
   class DefaultReadOutBuffer_
   {
   public:
-    
     enum ReadoutError
     {
       NoError,
@@ -118,15 +117,9 @@ namespace ros {
         
   public:
     DefaultReadOutBuffer_() :
-      read_out_error_( NoError )
-    {
-      
-    }
+      read_out_error_( NoError ){ }
     
-    virtual ~DefaultReadOutBuffer_() 
-    {
-      
-    }
+    virtual ~DefaultReadOutBuffer_() { }
     
     // for md5sum / msg type
     virtual const char *  readMsgInfo( const char * msg_info )
@@ -181,7 +174,6 @@ namespace ros {
        */
     public:
       NodeHandle_() : configured_(false) {
-
         for(unsigned int i=0; i< MAX_PUBLISHERS; i++)
 	   publishers[i] = 0;
 
@@ -246,7 +238,6 @@ namespace ros {
 
 
       virtual int spinOnce(){
-
         /* restart if timed out */
         uint32_t c_time = hardware_.time();
         if( (c_time - last_sync_receive_time) > (SYNC_SECONDS*2200) ){
@@ -552,7 +543,6 @@ namespace ros {
        */
 
     private:
-      
       void log(char byte, const char * msg){
         rosserial_msgs::Log l;
         l.level= byte;
@@ -566,7 +556,6 @@ namespace ros {
       
       template<typename T_ConstStringType>   
       void log(char byte, T_ConstStringType msg){
-	
 	  ReadBuffer buffer;
 	  
 	  log( byte, buffer.readLog( msg ) );

@@ -128,8 +128,12 @@ Note: The resolution of the realsense camera should always run at 1280x720 for t
 ## RP 3B+
 
 * Follow the driver installation instructions: https://github.com/IntelRealSense/librealsense/blob/master/doc/RaspberryPi3.md
+* cd ros_workspace
+* `git submodule init`
+* `git submodule update`
 * `catkin_make`
 * Test using `roslaunch realsense2_camera rs_camera.launch`
+* Run on the rov by launching the `rov_control` file
 
 
 ##UPDATES NEEDED BELOW THIS POINT

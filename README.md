@@ -120,14 +120,15 @@ On your Raspberry Pi 3B make sure you are running ubuntu mate 16.04 (image here 
 ### Intel Realsense Setup instructions
 ## Ubuntu
 
-* Follow the instructions here https://github.com/intel-ros/realsense
+* Follow the driver installation instructions: https://github.com/intel-ros/realsense
 * Test using `roslaunch realsense2_camera rs_camera.launch`
 
 Note: The resolution of the realsense camera should always run at 1280x720 for the D415 and 848x480 for the D435
 
 ## RP 3B+
 
-* Follow the instructions here https://github.com/intel-ros/realsense
+* Follow the driver installation instructions: https://github.com/IntelRealSense/librealsense/blob/master/doc/RaspberryPi3.md
+* `catkin_make`
 * Test using `roslaunch realsense2_camera rs_camera.launch`
 
 

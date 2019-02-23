@@ -122,10 +122,10 @@ class BMP280:
             
 		var1 = self.tfine - 128000
 		var2 = var1 * var1 * self.cal_REGISTER_DIG_P6
-		var2 = var2 + ((var1*self.cal_REGISTER_DIG_P5)<<17);
-		var2 = var2 + ((self.cal_REGISTER_DIG_P4)<<35);
-		var1 = ((var1 * var1 * self.cal_REGISTER_DIG_P3)>>8) + ((var1 * self.cal_REGISTER_DIG_P2)<<12);
-		var1 = ((((1)<<47)+var1))*(self.cal_REGISTER_DIG_P1)>>33;
+		var2 = var2 + ((var1*self.cal_REGISTER_DIG_P5)<<17)
+		var2 = var2 + ((self.cal_REGISTER_DIG_P4)<<35)
+		var1 = ((var1 * var1 * self.cal_REGISTER_DIG_P3)>>8) + ((var1 * self.cal_REGISTER_DIG_P2)<<12)
+		var1 = ((((1)<<47)+var1))*(self.cal_REGISTER_DIG_P1)>>33
 
 		if var1 == 0:
 			return 0

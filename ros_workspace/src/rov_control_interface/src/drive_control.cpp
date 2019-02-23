@@ -89,12 +89,10 @@ void expDrive (double &axis, double &driveExp)
 */
 void joyHorizontalCallback(const sensor_msgs::Joy::ConstPtr& joy){
 
-
     //once copilot interface is created the params will be replaced with topics (inversion + sensitivity)
 
     //check if thrusters disabled
     if (thrustEN) {
-
         //joystick message
         //float32[] axes          the axes measurements from a joystick
         //int32[] buttons         the buttons measurements from a joystick
@@ -138,12 +136,10 @@ void joyHorizontalCallback(const sensor_msgs::Joy::ConstPtr& joy){
 
 
     } else {
-
         a_axis = 0;
         l_axisLR = 0;
         l_axisFB = 0;
         v_axis = 0;
-
     }
 
     //publish the vector values -> build up command vector message
@@ -160,7 +156,6 @@ void joyHorizontalCallback(const sensor_msgs::Joy::ConstPtr& joy){
     commandVectors.angular.z = 0;
 
     vel_pub.publish(commandVectors);
-
 }
 
 void joyVerticalCallback(const sensor_msgs::Joy::ConstPtr& joy){
@@ -173,7 +168,6 @@ void joyVerticalCallback(const sensor_msgs::Joy::ConstPtr& joy){
           //joystick message
           //float32[] axes          the axes measurements from a joystick
           //int32[] buttons         the buttons measurements from a joystick
-
           if(!useJoyVerticalAxis){
             //store axes variables and handle 4 cases of inversion
             v_axis = joy->axes[verticalThrottleAxis] * v_scale * -1;
@@ -181,9 +175,7 @@ void joyVerticalCallback(const sensor_msgs::Joy::ConstPtr& joy){
           }
 
       } else {
-
           v_axis = 0;
-
       }
 
       //publish the vector values -> build up command vector message
@@ -210,7 +202,6 @@ void joyVerticalCallback(const sensor_msgs::Joy::ConstPtr& joy){
 * @param[in] level The OR-ing of all the values that have changed in the copilot_interface param (not used yet)
 */
 void controlCallback(copilot_interface::copilotControlParamsConfig &config, uint32_t level) {
-
     thrustEN = config.thrustersEnabled;
 
     l_scale = config.l_scale;
@@ -248,7 +239,6 @@ void controlCallback(copilot_interface::copilotControlParamsConfig &config, uint
     std_msgs::Bool thrusterStatusMsg;
     thrusterStatusMsg.data = thrustEN;
     thruster_status_pub.publish(thrusterStatusMsg);
-
 }
 
 /**

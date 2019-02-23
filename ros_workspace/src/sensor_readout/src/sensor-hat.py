@@ -1,8 +1,7 @@
 #!/usr/bin/env python
 
 import rospy
-import time
-import math
+
 import time
 from sense_hat import SenseHat
 from std_msgs.msg import Header
@@ -62,6 +61,7 @@ def talker():
 		start_time = int(time.time()) * 1000
 
 		rate.sleep()
+
 
 if __name__ == '__main__':
 	try:

@@ -4,12 +4,15 @@ The goal of this project is to develop preseason software technologies based on 
 
 Release    
 [![Build Status](https://travis-ci.com/JHSRobo/ROSbasic.svg?branch=release)](https://travis-ci.com/JHSRobo/ROSbasic)
+[![CodeFactor](https://www.codefactor.io/repository/github/jhsrobo/rosbasic/badge)](https://www.codefactor.io/repository/github/jhsrobo/rosbasic)
 
 Master     
 [![Build Status](https://travis-ci.com/JHSRobo/ROSbasic.svg?branch=master)](https://travis-ci.com/JHSRobo/ROSbasic)
+[![CodeFactor](https://www.codefactor.io/repository/github/jhsrobo/rosbasic/badge)](https://www.codefactor.io/repository/github/jhsrobo/rosbasic)
 
 Development     
 [![Build Status](https://travis-ci.com/JHSRobo/ROSbasic.svg?branch=development)](https://travis-ci.com/JHSRobo/ROSbasic)
+[![CodeFactor](https://www.codefactor.io/repository/github/jhsrobo/rosbasic/badge)](https://www.codefactor.io/repository/github/jhsrobo/rosbasic)
 
 ## Getting Started
 

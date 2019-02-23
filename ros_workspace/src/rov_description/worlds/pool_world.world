@@ -48,7 +48,7 @@
       <!--Add MATE 2019 dam model-->
       <include>
         <uri>model://dam</uri>
-        <pose>0 0 0 0 0 0</pose>
+        <pose>-8.042713 -23.216955 -1.602639 -1.570797 0 -3.140796</pose>
       </include>
 
       <plugin name="underwater_current_plugin" filename="libuuv_underwater_current_ros_plugin.so">

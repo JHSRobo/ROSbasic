@@ -203,3 +203,4 @@ include_directories(
 
 add_executable(drive_control src/drive_control.cpp)
 target_link_libraries(drive_control ${catkin_LIBRARIES})
+add_dependencies(drive_control rov_contor_interface_generate_messages_cpp)

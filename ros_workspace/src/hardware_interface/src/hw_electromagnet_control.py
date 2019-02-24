@@ -3,15 +3,18 @@ import RPi.GPIO as GPIO
 import rospy
 from std_msgs.msg import Bool
 
+
 def callback(data):
-    if data.data == True:
+    if data.data:
         GPIO.output(37, GPIO.HIGH)
-    elif data.data == False:
+    elif not data.data:
         GPIO.output(37, GPIO.LOW)
+
 
 def hook():
     GPIO.cleanup()
     rospy.loginfo("Electromagnet node shutdown successfully")
+
 
 def listener():
 
@@ -28,10 +31,11 @@ def listener():
 
     rospy.Subscriber("electromagnet_control", Bool, callback)
 
-    #shutdown hook releases the GPIO when the node is killed
+    # shutdown hook releases the GPIO when the node is killed
     rospy.on_shutdown(hook)
     # spin() simply keeps python from exiting until this node is stopped
     rospy.spin()
+
 
 if __name__ == '__main__':
     listener()

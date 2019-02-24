@@ -23,7 +23,7 @@ def listener():
     GPIO.setmode(GPIO.BOARD)
     GPIO.setup(38, GPIO.OUT)
 
-    rospy.Subscriber("rov/trout_grout", Bool, callback)
+    rospy.Subscriber("trout_grout", Bool, callback)
 
     #shutdown hook releases the GPIO when the node is killed
     rospy.on_shutdown(hook)

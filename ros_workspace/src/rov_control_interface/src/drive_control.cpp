@@ -88,13 +88,10 @@ void expDrive (double &axis, double &driveExp)
 * @param[in] joy "sensor_msgs/Joy" message that is recieved when the joystick publsihes a new message
 */
 void joyHorizontalCallback(const sensor_msgs::Joy::ConstPtr& joy){
-
-
     //once copilot interface is created the params will be replaced with topics (inversion + sensitivity)
 
     //check if thrusters disabled
     if (thrustEN) {
-
         //joystick message
         //float32[] axes          the axes measurements from a joystick
         //int32[] buttons         the buttons measurements from a joystick
@@ -138,12 +135,10 @@ void joyHorizontalCallback(const sensor_msgs::Joy::ConstPtr& joy){
 
 
     } else {
-
         a_axis = 0;
         l_axisLR = 0;
         l_axisFB = 0;
         v_axis = 0;
-
     }
 
     //publish the vector values -> build up command vector message
@@ -160,20 +155,16 @@ void joyHorizontalCallback(const sensor_msgs::Joy::ConstPtr& joy){
     commandVectors.angular.z = 0;
 
     vel_pub.publish(commandVectors);
-
 }
 
 void joyVerticalCallback(const sensor_msgs::Joy::ConstPtr& joy){
-
       //once copilot interface is created the params will be replaced with topics (inversion + sensitivity)
 
       //check if thrusters disabled
       if (thrustEN) {
-
           //joystick message
           //float32[] axes          the axes measurements from a joystick
           //int32[] buttons         the buttons measurements from a joystick
-
           if(!useJoyVerticalAxis){
             //store axes variables and handle 4 cases of inversion
             v_axis = joy->axes[verticalThrottleAxis] * v_scale * -1;
@@ -181,9 +172,7 @@ void joyVerticalCallback(const sensor_msgs::Joy::ConstPtr& joy){
           }
 
       } else {
-
           v_axis = 0;
-
       }
 
       //publish the vector values -> build up command vector message
@@ -210,7 +199,6 @@ void joyVerticalCallback(const sensor_msgs::Joy::ConstPtr& joy){
 * @param[in] level The OR-ing of all the values that have changed in the copilot_interface param (not used yet)
 */
 void controlCallback(copilot_interface::copilotControlParamsConfig &config, uint32_t level) {
-
     thrustEN = config.thrustersEnabled;
 
     l_scale = config.l_scale;
@@ -248,7 +236,6 @@ void controlCallback(copilot_interface::copilotControlParamsConfig &config, uint
     std_msgs::Bool thrusterStatusMsg;
     thrusterStatusMsg.data = thrustEN;
     thruster_status_pub.publish(thrusterStatusMsg);
-
 }
 
 /**
@@ -291,6 +278,7 @@ int main(int argc, char **argv)
     joy_sub1 = n.subscribe<sensor_msgs::Joy>("joy/joy1", 2, &joyHorizontalCallback);
     joy_sub2 = n.subscribe<sensor_msgs::Joy>("joy/joy2", 2, &joyVerticalCallback);
     thruster_status_sub = n.subscribe<std_msgs::Bool>("rov/thruster_status", 1, &thrusterStatusCallback);
+    sensitivity_sub = n.subscribe<rov_control_interface::rov_sensitivity>("rov/sensitivity", 3, &sensitivityCallback);
 
     vel_pub = n.advertise<geometry_msgs::Twist>("rov/cmd_vel", 1);
     camera_select = n.advertise<std_msgs::UInt8>("rov/camera_select", 3);       //Camera pub

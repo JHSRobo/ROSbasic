@@ -826,7 +826,6 @@ bool USBDeviceClass::handleStandardSetup(USBSetup &setup)
 
 	case SET_CONFIGURATION:
 		if (REQUEST_DEVICE == (setup.bmRequestType & REQUEST_RECIPIENT)) {
-
 			initEndpoints();
 			_usbConfiguration = setup.wValueL;
 
@@ -858,7 +857,6 @@ bool USBDeviceClass::handleStandardSetup(USBSetup &setup)
 
 void USBDeviceClass::ISRHandler()
 {
-
 	if (_pack_message == true) {
 		return;
 	}
@@ -932,7 +930,6 @@ void USBDeviceClass::ISRHandler()
 			// Remove stall request
 			usbd.epBank1DisableStalled(0);
 		}
-
 	} // end Received Setup handler
 
 	uint8_t i=0;

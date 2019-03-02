@@ -796,7 +796,6 @@ int start_capture(RASPIVID_STATE *state) {
 }
 
 int close_cam(RASPIVID_STATE *state) {
-
     //Return to camera 1
     i2c.send(0x01);
     gpio.digitalWrite(ePin, 0);

@@ -65,7 +65,9 @@
     <param name="publish_tf" type="bool" value="false"/>
 
     <!-- http://wiki.ros.org/rtabmap_ros/Tutorials/Advanced%20Parameter%20Tuning -->
-    <param name="Vis/CorType" type="int" value="1"/> <!-- Correspondences 0=Features Matching, 1=Optical Flow -->
+    <param name="Odom/Strategy" value="1"/>
+    <!-- Correspondences 0=Features Matching, 1=Optical Flow -->
+    <param name="Vis/CorType" type="int" value="1"/>
   </node>
 
   <!-- Start Fusing IMU, VO, and Depth Sensor Odometry -->

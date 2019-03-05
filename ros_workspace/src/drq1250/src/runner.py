@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 import time
 from PMBus import pmbus
 
@@ -17,8 +19,7 @@ while True:
     print("Output Voltage: " + str(DRQ.getVoltageOut()))
     print("Output Current: " + str(DRQ.getCurrent()))
     print("Output Power: " + str(DRQ.getPowerOut(False)) + "\n\n") #False is caclulated from given values of current and voltage while True gets values from DRQ1250
-    
-    #DRQ.encodePMBus(34.0)
-    
-    time.sleep(5)
 
+    #DRQ.encodePMBus(34.0)
+
+    time.sleep(5)

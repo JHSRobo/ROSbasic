@@ -1,9 +1,5 @@
 <launch>
 
- <!-- Use the joysticks vertical axis for controlling the vertical thrusters -->
-  <arg name="useJoyVerticalAxis" default="true" />
-  <param name="useJoyVerticalAxis" value="$(arg useJoyVerticalAxis)" />
-
  <!-- joystick -> vectorCommand-->
   <node pkg="rov_control_interface" type="drive_control" name="drive_control"/>
 

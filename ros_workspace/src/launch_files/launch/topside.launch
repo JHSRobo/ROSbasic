@@ -1,8 +1,6 @@
 <launch>
 <!-- ROV topside control interface -->
-   <include file="$(find rov_control_interface)/launch/control_interface.launch">
-     <arg name="useJoyVerticalAxis" value="true" />
-  </include>
+   <include file="$(find rov_control_interface)/launch/control_interface.launch"/>
 
  <!-- temp copilot interface -->
    <node pkg="rqt_reconfigure" type="rqt_reconfigure" name="copilot_interface"/>

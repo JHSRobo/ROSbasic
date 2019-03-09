@@ -200,9 +200,13 @@ void joyVerticalCallback(const sensor_msgs::Joy::ConstPtr& joy){
 void joyWatchdogCB(const ros::TimerEvent&){
   //Check the joystick
   if(ros::Time::now().toSec() > joyHorizontalLastInput + 1.5){
-    // ROS_ERROR("Joystick disconnection detected!");
+//     ROS_ERROR("Joystick disconnection detected!");
     //publish the vector values for failsafe mode
     geometry_msgs::Twist commandVectors; //Default message contains all zeros
+    // Reset all the values to prevent feedback loop from throttle
+    l_axisLR = 0;
+    l_axisFB = 0;
+    a_axis = 0;
     if(!useJoyVerticalAxis){
       //if the throttle is plugged in, then continue using the v_axis value
       commandVectors.linear.z = v_axis;

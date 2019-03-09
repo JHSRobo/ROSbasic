@@ -119,6 +119,10 @@ On your Raspberry Pi 3B make sure you are running ubuntu mate 16.04 (image here 
 * `roslaunch rov_description full_systems_launch.launch` or `roslaunch rov_description partial_systems_launch.launch` and `roslaunch simulate_rov.launch` on another machine
 * `rosrun rov_description simulation_interface.py`
 
+### Bottomside Build Instructions
+
+* When building bottomside with catkin_make, type the command catkin_make -DCATKIN_WHITELIST_PACKAGES="vector_drive;hardware_interface;raspicam_node;drq1250;ms5837;sensor_readout"
+
 ### Intel Realsense Setup instructions
 ## Ubuntu
 

@@ -52,6 +52,24 @@
         <pose>-8.042713 -23.216955 -1.602639 -1.570797 0 -3.140796</pose>
       </include>
 
+      <!--Add MATE 2019 benthic species model-->
+      <include>
+        <uri>model://benthic_species</uri>
+        <pose>-8.136448 -20.867729 -4.064263 -1.644706 0 0</pose>
+      </include>
+
+      <!--Add MATE 2019 cannon model-->
+      <include>
+        <uri>model://cannon</uri>
+        <pose>-10.945729 -20.167297 -3.920171 3.069565 0 0</pose>
+      </include>
+
+      <!--Add MATE 2019 trout reef model-->
+      <include>
+        <uri>model://trout_reef</uri>
+        <pose>-10.890866 -22.879333 -3.805876 -1.640956 0 0</pose>
+      </include>
+
       <plugin name="underwater_current_plugin" filename="libuuv_underwater_current_ros_plugin.so">
         <namespace>hydrodynamics</namespace>
         <constant_current>

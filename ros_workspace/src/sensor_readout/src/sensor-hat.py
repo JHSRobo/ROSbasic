@@ -13,7 +13,7 @@ sense.set_imu_config(True, True, True) #compass, gyro, accele
 calibration = sense.get_orientation_radians()
 start_roll = calibration['yaw']
 start_pitch = calibration['roll']
-start_yaw = calibration['pitch	']
+start_yaw = calibration['pitch']
 start_time = int(time.time()) * 1000
 
 

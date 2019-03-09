@@ -41,7 +41,7 @@ double v_axis(0);   //!< Holds the value of the vertical control axis
 bool thrustEN(false); //!<thrusters enabled (True = yes, False = default = no)
 
 //change this as a launch parameter in topside.launch
-bool useJoyVerticalAxis(true); //!< Holds the state that determins wether the joysticks vertical input or the throttles vertical input gets used
+bool useJoyVerticalAxis(true); //!< Holds the state that determines wether the joysticks vertical input or the throttles vertical input gets used
 
 
 //! inversion -> 1 Front, 2 Left, 3 Back, 4 Right
@@ -54,7 +54,7 @@ const double bilinearRatio(1.5);
 const double bilinearThreshold(1.0 / bilinearRatio);
 
 //! Exponent for Drive Power Calculations
-double driveExp = 1.4;
+const double driveExp = 1.4;
 
 ros::Publisher vel_pub; //!<publisher that publishes a Twist message containing 2 non-standard Vector3 data sets
 ros::Subscriber joy_sub1; //!<subscriber to the logitech joystick
@@ -77,19 +77,20 @@ ros::Publisher thruster_status_pub; //!<Publishes thruster status from copilot
 * @brief Controls variable joystick sensitivity. Small movements that use a small percent of the maximum control vector magnitude have a lower sensitivity than larger movements with the joystick.
 * @param[in,out] axis Takes in a reference to the axis (a_axis, l_axisLR/FB, v_axis) from -1 to 1
 */
-void expDrive (double &axis, double &driveExp)
+void expDrive (double &axis, const double &driveExp)
 {
     axis = copysign((pow(fabs(axis), driveExp)), axis); // Copies
 }
 
-
+//! variable for monitoring the topic frequency so that a diconnect can be declared if the frequency drops below 1Hz
+double joyHorizontalLastInput(0.0);
 /**
 * @breif What the node does when joystick publishes a new message
 * @param[in] joy "sensor_msgs/Joy" message that is recieved when the joystick publsihes a new message
 */
 void joyHorizontalCallback(const sensor_msgs::Joy::ConstPtr& joy){
     //once copilot interface is created the params will be replaced with topics (inversion + sensitivity)
-
+    joyHorizontalLastInput = ros::Time::now().toSec();
     //check if thrusters disabled
     if (thrustEN) {
         //joystick message
@@ -157,19 +158,24 @@ void joyHorizontalCallback(const sensor_msgs::Joy::ConstPtr& joy){
     vel_pub.publish(commandVectors);
 }
 
+//! variable for monitoring the topic frequency so that a diconnect can be declared if the frequency drops below 1Hz
+double joyVerticalLastInput(0.0);
+/**
+* @breif What the node does when throttle publishes a new message
+* @param[in] joy "sensor_msgs/Joy" message that is recieved when the joystick publsihes a new message
+*/
 void joyVerticalCallback(const sensor_msgs::Joy::ConstPtr& joy){
       //once copilot interface is created the params will be replaced with topics (inversion + sensitivity)
-
+      joyVerticalLastInput = ros::Time::now().toSec();
       //check if thrusters disabled
+      useJoyVerticalAxis = false;
       if (thrustEN) {
           //joystick message
           //float32[] axes          the axes measurements from a joystick
           //int32[] buttons         the buttons measurements from a joystick
-          if(!useJoyVerticalAxis){
-            //store axes variables and handle 4 cases of inversion
-            v_axis = joy->axes[verticalThrottleAxis] * v_scale * -1;
-            expDrive(v_axis, driveExp);
-          }
+          //store axes variables and handle 4 cases of inversion
+          v_axis = joy->axes[verticalThrottleAxis] * v_scale * -1;
+          expDrive(v_axis, driveExp);
 
       } else {
           v_axis = 0;
@@ -189,6 +195,30 @@ void joyVerticalCallback(const sensor_msgs::Joy::ConstPtr& joy){
       commandVectors.angular.z = 0;
 
       vel_pub.publish(commandVectors);
+}
+
+void joyWatchdogCB(const ros::TimerEvent&){
+  //Check the joystick
+  if(ros::Time::now().toSec() > joyHorizontalLastInput + 1.5){
+//     ROS_ERROR("Joystick disconnection detected!");
+    //publish the vector values for failsafe mode
+    geometry_msgs::Twist commandVectors; //Default message contains all zeros
+    // Reset all the values to prevent feedback loop from throttle
+    l_axisLR = 0;
+    l_axisFB = 0;
+    a_axis = 0;
+    if(!useJoyVerticalAxis){
+      //if the throttle is plugged in, then continue using the v_axis value
+      commandVectors.linear.z = v_axis;
+    }
+    vel_pub.publish(commandVectors);
+  }
+
+  //Check the throttle
+  if(ros::Time::now().toSec() > joyVerticalLastInput + 1.5){
+    // ROS_ERROR("Throttle disconnection detected!");
+    useJoyVerticalAxis = true;
+  }
 }
 
 
@@ -272,8 +302,6 @@ int main(int argc, char **argv)
 
     ros::NodeHandle n;
 
-    n.getParam("/useJoyVerticalAxis", useJoyVerticalAxis); //Check the parameter server for useJoyVerticalAxis
-
     //setup publisher and subscriber
     joy_sub1 = n.subscribe<sensor_msgs::Joy>("joy/joy1", 2, &joyHorizontalCallback);
     joy_sub2 = n.subscribe<sensor_msgs::Joy>("joy/joy2", 2, &joyVerticalCallback);
@@ -295,6 +323,8 @@ int main(int argc, char **argv)
     f = boost::bind(&controlCallback, _1, _2);
     server.setCallback(f);
 
+    //create a ROS timer to call a callback that checks the joystick update rate (must be > 0.667Hz with ROS time)
+    ros::Timer joystickWatchdog = n.createTimer(ros::Duration(1.5), joyWatchdogCB);
 
     //Enter the event loop
     ros::spin();

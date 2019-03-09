@@ -61,7 +61,7 @@
       <!--Add MATE 2019 cannon model-->
       <include>
         <uri>model://cannon</uri>
-        <pose>-10.945729 -20.167297 -4.183445 3.069565 0 0</pose>
+        <pose>-10.945729 -20.167297 -3.920171 3.069565 0 0</pose>
       </include>
 
       <!--Add MATE 2019 trout reef model-->

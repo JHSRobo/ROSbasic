@@ -9,12 +9,14 @@
 * Compile using catkin_make in the ros_workspace directory.
 */
 
-
 #include <ros/ros.h>
 #include <geometry_msgs/Twist.h>
 
 //custom message for holding 4 int32 thruster percents
 #include "vector_drive/thrusterPercents.h"
+
+//custom message from DRQ1250s
+#include "drq1250/DRQ1250.h"
 
 
 ros::Publisher horiz_pub;  //!< Publishes horizontal thrusterPercent (-1000 to 1000) message for thruster 1, 2, 3, and 4
@@ -22,6 +24,12 @@ ros::Publisher vert_pub;  //!< Publishes vertical thrusterPercent (-1000 to 1000
 ros::Publisher horiz_power_pub;  //!< Publishes horizontal power (W) message for thruster 1, 2, 3, and 4
 ros::Publisher vert_power_pub;  //!< Publishes vertical power (W) message for thruster 5, 6, 7, and 8
 ros::Subscriber sub; //!< Subscribes to rov/cmd_vel in order to get command/control vectors for vector drive algorithm
+ros::Subscriber drq1_sub; //!< Subscribes to rov/drq1250_1/status in order to get P,V, and I information for active overload protection
+ros::Subscriber drq2_sub; //!< Subscribes to rov/drq1250_2/status in order to get P,V, and I information for active overload protection
+
+//global vars for storing the drq1250 data
+drq1250::DRQ1250 drq1;
+drq1250::DRQ1250 drq2;
 
 //template classes for simple functions
 
@@ -193,6 +201,14 @@ void commandVectorCallback(const geometry_msgs::Twist::ConstPtr& vel)
     horiz_pub.publish(horizThrustPercents);
 }
 
+void drq1_cb(const drq1250::DRQ1250 data){
+  drq1 = data;
+}
+
+void drq2_cb(const drq1250::DRQ1250 data){
+  drq2 = data;
+}
+
 int main(int argc, char **argv)
 {
     //initialize node for horizontal vector drive
@@ -201,7 +217,10 @@ int main(int argc, char **argv)
     ros::NodeHandle n;
 
     //ROS subscriber to get vectors from the joystick control input
-    sub = n.subscribe("rov/cmd_vel", 1, commandVectorCallback);
+    sub = n.subscribe("cmd_vel", 1, commandVectorCallback);
+
+    drq1_sub = n.subscribe("drq1250_1/status", 1, drq1_cb);
+    drq2_sub = n.subscribe("drq1250_2/status", 1, drq2_cb);
 
     //ROS publisher to send thruster percent to hardware control node for CAN transmission
     horiz_pub = n.advertise<vector_drive::thrusterPercents>("cmd_horizontal_vdrive", 1);

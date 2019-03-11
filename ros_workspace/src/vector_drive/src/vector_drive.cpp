@@ -213,17 +213,30 @@ void activeOverloadProtection(vector_drive::thrusterPercents &horizontals, vecto
   double normArray_vert[4];
   normalize(vertical_power_arr, normArray_vert, 4);
 
+  double totalPower;
+  for(int i=0;i<4;i++){
+    totalPower += horizontal_power_arr[i] + vertical_power_arr[i];
+  }
+
   if(ros::Time::now().toSec() - drq1.header.stamp.toSec() > 1){
-    horizontal_power_arr[0] = 0.2*horizontal_power_arr[0] + 0.8*normArray_horiz[0]*(drq1.Pout-drq1_idle); //T1
-    horizontal_power_arr[3] = 0.2*horizontal_power_arr[3] + 0.8*normArray_horiz[3]*(drq1.Pout-drq1_idle); //T4
-    vertical_power_arr[0] = 0.2*vertical_power_arr[0] + 0.8*normArray_vert[0]*(drq1.Pout-drq1_idle); //T5
-    vertical_power_arr[3] = 0.2*vertical_power_arr[3] + 0.8*normArray_vert[3]*(drq1.Pout-drq1_idle); //T8
+    if(totalPower == 0){
+      drq1_idle = drq1.Pout*drq1_idle/2;
+    } else {
+      horizontal_power_arr[0] = 0.2*horizontal_power_arr[0] + 0.8*normArray_horiz[0]*(drq1.Pout-drq1_idle); //T1
+      horizontal_power_arr[3] = 0.2*horizontal_power_arr[3] + 0.8*normArray_horiz[3]*(drq1.Pout-drq1_idle); //T4
+      vertical_power_arr[0] = 0.2*vertical_power_arr[0] + 0.8*normArray_vert[0]*(drq1.Pout-drq1_idle); //T5
+      vertical_power_arr[3] = 0.2*vertical_power_arr[3] + 0.8*normArray_vert[3]*(drq1.Pout-drq1_idle); //T8
+    }
   }
   if(ros::Time::now().sec - drq2.header.stamp.sec > 1){
-    horizontal_power_arr[1] = 0.2*horizontal_power_arr[1] + 0.8*normArray_horiz[1]*(drq1.Pout-drq2_idle); //T2
-    horizontal_power_arr[2] = 0.2*horizontal_power_arr[2] + 0.8*normArray_horiz[2]*(drq1.Pout-drq2_idle); //T3
-    vertical_power_arr[1] = 0.2*vertical_power_arr[1] + 0.8*normArray_vert[1]*(drq1.Pout-drq2_idle); //T6
-    vertical_power_arr[2] = 0.2*vertical_power_arr[2] + 0.8*normArray_vert[2]*(drq1.Pout-drq2_idle); //T7
+    if(totalPower == 0){
+      drq2_idle = drq2.Pout*drq2_idle/2;
+    } else {
+      horizontal_power_arr[1] = 0.2*horizontal_power_arr[1] + 0.8*normArray_horiz[1]*(drq1.Pout-drq2_idle); //T2
+      horizontal_power_arr[2] = 0.2*horizontal_power_arr[2] + 0.8*normArray_horiz[2]*(drq1.Pout-drq2_idle); //T3
+      vertical_power_arr[1] = 0.2*vertical_power_arr[1] + 0.8*normArray_vert[1]*(drq1.Pout-drq2_idle); //T6
+      vertical_power_arr[2] = 0.2*vertical_power_arr[2] + 0.8*normArray_vert[2]*(drq1.Pout-drq2_idle); //T7
+    }
   }
 
   horizontal_power.t1 = horizontal_power_arr[0];

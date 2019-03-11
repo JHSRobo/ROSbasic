@@ -28,8 +28,10 @@ ros::Subscriber drq1_sub; //!< Subscribes to rov/drq1250_1/status in order to ge
 ros::Subscriber drq2_sub; //!< Subscribes to rov/drq1250_2/status in order to get P,V, and I information for active overload protection
 
 //global vars for storing the drq1250 data
-drq1250::DRQ1250 drq1;
-drq1250::DRQ1250 drq2;
+drq1250::DRQ1250 drq1; //!< Should provide power for thrusters 1, 5, 4
+drq1250::DRQ1250 drq2; //!< Should provide power for thrusters 2, 6, 3
+double drq1_idle; //!< How much power drq1 consumes when thrusters are a 0%
+double drq2_idle; //!< How much power drq2 consumes when thrusters are a 0%
 
 //template classes for simple functions
 
@@ -85,6 +87,30 @@ T min(T value1, T value2){
         return value1;
     return value2;
 }
+
+/**
+* @breif returns the normalized array
+* @param[in] array to normalize
+* @return void as the func is return by reference
+*/
+void normalize(const double *arr, double *normArr, int size){
+  //arr and normArr should be the same size
+  //This is a very powerful function using primitive arrays so be carefull
+  double max = 0;
+  double min = 99999999; //large number
+  for(int i=0; i<size; i++){
+    if(arr[i] > max){
+      max = arr[i];
+    }
+    if(arr[i] < min){
+      min = arr[i];
+    }
+  }
+  for(int i=0; i<size;i++){
+    normArr[i] = (arr[i]-min)/(max-min);
+  }
+}
+
 /**
 * @breif returns a number mapped proportioanlly from one range of numbers to another
 * @param[in] input Value to be mapped
@@ -164,6 +190,57 @@ double predictPower(double percent){
   return power;
 }
 
+void activeOverloadProtection(vector_drive::thrusterPercents &horizontals, vector_drive::thrusterPercents &verticals){
+  vector_drive::thrusterPercents horizontal_power;
+  vector_drive::thrusterPercents vertical_power;
+
+  double horizontal_power_arr[4];
+  double vertical_power_arr[4];
+
+  horizontal_power_arr[0] = predictPower(horizontals.t1/10);
+  horizontal_power_arr[1] = predictPower(horizontals.t2/10);
+  horizontal_power_arr[2] = predictPower(horizontals.t3/10);
+  horizontal_power_arr[3] = predictPower(horizontals.t4/10);
+
+  vertical_power_arr[0] = predictPower(verticals.t1/10);
+  vertical_power_arr[1] = predictPower(verticals.t2/10);
+  vertical_power_arr[2] = predictPower(verticals.t3/10);
+  vertical_power_arr[3] = predictPower(verticals.t4/10);
+
+  //Correct prediction value if DRQ data has come in
+  double normArray_horiz[4];
+  normalize(horizontal_power_arr, normArray_horiz, 4);
+  double normArray_vert[4];
+  normalize(vertical_power_arr, normArray_vert, 4);
+
+  if(ros::Time::now().toSec() - drq1.header.stamp.toSec() > 1){
+    horizontal_power_arr[0] = 0.2*horizontal_power_arr[0] + 0.8*normArray_horiz[0]*(drq1.Pout-drq1_idle); //T1
+    horizontal_power_arr[3] = 0.2*horizontal_power_arr[3] + 0.8*normArray_horiz[3]*(drq1.Pout-drq1_idle); //T4
+    vertical_power_arr[0] = 0.2*vertical_power_arr[0] + 0.8*normArray_vert[0]*(drq1.Pout-drq1_idle); //T5
+    vertical_power_arr[3] = 0.2*vertical_power_arr[3] + 0.8*normArray_vert[3]*(drq1.Pout-drq1_idle); //T8
+  }
+  if(ros::Time::now().sec - drq2.header.stamp.sec > 1){
+    horizontal_power_arr[1] = 0.2*horizontal_power_arr[1] + 0.8*normArray_horiz[1]*(drq1.Pout-drq2_idle); //T2
+    horizontal_power_arr[2] = 0.2*horizontal_power_arr[2] + 0.8*normArray_horiz[2]*(drq1.Pout-drq2_idle); //T3
+    vertical_power_arr[1] = 0.2*vertical_power_arr[1] + 0.8*normArray_vert[1]*(drq1.Pout-drq2_idle); //T6
+    vertical_power_arr[2] = 0.2*vertical_power_arr[2] + 0.8*normArray_vert[2]*(drq1.Pout-drq2_idle); //T7
+  }
+
+  horizontal_power.t1 = horizontal_power_arr[0];
+  horizontal_power.t2 = horizontal_power_arr[1];
+  horizontal_power.t3 = horizontal_power_arr[2];
+  horizontal_power.t4 = horizontal_power_arr[3];
+
+  horiz_power_pub.publish(horizontal_power);
+
+  vertical_power.t1 = vertical_power_arr[0];
+  vertical_power.t2 = vertical_power_arr[1];
+  vertical_power.t3 = vertical_power_arr[2];
+  vertical_power.t4 = vertical_power_arr[3];
+
+  vert_power_pub.publish(vertical_power);
+}
+
 /**
 * @breif updates control percents, runs vectorMath, updates thruster percents, and publishes the updates thruster percents to the rov/cmd_horizontal_vdrive topic
 * @param[in] vel Input from the joystick, ros_control_interface and ROS Control PID algorithms
@@ -196,12 +273,15 @@ void commandVectorCallback(const geometry_msgs::Twist::ConstPtr& vel)
     vertThrustPercents.t3 = T7;
     vertThrustPercents.t4 = T8;
 
+    activeOverloadProtection(horizThrustPercents, vertThrustPercents);
+
     //publish messages
     vert_pub.publish(vertThrustPercents);
     horiz_pub.publish(horizThrustPercents);
 }
 
 void drq1_cb(const drq1250::DRQ1250 data){
+  drq1.header = data.header;
   drq1.Vin = data.Vin;
   drq1.Vout = data.Vout;
   drq1.Iout = data.Iout;
@@ -209,6 +289,7 @@ void drq1_cb(const drq1250::DRQ1250 data){
 }
 
 void drq2_cb(const drq1250::DRQ1250 data){
+  drq2.header = data.header;
   drq2.Vin = data.Vin;
   drq2.Vout = data.Vout;
   drq2.Iout = data.Iout;

@@ -14,6 +14,8 @@
 
 //custom message for holding 4 int32 thruster percents
 #include "vector_drive/thrusterPercents.h"
+//custom message for holding 8 float64 thruster power usage in watts
+#include "vector_drive/ThrusterPower.h"
 
 //custom message from DRQ1250s
 #include "drq1250/DRQ1250.h"
@@ -21,8 +23,7 @@
 
 ros::Publisher horiz_pub;  //!< Publishes horizontal thrusterPercent (-1000 to 1000) message for thruster 1, 2, 3, and 4
 ros::Publisher vert_pub;  //!< Publishes vertical thrusterPercent (-1000 to 1000) message for thruster 5, 6, 7, and 8
-ros::Publisher horiz_power_pub;  //!< Publishes horizontal power (W) message for thruster 1, 2, 3, and 4
-ros::Publisher vert_power_pub;  //!< Publishes vertical power (W) message for thruster 5, 6, 7, and 8
+ros::Publisher power_pub;  //!< Publishes power (W) message for thrusters 1, 2, 3, 4, 5, 6, 7, and 8
 ros::Subscriber sub; //!< Subscribes to rov/cmd_vel in order to get command/control vectors for vector drive algorithm
 ros::Subscriber drq1_sub; //!< Subscribes to rov/drq1250_1/status in order to get P,V, and I information for active overload protection
 ros::Subscriber drq2_sub; //!< Subscribes to rov/drq1250_2/status in order to get P,V, and I information for active overload protection
@@ -197,8 +198,7 @@ double predictPower(double percent){
 }
 
 void activeOverloadProtection(vector_drive::thrusterPercents &horizontals, vector_drive::thrusterPercents &verticals){
-  vector_drive::thrusterPercents horizontal_power;
-  vector_drive::thrusterPercents vertical_power;
+  vector_drive::ThrusterPower thuster_power;
 
   double horizontal_power_arr[4];
   double vertical_power_arr[4];
@@ -212,8 +212,6 @@ void activeOverloadProtection(vector_drive::thrusterPercents &horizontals, vecto
   vertical_power_arr[1] = predictPower(verticals.t2/10);
   vertical_power_arr[2] = predictPower(verticals.t3/10);
   vertical_power_arr[3] = predictPower(verticals.t4/10);
-
-  std::cout << horizontal_power_arr[0] << "\n";
 
   //Correct prediction value if DRQ data has come in
   double normArray_horiz[4];
@@ -247,19 +245,16 @@ void activeOverloadProtection(vector_drive::thrusterPercents &horizontals, vecto
     }
   }
 
-  horizontal_power.t1 = horizontal_power_arr[0];
-  horizontal_power.t2 = horizontal_power_arr[1];
-  horizontal_power.t3 = horizontal_power_arr[2];
-  horizontal_power.t4 = horizontal_power_arr[3];
+  thuster_power.t1 = horizontal_power_arr[0];
+  thuster_power.t2 = horizontal_power_arr[1];
+  thuster_power.t3 = horizontal_power_arr[2];
+  thuster_power.t4 = horizontal_power_arr[3];
+  thuster_power.t5 = vertical_power_arr[0];
+  thuster_power.t6 = vertical_power_arr[1];
+  thuster_power.t7 = vertical_power_arr[2];
+  thuster_power.t8 = vertical_power_arr[3];
 
-  horiz_power_pub.publish(horizontal_power);
-
-  vertical_power.t1 = vertical_power_arr[0];
-  vertical_power.t2 = vertical_power_arr[1];
-  vertical_power.t3 = vertical_power_arr[2];
-  vertical_power.t4 = vertical_power_arr[3];
-
-  vert_power_pub.publish(vertical_power);
+  power_pub.publish(thuster_power);
 }
 
 /**
@@ -335,9 +330,7 @@ int main(int argc, char **argv)
     //ROS publisher to send thruster percent to hardware control node for CAN transmission
     vert_pub = n.advertise<vector_drive::thrusterPercents>("cmd_vertical_vdrive", 1);
     //ROS publisher to send thruster power
-    horiz_power_pub = n.advertise<vector_drive::thrusterPercents>("horizontal_power", 1);
-    //ROS publisher to send thruster power
-    vert_power_pub = n.advertise<vector_drive::thrusterPercents>("vertical_power", 1);
+    power_pub = n.advertise<vector_drive::ThrusterPower>("thruster_power", 1);
 
     ros::spin();
 

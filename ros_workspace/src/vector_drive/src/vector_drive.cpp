@@ -211,8 +211,8 @@ void activeOverloadProtection(vector_drive::thrusterPercents &horizontals, vecto
 
   vertical_power_arr[0] = predictPower(verticals.t1/10);
   vertical_power_arr[1] = predictPower(verticals.t2/10);
-  vertical_power_arr[2] = predictPower(verticals.t3/10);
-  vertical_power_arr[3] = predictPower(verticals.t4/10);
+  vertical_power_arr[2] = predictPower(0);
+  vertical_power_arr[3] = predictPower(0);
 
   //Correct prediction value if DRQ data has come in
   double normArray_horiz[4];
@@ -260,7 +260,7 @@ void activeOverloadProtection(vector_drive::thrusterPercents &horizontals, vecto
   //--------------------------------------------------- Apply the Active Overload Protection (AOP)
   // di/dt protection not implemented yet
 
-  double powerBudget = 1000.0 //Watts (less than 1200 due to votlage drop over tether) -> eventually make a dynamic reconfigure
+  double powerBudget = 900.0 //Watts (less than 1200 due to votlage drop over tether and the IIn limit) -> eventually make a dynamic reconfigure
   // total power for horizontals
   double totalPowerHorizontal;
   for(int i=0;i<4;i++){

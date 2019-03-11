@@ -19,6 +19,8 @@
 
 ros::Publisher horiz_pub;  //!< Publishes horizontal thrusterPercent (-1000 to 1000) message for thruster 1, 2, 3, and 4
 ros::Publisher vert_pub;  //!< Publishes vertical thrusterPercent (-1000 to 1000) message for thruster 5, 6, 7, and 8
+ros::Publisher horiz_power_pub;  //!< Publishes horizontal power (W) message for thruster 1, 2, 3, and 4
+ros::Publisher vert_power_pub;  //!< Publishes vertical power (W) message for thruster 5, 6, 7, and 8
 ros::Subscriber sub; //!< Subscribes to rov/cmd_vel in order to get command/control vectors for vector drive algorithm
 
 //template classes for simple functions
@@ -139,11 +141,25 @@ vector_drive::thrusterPercents vectorMath(const double &linearX, const double &l
     return thrustPercents;
 }
 
+/*
+* @brief predict the amount of power a thruster will consume given the 5th order appox and the percent
+* @param[in] percent the percent -100 - 100 to compute power consumption at
+*/
+double predictPower(double percent){
+  //source = https://www.bluerobotics.com/store/thrusters/t100-t200-thrusters/t100-thruster/
+  double power = -1.102300134426306e-9*pow(percent, 5)+4.283627297272621e-7*pow(percent, 4)+
+          0.000010392999307079629*pow(percent, 3)+0.01158098074829852*pow(percent, 2)+
+          0.0057226220370483576*percent-0.1928628358148441;
+  if(power < 0){
+    power = 0;
+  }
+  return power;
+}
+
 /**
 * @breif updates control percents, runs vectorMath, updates thruster percents, and publishes the updates thruster percents to the rov/cmd_horizontal_vdrive topic
 * @param[in] vel Input from the joystick, ros_control_interface and ROS Control PID algorithms
 */
-
 void commandVectorCallback(const geometry_msgs::Twist::ConstPtr& vel)
 {
     //linear (L-R)
@@ -188,9 +204,13 @@ int main(int argc, char **argv)
     sub = n.subscribe("rov/cmd_vel", 1, commandVectorCallback);
 
     //ROS publisher to send thruster percent to hardware control node for CAN transmission
-    horiz_pub = n.advertise<vector_drive::thrusterPercents>("rov/cmd_horizontal_vdrive", 1);
+    horiz_pub = n.advertise<vector_drive::thrusterPercents>("cmd_horizontal_vdrive", 1);
     //ROS publisher to send thruster percent to hardware control node for CAN transmission
-    vert_pub = n.advertise<vector_drive::thrusterPercents>("rov/cmd_vertical_vdrive", 1);
+    vert_pub = n.advertise<vector_drive::thrusterPercents>("cmd_vertical_vdrive", 1);
+    //ROS publisher to send thruster power
+    horiz_power_pub = n.advertise<vector_drive::thrusterPercents>("horizontal_power", 1);
+    //ROS publisher to send thruster power
+    vert_power_pub = n.advertise<vector_drive::thrusterPercents>("vertical_power", 1);
 
     ros::spin();
 

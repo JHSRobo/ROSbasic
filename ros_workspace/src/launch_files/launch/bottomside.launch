@@ -1,7 +1,7 @@
 <launch>
 
- <!-- horizontal vector drive node -->
-   <node pkg="vector_drive" type="vector_drive" name="vector_drive"/>
+ <!-- vector drive node -->
+   <node pkg="vector_drive" type="vector_drive" name="vector_drive" ns="rov"/>
 
  <!-- harware interface -->
    <node respawn="true" pkg="hardware_interface" type="hw_thruster_controller_interface.py" name="hw_thruster_controller_interface">

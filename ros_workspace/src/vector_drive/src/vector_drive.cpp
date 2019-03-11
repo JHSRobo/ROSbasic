@@ -21,8 +21,6 @@ ros::Publisher horiz_pub;  //!< Publishes horizontal thrusterPercent (-1000 to 1
 ros::Publisher vert_pub;  //!< Publishes vertical thrusterPercent (-1000 to 1000) message for thruster 5, 6, 7, and 8
 ros::Subscriber sub; //!< Subscribes to rov/cmd_vel in order to get command/control vectors for vector drive algorithm
 
-vector_drive::thrusterPercents thrustPercents; //!< Message being published by pub
-
 //template classes for simple functions
 
 /**
@@ -99,7 +97,7 @@ T map(T input, T inMin, T inMax, T outMin, T outMax){
 * @param[in] angularX Equivalent to the rotational/angular axis of the joystick
 * @return Const vector_drive/thrusterPercents message ready to be published to the rov/cmd_horizontal_vdrive topic
 */
-const vector_drive::thrusterPercents& vectorMath(const double &linearX, const double &linearY, const double &angularX){
+vector_drive::thrusterPercents vectorMath(const double &linearX, const double &linearY, const double &angularX){
     //if values out of range flag an error
     if(abs(linearX) > 1 || abs(linearY) > 1 || abs(angularX) > 1){
         //ROS_ERROR("cmd_vel value out of range!\nEntering safe mode and disabling thrusters... ");
@@ -117,7 +115,6 @@ const vector_drive::thrusterPercents& vectorMath(const double &linearX, const do
     double T3 = -linearX - linearY + angularX;
     double T4 = linearX - linearY - angularX;
 
-
     //Normalize the values so that no motor outputs over 100% thrust
     double maxMotor = max(max(max(abs(T1), abs(T2)), abs(T3)), abs(T4));
     double maxInput = max(max(abs(linearX), abs(linearY)), abs(angularX));
@@ -130,17 +127,14 @@ const vector_drive::thrusterPercents& vectorMath(const double &linearX, const do
     T3 *= maxInput / maxMotor;
     T4 *= maxInput / maxMotor;
 
-
-
-    ROS_DEBUG_STREAM("T1: " << thrustPercents.t1 << "  T2: " <<
-    	thrustPercents.t2 << "  T3: " << thrustPercents.t3 << "  T4: " << thrustPercents.t4);
+    ROS_DEBUG_STREAM("T1: " << T1 << "  T2: " << T2 << "  T3: " << T3 << "  T4: " << T4);
 
     //load thruster values into custom int32 ROS message
+    vector_drive::thrusterPercents thrustPercents;
     thrustPercents.t1 = T1*1000;
     thrustPercents.t2 = T2*1000;
     thrustPercents.t3 = T3*1000;
     thrustPercents.t4 = T4*1000;
-
 
     return thrustPercents;
 }
@@ -152,8 +146,6 @@ const vector_drive::thrusterPercents& vectorMath(const double &linearX, const do
 
 void commandVectorCallback(const geometry_msgs::Twist::ConstPtr& vel)
 {
-    //only deals with values pertaining to horizontal vector drive
-
     //linear (L-R)
     double linearX = vel->linear.x;
 
@@ -163,7 +155,8 @@ void commandVectorCallback(const geometry_msgs::Twist::ConstPtr& vel)
     //angular
     double angularX = vel->angular.x;
 
-    vectorMath(linearX, linearY, angularX);
+    vector_drive::thrusterPercents horizThrustPercents;
+    horizThrustPercents = vectorMath(linearX, linearY, angularX);
 
     //Handle verticals
     double linearZ = vel->linear.z;
@@ -173,14 +166,15 @@ void commandVectorCallback(const geometry_msgs::Twist::ConstPtr& vel)
     double T7 = linearZ*1000;
     double T8 = linearZ*1000;
 
-    thrustPercents.t1 = T5;
-    thrustPercents.t2 = T6;
-    thrustPercents.t3 = T7;
-    thrustPercents.t4 = T8;
+    vector_drive::thrusterPercents vertThrustPercents;
+    vertThrustPercents.t1 = T5;
+    vertThrustPercents.t2 = T6;
+    vertThrustPercents.t3 = T7;
+    vertThrustPercents.t4 = T8;
 
     //publish messages
-    vert_pub.publish(thrustPercents);
-    horiz_pub.publish(thrustPercents);
+    vert_pub.publish(vertThrustPercents);
+    horiz_pub.publish(horizThrustPercents);
 }
 
 int main(int argc, char **argv)

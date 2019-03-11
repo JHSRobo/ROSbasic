@@ -106,8 +106,14 @@ void normalize(const double *arr, double *normArr, int size){
       min = arr[i];
     }
   }
-  for(int i=0; i<size;i++){
-    normArr[i] = (arr[i]-min)/(max-min);
+  if(max-min == 0){
+    for(int i=0; i<size;i++){
+      normArr[i] = 0;
+    }
+  } else {
+    for(int i=0; i<size;i++){
+      normArr[i] = (arr[i]-min)/(max-min);
+    }
   }
 }
 
@@ -207,6 +213,8 @@ void activeOverloadProtection(vector_drive::thrusterPercents &horizontals, vecto
   vertical_power_arr[2] = predictPower(verticals.t3/10);
   vertical_power_arr[3] = predictPower(verticals.t4/10);
 
+  std::cout << horizontal_power_arr[0] << "\n";
+
   //Correct prediction value if DRQ data has come in
   double normArray_horiz[4];
   normalize(horizontal_power_arr, normArray_horiz, 4);
@@ -218,7 +226,7 @@ void activeOverloadProtection(vector_drive::thrusterPercents &horizontals, vecto
     totalPower += horizontal_power_arr[i] + vertical_power_arr[i];
   }
 
-  if(ros::Time::now().toSec() - drq1.header.stamp.toSec() > 1){
+  if(ros::Time::now() - drq1.header.stamp < ros::Duration(0.6)){
     if(totalPower == 0){
       drq1_idle = drq1.Pout*drq1_idle/2;
     } else {
@@ -228,7 +236,7 @@ void activeOverloadProtection(vector_drive::thrusterPercents &horizontals, vecto
       vertical_power_arr[3] = 0.2*vertical_power_arr[3] + 0.8*normArray_vert[3]*(drq1.Pout-drq1_idle); //T8
     }
   }
-  if(ros::Time::now().sec - drq2.header.stamp.sec > 1){
+  if(ros::Time::now() - drq2.header.stamp < ros::Duration(0.6)){
     if(totalPower == 0){
       drq2_idle = drq2.Pout*drq2_idle/2;
     } else {
@@ -317,7 +325,7 @@ int main(int argc, char **argv)
     ros::NodeHandle n;
 
     //ROS subscriber to get vectors from the joystick control input
-    sub = n.subscribe("cmd_vel", 1, commandVectorCallback);
+    sub = n.subscribe("/rov/cmd_vel", 1, commandVectorCallback);
 
     drq1_sub = n.subscribe("drq1250_1/status", 1, drq1_cb);
     drq2_sub = n.subscribe("drq1250_2/status", 1, drq2_cb);

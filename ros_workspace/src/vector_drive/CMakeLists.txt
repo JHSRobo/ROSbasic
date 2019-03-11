@@ -197,11 +197,6 @@ include_directories(
 ## Add folders to be run by python nosetests
 # catkin_add_nosetests(test)
 
-
-add_executable(horiz_drive src/horiz_drive.cpp)
-target_link_libraries(horiz_drive ${catkin_LIBRARIES})
-add_dependencies(horiz_drive vector_drive_generate_messages_cpp)
-
-add_executable(vert_drive src/vert_drive.cpp)
-target_link_libraries(vert_drive ${catkin_LIBRARIES})
-add_dependencies(vert_drive vector_drive_generate_messages_cpp)
+add_executable(vector_drive src/vector_drive.cpp)
+target_link_libraries(vector_drive ${catkin_LIBRARIES})
+add_dependencies(vector_drive vector_drive_generate_messages_cpp)

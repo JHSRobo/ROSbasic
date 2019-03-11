@@ -17,7 +17,8 @@
 #include "vector_drive/thrusterPercents.h"
 
 
-ros::Publisher pub;  //!< Publishes thrusterPercent (-1000 to 1000) message for thruster 1, 2, 3, and 4
+ros::Publisher horiz_pub;  //!< Publishes horizontal thrusterPercent (-1000 to 1000) message for thruster 1, 2, 3, and 4
+ros::Publisher vert_pub;  //!< Publishes vertical thrusterPercent (-1000 to 1000) message for thruster 5, 6, 7, and 8
 ros::Subscriber sub; //!< Subscribes to rov/cmd_vel in order to get command/control vectors for vector drive algorithm
 
 vector_drive::thrusterPercents thrustPercents; //!< Message being published by pub
@@ -164,8 +165,22 @@ void commandVectorCallback(const geometry_msgs::Twist::ConstPtr& vel)
 
     vectorMath(linearX, linearY, angularX);
 
-    //publish message
-    pub.publish(thrustPercents);
+    //Handle verticals
+    double linearZ = vel->linear.z;
+
+    double T5 = linearZ*1000;
+    double T6 = linearZ*1000;
+    double T7 = linearZ*1000;
+    double T8 = linearZ*1000;
+
+    thrustPercents.t1 = T5;
+    thrustPercents.t2 = T6;
+    thrustPercents.t3 = T7;
+    thrustPercents.t4 = T8;
+
+    //publish messages
+    vert_pub.publish(thrustPercents);
+    horiz_pub.publish(thrustPercents);
 }
 
 int main(int argc, char **argv)
@@ -175,12 +190,13 @@ int main(int argc, char **argv)
 
     ros::NodeHandle n;
 
-    //ROS publisher to send thruster percent to hardware control node for CAN transmission
-    pub = n.advertise<vector_drive::thrusterPercents>("rov/cmd_horizontal_vdrive", 1);
-
     //ROS subscriber to get vectors from the joystick control input
     sub = n.subscribe("rov/cmd_vel", 1, commandVectorCallback);
 
+    //ROS publisher to send thruster percent to hardware control node for CAN transmission
+    horiz_pub = n.advertise<vector_drive::thrusterPercents>("rov/cmd_horizontal_vdrive", 1);
+    //ROS publisher to send thruster percent to hardware control node for CAN transmission
+    vert_pub = n.advertise<vector_drive::thrusterPercents>("rov/cmd_vertical_vdrive", 1);
 
     ros::spin();
 

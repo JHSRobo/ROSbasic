@@ -202,11 +202,17 @@ void commandVectorCallback(const geometry_msgs::Twist::ConstPtr& vel)
 }
 
 void drq1_cb(const drq1250::DRQ1250 data){
-  drq1 = data;
+  drq1.Vin = data.Vin;
+  drq1.Vout = data.Vout;
+  drq1.Iout = data.Iout;
+  drq1.Pout = data.Pout;
 }
 
 void drq2_cb(const drq1250::DRQ1250 data){
-  drq2 = data;
+  drq2.Vin = data.Vin;
+  drq2.Vout = data.Vout;
+  drq2.Iout = data.Iout;
+  drq2.Pout = data.Pout;
 }
 
 int main(int argc, char **argv)

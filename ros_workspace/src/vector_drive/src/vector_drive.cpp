@@ -198,6 +198,7 @@ double predictPower(double percent){
 }
 
 void activeOverloadProtection(vector_drive::thrusterPercents &horizontals, vector_drive::thrusterPercents &verticals){
+  //--------------------------------------------------- Calculate thruster power values
   vector_drive::ThrusterPower thuster_power;
 
   double horizontal_power_arr[4];
@@ -255,6 +256,24 @@ void activeOverloadProtection(vector_drive::thrusterPercents &horizontals, vecto
   thuster_power.t8 = vertical_power_arr[3];
 
   power_pub.publish(thuster_power);
+
+  //--------------------------------------------------- Apply the Active Overload Protection (AOP)
+  // di/dt protection not implemented yet
+
+  double powerBudget = 1000.0 //Watts (less than 1200 due to votlage drop over tether) -> eventually make a dynamic reconfigure
+  // total power for horizontals
+  double totalPowerHorizontal;
+  for(int i=0;i<4;i++){
+    totalPowerHorizontal += horizontal_power_arr[i];
+  }
+  // total power for verticals
+  double totalPowerVertical;
+  for(int i=0;i<4;i++){
+    totalPowerVertical += vertical_power_arr[i];
+  }
+
+
+
 }
 
 /**

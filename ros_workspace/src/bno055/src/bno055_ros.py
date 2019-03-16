@@ -29,7 +29,6 @@ def publisher():
 			sensor.begin()
 			break
 		except Exception as e:
-			rospy.logerr('Failed to initialize BNO055! %s', e)
 			attempts += 1
 			rospy.sleep(0.25)
 
@@ -87,7 +86,7 @@ def publisher():
 				temp_c = sensor.read_temp()
 				break
 			except Exception as e:
-				rospy.logerr('Failed to read BNO055 calibration stat and temp! %s', e)
+				rospy.logdebug('Failed to read BNO055 calibration stat and temp! %s', e)
 				attempts += 1
 				rospy.sleep(0.01)
 	
@@ -116,7 +115,7 @@ def publisher():
 				linear_accel.x, linear_accel.y, linear_accel.z = sensor.read_linear_acceleration()
 				break
 			except Exception as e:
-				rospy.logerr('Failed to read BNO055 data! %s', e)
+				rospy.logdebug('Failed to read BNO055 data! %s', e)
 				attempts += 1
 				rospy.sleep(0.01)	
 

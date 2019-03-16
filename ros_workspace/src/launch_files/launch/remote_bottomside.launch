@@ -1,5 +1,5 @@
 <launch>
-   <machine name="bottomside" address="192.168.1.111" default="true" user="JHSRobo"/>
+   <machine name="bottomside" address="192.168.1.111" default="true" user="pi" password="JHSRobo"/>
 
  <!-- horizontal vector drive node -->
    <node machine="bottomside" pkg="vector_drive" type="horiz_drive" name="horiz_drive"/>

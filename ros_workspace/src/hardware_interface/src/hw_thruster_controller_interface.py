@@ -1,5 +1,4 @@
 #!/usr/bin/env python
-# license removed for brevity
 import rospy
 import serial
 from vector_drive.msg import thrusterPercents
@@ -24,7 +23,7 @@ def verticals(data):
 def listener():
     rospy.init_node('hw_thruster_controller_interface')
 
-    port = rospy.get_param('thrusterControllerPort', '/dev/ttyUSB0')
+    port = rospy.get_param('~thrusterControllerPort', '/dev/ttyUSB0')
 
     rospy.Subscriber("rov/cmd_horizontal_vdrive", thrusterPercents, horizontals)
     rospy.Subscriber("rov/cmd_vertical_vdrive", thrusterPercents, verticals)

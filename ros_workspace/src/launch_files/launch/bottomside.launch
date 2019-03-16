@@ -7,12 +7,11 @@
     <node pkg="vector_drive" type="vert_drive" name="vert_drive"/>
 
  <!-- harware interface -->
-   <node respawn="true" pkg="hardware_interface" type="hw_thruster_controller_interface.py"
-	    name="hw_thruster_controller_interface">
-      <param name="thrusterControllerPort" value="/dev/ttyUSB0"/>
+   <node respawn="true" pkg="hardware_interface" type="hw_thruster_controller_interface.py" name="hw_thruster_controller_interface">
+      <param name="thrusterControllerPort" type="string" value="/dev/serial/by-id/usb-1a86_USB2.0-Serial-if00-port0"/>
    </node>
 
-   <!-- camera switching -->
+   <!-- camera switching and tools -->
    <node pkg="hardware_interface" ns="rov" type="cameraSwitch.py" name="cameraSwitch"/>
    <node pkg="hardware_interface" ns="rov" type="hw_electromagnet_control.py" name="hw_electromagnet_control"/>
    <node pkg="hardware_interface" ns="rov" type="trout_grout_control.py" name="trout_grout_control"/>
@@ -36,10 +35,11 @@
 
  <!-- start reading the depth sensor -->
  <!-- respawn setup to restart the node every 30 seconds if it dies-->
-  <node pkg="ms5837" name="depth_sensor" type="ms5837_ros.py" respawn="true" respawn_delay="30"/>
+ <node pkg="ms5837" name="depth_sensor" type="ms5837_ros.py" respawn="true" respawn_delay="30"/>
 
  <!-- launch all the sensors -->
  <!-- respawn setup to restart the node every 30 seconds if it dies-->
-  <node type="sensor-hat.py" pkg="sensor_readout" name="sensor_interface" respawn="true" respawn_delay="30"/>
+ <!-- <node type="sensor-hat.py" pkg="sensor_readout" name="sensor_interface" respawn="true" respawn_delay="30"/> -->
+ <node type="bno055_ros.py" pkg="bno055" name="imu" respawn="true" respawn_delay="30"/>
 
 </launch>

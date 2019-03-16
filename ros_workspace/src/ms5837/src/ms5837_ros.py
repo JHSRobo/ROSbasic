@@ -49,7 +49,7 @@ def publisher():
 				sensor.read()
 				goodRead = True
 			except Exception as e:
-				rospy.logerr("Sensor read failed! %s", e)
+				rospy.logdebug("Sensor read failed! %s", e)
 				rospy.sleep(0.2)
 
 		msg.tempC = sensor.temperature(ms5837_driver.UNITS_Centigrade)

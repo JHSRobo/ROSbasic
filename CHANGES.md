@@ -47,3 +47,21 @@
     * Passed Tests on updated parts of code
     
     Passed 107 Test List
+
+
+### v2.19.1 Changes
+    Software Changes
+    * DRQ Bug Fixes
+    * BNO055 Bug Fixes
+    * Added New Line Following Submodule
+   
+    Hardware Changes
+    * None
+    
+    Task Changes
+    * None
+    
+    Tests
+    * Passed Tests on updated parts of code (DRQ)
+    
+    Passed 107 Test List

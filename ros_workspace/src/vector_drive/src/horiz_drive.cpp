@@ -129,6 +129,8 @@ const vector_drive::thrusterPercents& vectorMath(const double &linearX, const do
     T3 *= maxInput / maxMotor;
     T4 *= maxInput / maxMotor;
 
+    //T100 thruster power calculations
+
 
 
     ROS_DEBUG_STREAM("T1: " << thrustPercents.t1 << "  T2: " <<

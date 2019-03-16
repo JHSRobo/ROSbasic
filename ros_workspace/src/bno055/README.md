@@ -9,6 +9,7 @@ ROS node for publishing BNO055 IMU data. Uses the adafruit BNO055 python library
 Easy integration of BNO055 sensors into a ROS software enviroment.
 
 ## Build Instructions 
+* pip install adafruit-gpio
 
 PLEASE run on fresh system and update install instructions (not sure what was installed by default on my rpi)
 

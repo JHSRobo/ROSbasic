@@ -80,14 +80,25 @@
     <node name="publish_pitch_setpoint" pkg="topic_tools" type="transform" args="/rov/cmd_vel /pitch_pid/setpoint std_msgs/Float64 m.angular.y" />
     <node name="publish_roll_setpoint" pkg="topic_tools" type="transform" args="/rov/cmd_vel /roll_pid/setpoint std_msgs/Float64 m.angular.z" />
 
-    <!-- topic_tools transform nodes to break up /rov/imu to pid state topics-->
+    <!-- velocity data from real-world sensors
+    topic_tools transform nodes to break up /rov/imu to pid state topics
     <node name="publish_yaw_state" pkg="topic_tools" type="transform" args="/rov/imu /yaw_pid/state std_msgs/Float64 m.angular_velocity.x" />
     <node name="publish_pitch_state" pkg="topic_tools" type="transform" args="/rov/imu /pitch_pid/state std_msgs/Float64 m.angular_velocity.y" />
     <node name="publish_roll_state" pkg="topic_tools" type="transform" args="/rov/imu /roll_pid/state std_msgs/Float64 m.angular_velocity.z" />
 
-    <!-- topic_tools transform nodes to break up /rov/cmd_vel to pid setpoint topics-->
+    topic_tools transform nodes to break up /rov/linear_velocity to pid state topics
     <node name="publish_long_state" pkg="topic_tools" type="transform" args="/rov/linear_velocity /long_pid/state std_msgs/Float64 m.y" />
     <node name="publish_lat_state" pkg="topic_tools" type="transform" args="/rov/linear_velocity /lat_pid/state std_msgs/Float64 m.x" />
     <node name="publish_vert_state" pkg="topic_tools" type="transform" args="/rov/linear_velocity /vert_pid/state std_msgs/Float64 m.z" />
+    -->
+    <!-- velocity data from simulation -->
+    <!-- topic_tools transform nodes to break up /gazebo/model_states to pid state topics-->
+    <node name="publish_long_state" pkg="topic_tools" type="transform" args="/gazebo/model_states /long_pid/state std_msgs/Float64 m.twist[5].linear.y" />
+    <node name="publish_lat_state" pkg="topic_tools" type="transform" args="/gazebo/model_states /lat_pid/state std_msgs/Float64 m.twist[5].linear.x" />
+    <node name="publish_vert_state" pkg="topic_tools" type="transform" args="/gazebo/model_states /vert_pid/state std_msgs/Float64 m.twist[5].linear.z" />
+
+    <node name="publish_yaw_state" pkg="topic_tools" type="transform" args="/gazebo/model_states /yaw_pid/state std_msgs/Float64 m.twist[5].angular.x" />
+    <node name="publish_pitch_state" pkg="topic_tools" type="transform" args="/gazebo/model_states /pitch_pid/state std_msgs/Float64 m.twist[5].angular.y" />
+    <node name="publish_roll_state" pkg="topic_tools" type="transform" args="/gazebo/model_states /roll_pid/state std_msgs/Float64 m.twist[5].angular.z" />
 
   </launch>

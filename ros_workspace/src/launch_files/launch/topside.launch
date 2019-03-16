@@ -1,14 +1,12 @@
 <launch>
 <!-- ROV topside control interface -->
-   <include file="$(find rov_control_interface)/launch/control_interface.launch">
-     <arg name="useJoyVerticalAxis" value="true" />
-  </include>
+   <include file="$(find rov_control_interface)/launch/control_interface.launch"/>
 
  <!-- temp copilot interface -->
    <node pkg="rqt_reconfigure" type="rqt_reconfigure" name="copilot_interface"/>
 
  <!-- temp pilot interface -->
-    <node pkg="rqt_image_view" type="rqt_image_view" name="pilot_interface"/>
+    <!-- <node pkg="rqt_image_view" type="rqt_image_view" name="pilot_interface"/> -->
 
  <!-- tcu board -->
     <node pkg="rosserial_python" type="serial_node.py" name="tcu_board">

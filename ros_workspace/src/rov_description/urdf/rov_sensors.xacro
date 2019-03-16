@@ -121,11 +121,11 @@
 
   <!-- Intel Realsense Cameras -->
   <!-- RealSense D415 Camera -->
-  <xacro:include filename="$(find realsense2_description)/urdf/_d415.urdf.xacro"/>
+  <xacro:include filename="$(find realsense2_description)/urdf/_d435.urdf.xacro"/>
 
-  <xacro:sensor_d415 parent="${namespace}/frame_link" camera_name="${namespace}/bottom_cam">
+  <xacro:sensor_d435 parent="${namespace}/frame_link" camera_name="${namespace}/realsense_cam">
     <origin xyz="0 0 -0.11" rpy="0 ${90*d2r} 0"/>
-  </xacro:sensor_d415>
+  </xacro:sensor_d435>
 
 
 </robot>

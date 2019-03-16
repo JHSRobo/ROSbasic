@@ -80,7 +80,6 @@ T min(T value1, T value2){
         return value1;
     return value2;
 }
-
 /**
 * @breif returns a number mapped proportioanlly from one range of numbers to another
 * @param[in] input Value to be mapped
@@ -104,7 +103,6 @@ T map(T input, T inMin, T inMax, T outMin, T outMax){
 * @return Const vector_drive/thrusterPercents message ready to be published to the rov/cmd_horizontal_vdrive topic
 */
 const vector_drive::thrusterPercents& vectorMath(const double &linearX, const double &linearY, const double &angularX){
-
     //if values out of range flag an error
     if(abs(linearX) > 1 || abs(linearY) > 1 || abs(angularX) > 1){
         //ROS_ERROR("cmd_vel value out of range!\nEntering safe mode and disabling thrusters... ");
@@ -177,7 +175,6 @@ void commandVectorCallback(const geometry_msgs::Twist::ConstPtr& vel)
 
 int main(int argc, char **argv)
 {
-
     //initialize node for horizontal vector drive
     ros::init(argc, argv, "horiz_drive");
 

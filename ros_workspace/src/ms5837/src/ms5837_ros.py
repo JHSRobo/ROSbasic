@@ -29,7 +29,7 @@ def publisher():
 			sensor.init()
 			goodInit = True
 		except Exception as e:
-			rospy.logerr("Sensor could not be initialized! %s", e)
+			rospy.logerr("ms5837 could not be initialized! %s", e)
 			attempts += 1
 			rospy.sleep(0.25)
 
@@ -38,7 +38,7 @@ def publisher():
 		exit(1)
 
 	sensor.setFluidDensity(int(fluidDensity))
-	
+
 	while not rospy.is_shutdown():
 		msg = ms5837_data()
 		header = Header()
@@ -49,7 +49,7 @@ def publisher():
 				sensor.read()
 				goodRead = True
 			except Exception as e:
-				rospy.logerr("Sensor read failed! %s", e)
+				rospy.logdebug("Sensor read failed! %s", e)
 				rospy.sleep(0.2)
 
 		msg.tempC = sensor.temperature(ms5837_driver.UNITS_Centigrade)

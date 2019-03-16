@@ -55,13 +55,13 @@ def talker():
 		message.angular_velocity.x, message.angular_velocity.y, message.angular_velocity.z = (angular_velocity_roll, angular_velocity_pitch, angular_velocity_yaw)
 
 		imu_pub.publish(message)
-
 		start_roll = orientation['yaw']
 		start_pitch = orientation['roll']
 		start_yaw = orientation['pitch']
 		start_time = rospy.get_rostime()
 
 		rate.sleep()
+
 
 if __name__ == '__main__':
 	try:

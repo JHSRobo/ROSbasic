@@ -7,9 +7,9 @@ from std_msgs.msg import Bool
 
 def callback(data):
     if data.data:
-        GPIO.output(38, GPIO.HIGH)
+        GPIO.output(13, GPIO.HIGH)
     else:
-        GPIO.output(38, GPIO.LOW)
+        GPIO.output(13, GPIO.LOW)
 
 def hook():
     GPIO.cleanup()
@@ -21,7 +21,7 @@ def listener():
     rospy.init_node('trout_grout')
 
     GPIO.setmode(GPIO.BOARD)
-    GPIO.setup(38, GPIO.OUT)
+    GPIO.setup(13, GPIO.OUT)
 
     rospy.Subscriber("trout_grout", Bool, callback)
 

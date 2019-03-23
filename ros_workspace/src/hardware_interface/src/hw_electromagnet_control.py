@@ -6,9 +6,9 @@ from std_msgs.msg import Bool
 
 def callback(data):
     if data.data:
-        GPIO.output(37, GPIO.HIGH)
+        GPIO.output(19, GPIO.HIGH)
     elif not data.data:
-        GPIO.output(37, GPIO.LOW)
+        GPIO.output(19, GPIO.LOW)
 
 
 def hook():
@@ -25,9 +25,9 @@ def listener():
     # run simultaneously.
     rospy.init_node('electromagnet')
 
-    # PIN 37 for Electromagnet Setup
+    # PIN 19 for Electromagnet Setup
     GPIO.setmode(GPIO.BOARD)
-    GPIO.setup(37, GPIO.OUT)
+    GPIO.setup(19, GPIO.OUT)
 
     rospy.Subscriber("electromagnet_control", Bool, callback)
 

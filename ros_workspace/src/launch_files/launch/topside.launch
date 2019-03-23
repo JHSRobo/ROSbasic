@@ -14,5 +14,10 @@
      </node>
 
      <include file="$(find rosbridge_server)/launch/rosbridge_websocket.launch"/>
+ <!-- axis ip video to ros image -->
+     <include file="$(find video_stream_opencv)/launch/camera.launch" >
+        <arg name="camera_name" value="rov" />
+        <arg name="video_stream_provider" value="rtsp://root:jhsrobo@192.168.1.201/axis-media/media.amp" />
+   </include>
 
 </launch>

@@ -16,6 +16,10 @@ Development
 [![Build Status](https://travis-ci.com/JHSRobo/ROSbasic.svg?branch=development)](https://travis-ci.com/JHSRobo/ROSbasic)
 [![CodeFactor](https://www.codefactor.io/repository/github/jhsrobo/rosbasic/badge)](https://www.codefactor.io/repository/github/jhsrobo/rosbasic)
 
+## Release Page and Feature Addition Form
+
+All latest releases will be posted on the [release page](https://jhsrobo.github.io/releasepage/). There is also a feature addition form on this page so you can submit a feature that you want to be in the next release. Please only add the feature if it is complete and in development.
+
 ## Getting Started
 
 These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. See deployment for notes on how to deploy the project on the main ROV system (Master).

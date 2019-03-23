@@ -3,20 +3,24 @@ import RPi.GPIO as GPIO
 import rospy
 from std_msgs.msg import UInt8
 
+# GPIO pins that are used, A0 and A1
+pin1 = 38
+pin2 = 40
+
 # Callback function that runs every time a new message is
 def callback(data):
     if data.data == 2:
-        GPIO.output(35, GPIO.LOW)
-        GPIO.output(36, GPIO.HIGH)
+        GPIO.output(pin1, GPIO.LOW)
+        GPIO.output(pin2, GPIO.HIGH)
     elif data.data == 3:
-        GPIO.output(35, GPIO.HIGH)
-        GPIO.output(36, GPIO.LOW)
+        GPIO.output(pin1, GPIO.HIGH)
+        GPIO.output(pin2, GPIO.LOW)
     elif data.data == 4:
-        GPIO.output(35, GPIO.HIGH)
-        GPIO.output(36, GPIO.HIGH)
+        GPIO.output(pin1, GPIO.HIGH)
+        GPIO.output(pin2, GPIO.HIGH)
     else:
-        GPIO.output(35, GPIO.LOW)
-        GPIO.output(36, GPIO.LOW)
+        GPIO.output(pin1, GPIO.LOW)
+        GPIO.output(pin2, GPIO.LOW)
 
 def hook():
     GPIO.cleanup()
@@ -32,11 +36,9 @@ def listener():
     rospy.init_node('drive_control')
 
     #setup GPIO that will be used for the camera Mux
-    #GPIO36(19) = A0
-    #GPIO35(16) = A1
     GPIO.setmode(GPIO.BOARD)
-    GPIO.setup(35, GPIO.OUT)
-    GPIO.setup(36, GPIO.OUT)
+    GPIO.setup(pin1, GPIO.OUT)
+    GPIO.setup(pin2, GPIO.OUT)
 
     rospy.Subscriber("camera_select", UInt8, callback)
 

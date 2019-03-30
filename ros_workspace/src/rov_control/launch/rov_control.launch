@@ -64,7 +64,7 @@
 
   <!-- Start gathering visual odometry -->
   <node name="visual_odometer" pkg="rtabmap_ros" type="rgbd_odometry" output="$(arg output_source)">
-    <remap from="odom"            to="visual_odom"/>
+    <remap from="odom"            to="rtabmap/odom"/>
     <remap from="rgb/image"       to="$(arg rgb_image)"/>
     <remap from="rgb/camera_info" to="$(arg rgb_camera_info)"/>
     <remap from="depth/image"     to="$(arg depth_image)"/>

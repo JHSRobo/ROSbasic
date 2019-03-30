@@ -41,7 +41,6 @@ def listener():
     GPIO.setup(pin2, GPIO.OUT)
 
     rospy.Subscriber("camera_select", UInt8, callback)
-
     #shutdown hook releases the GPIO when the node is killed
     rospy.on_shutdown(hook)
     # spin() simply keeps python from exiting until this node is stopped

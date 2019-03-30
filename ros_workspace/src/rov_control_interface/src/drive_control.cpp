@@ -297,7 +297,21 @@ void thrusterStatusCallback(const std_msgs::Bool::ConstPtr& data) {
 
 
 void inversionCameraSwitcherCallback(const std_msgs::UInt8::ConstPtr& data) {
-  inversion = data->data;
+  if (data->data == 1) {
+    inversion = 0;
+  }
+  else if (data->data == 2) {
+      inversion = 2;
+  }
+  else if (data->data == 3) {
+      inversion = 2;
+  }
+  else {
+      inversion = 0;
+  }
+  std_msgs::UInt8 inversionMsg;
+  inversionMsg.data = inversion;
+  inversion_pub.publish(inversionMsg)
 }
 
 int main(int argc, char **argv)

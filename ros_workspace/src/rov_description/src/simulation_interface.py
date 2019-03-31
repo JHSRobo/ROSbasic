@@ -46,7 +46,7 @@ def map(input, inMin, inMax, outMin, outMax):
 # @return A propellers angular velocity that can be sent to the uuv simulator thruster manager
 def toRotorAngVel(inputVal):
     thrusterCmd = map(inputVal, -1000.0, 1000.0, 1100.0, 1900.0) #Convert thruster percent to microseconds signal
-    if thrusterCmd > 1450 and thrusterCmd < 1550: #if the microseconds pulse is in the deadzone
+    if thrusterCmd > 1475 and thrusterCmd < 1525: #if the microseconds pulse is in the deadzone
         return 0
     else:
         #cubic function that takes in microseconds and outputs thruster force - source Blue Robotics

@@ -1,7 +1,12 @@
 <launch>
 
-  <!-- output "log" or "screen" -->
-  <arg name="output_source" default="log"/>
+<!-- output "log" or "screen" -->
+<arg name="output_source" default="log"/>
+
+<!-- RTAB viewer-->
+<arg name="rtabmapviz" default="true"/>
+
+<group ns="rov">
 
   <!-- Name of camera -->
   <group ns="realsense_cam">
@@ -52,10 +57,11 @@
   camera_info_topic:=/camera/color/camera_info
   approx_sync:=false -->
   <include file="$(find rtabmap_ros)/launch/rtabmap.launch">
+    <arg name="rtabmapviz" value="$(arg rtabmapviz)"/>
     <arg name="rtabmap_args" value="--delete_db_on_start"/>
-    <arg name="depth_topic" value="/realsense_cam/aligned_depth_to_color/image_raw"/>
-    <arg name="rgb_topic" value="/realsense_cam/color/image_raw"/>
-    <arg name="camera_info_topic" value="/realsense_cam/color/camera_info"/>
+    <arg name="depth_topic" value="realsense_cam/aligned_depth_to_color/image_raw"/>
+    <arg name="rgb_topic" value="realsense_cam/color/image_raw"/>
+    <arg name="camera_info_topic" value="realsense_cam/color/camera_info"/>
     <arg name="approx_sync" value="false"/>
   </include>
 
@@ -63,5 +69,7 @@
   <node name="odom_filter" pkg="robot_localization" type="ekf_localization_node" output="$(arg output_source)">
     <rosparam command="load" file="$(find rov_control)/config/rov_robot_local_params.yaml"/>
   </node>
+
+</group>
 
 </launch>

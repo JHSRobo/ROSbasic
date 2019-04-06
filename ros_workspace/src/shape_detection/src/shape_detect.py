@@ -125,6 +125,7 @@ def listener():
             rospy.Subscriber("/rov/image_raw", Image, find_the_shape)
         else:
             pass
+    rospy.init_node("shape_detect")
     rospy.ServiceProxy('start_shape_detect', bool, is_true)
 
 

@@ -50,12 +50,12 @@ def toRotorAngVel(inputVal):
         return 0
     # two quintic regressions - one forward, one reverse
     # https://www.desmos.com/calculator/mdhep9gttj
-    else if thrusterCmd < 1500: #reverse thrust
+    elif thrusterCmd < 1500: #reverse thrust
         thrusterForce = (1.0659232851E-15*(thrusterCmd**5)-6.0041876632E-11*(thrusterCmd**4)+2.8763892765E-7*(thrusterCmd**3)-0.000541405587613*(thrusterCmd**2)+0.466418689099*thrusterCmd-156.361912754) #Thruster Force in Newtons
         #force is calculated in the uuv simulator with the equation rotorConstant*angularVel^2
         propAngVel = sqrt(thrusterForce/0.00031*(thrusterForce/abs(thrusterForce)))*(thrusterForce/abs(thrusterForce)) #We know that thrusterForce is not going to be zero here
         return propAngVel
-    else if thrusterCmd > 1500: #forward thrust
+    elif thrusterCmd > 1500: #forward thrust
         thrusterForce = (-1.235121669E-12*(thrusterCmd**5)+1.0528533279E-8*(thrusterCmd**4)-0.0000358699420294*(thrusterCmd**3)+0.0610602730083*(thrusterCmd**2)-51.9329220769*thrusterCmd+17653.3591143)
         #force is calculated in the uuv simulator with the equation rotorConstant*angularVel^2
         propAngVel = sqrt(thrusterForce/0.00031*(thrusterForce/abs(thrusterForce)))*(thrusterForce/abs(thrusterForce)) #We know that thrusterForce is not going to be zero here

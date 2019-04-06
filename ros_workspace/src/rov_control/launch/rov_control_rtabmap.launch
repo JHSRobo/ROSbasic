@@ -59,9 +59,9 @@
   <include file="$(find rtabmap_ros)/launch/rtabmap.launch">
     <arg name="rtabmapviz" value="$(arg rtabmapviz)"/>
     <arg name="rtabmap_args" value="--delete_db_on_start"/>
-    <arg name="depth_topic" value="realsense_cam/aligned_depth_to_color/image_raw"/>
-    <arg name="rgb_topic" value="realsense_cam/color/image_raw"/>
-    <arg name="camera_info_topic" value="realsense_cam/color/camera_info"/>
+    <arg name="depth_topic" value="/rov/realsense_cam/aligned_depth_to_color/image_raw"/>
+    <arg name="rgb_topic" value="/rov/realsense_cam/color/image_raw"/>
+    <arg name="camera_info_topic" value="/rov/realsense_cam/color/camera_info"/>
     <arg name="approx_sync" value="false"/>
   </include>
 

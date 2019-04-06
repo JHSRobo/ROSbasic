@@ -295,7 +295,6 @@ void thrusterStatusCallback(const std_msgs::Bool::ConstPtr& data) {
   ROS_INFO_STREAM(thrustEN);
 }
 
-
 int main(int argc, char **argv)
 {
     ros::init(argc, argv, "drive_control");

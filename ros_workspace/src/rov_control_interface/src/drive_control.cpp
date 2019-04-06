@@ -296,25 +296,6 @@ void thrusterStatusCallback(const std_msgs::Bool::ConstPtr& data) {
   ROS_INFO_STREAM(thrustEN);
 }
 
-
-void inversionCameraSwitcherCallback(const std_msgs::UInt8::ConstPtr& data) {
-  if (data->data == 1) {
-    inversion = 0;
-  }
-  else if (data->data == 2) {
-      inversion = 2;
-  }
-  else if (data->data == 3) {
-      inversion = 2;
-  }
-  else {
-      inversion = 0;
-  }
-  std_msgs::UInt8 inversionMsg;
-  inversionMsg.data = inversion;
-  inversion_pub.publish(inversionMsg);
-}
-
 int main(int argc, char **argv)
 {
     ros::init(argc, argv, "drive_control");
@@ -326,7 +307,6 @@ int main(int argc, char **argv)
     joy_sub2 = n.subscribe<sensor_msgs::Joy>("joy/joy2", 2, &joyVerticalCallback);
     thruster_status_sub = n.subscribe<std_msgs::Bool>("rov/thruster_status", 1, &thrusterStatusCallback);
     sensitivity_sub = n.subscribe<rov_control_interface::rov_sensitivity>("rov/sensitivity", 3, &sensitivityCallback);
-    camera_sub = n.subscribe<std_msgs::UInt8>("rov/inversion", 2, &inversionCameraSwitcherCallback);
 
     vel_pub = n.advertise<geometry_msgs::Twist>("rov/cmd_vel", 1);
     camera_select = n.advertise<std_msgs::UInt8>("rov/camera_select", 3);       //Camera pub

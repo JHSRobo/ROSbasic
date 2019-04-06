@@ -63,7 +63,6 @@ ros::Subscriber joy_sub2; //!<subscriber to the thrustmaster throttle
 ros::Subscriber inversion_sub; //!<subscriber to inversion from copilota
 ros::Subscriber sensitivity_sub; //!<subscriber to sensitivity from copilot
 ros::Subscriber thruster_status_sub; //!<subscriber to thrusters enabled/disabled from copilot
-ros::Subscriber camera_sub;
 
 ros::Publisher camera_select;    //!<Camera pub
 ros::Publisher power_control;    //!<TCU relay controller

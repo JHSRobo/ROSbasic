@@ -66,6 +66,7 @@ def publisher():
 
 		rate.sleep()
 
+
 if __name__ == '__main__':
 	try:
 		publisher()

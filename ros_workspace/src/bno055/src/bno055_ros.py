@@ -32,7 +32,7 @@ def publisher():
 			attempts += 1
 			rospy.sleep(0.25)
 
-	if(attempts == 10):	
+	if attempts == 10:
 		rospy.logerr('Failed to initialize BNO055! Program end')
 		exit(1)
 
@@ -45,9 +45,9 @@ def publisher():
 	rospy.logdebug('System status: %s', status)
 	rospy.logdebug('Self test result (0x0F is normal): %s', hex(self_test))
 	# Print out an error if system status is in error mode.
-	if(status == 0x01):
+	if status == 0x01:
 		rospy.logerr('System error: %s', error)
-   		rospy.logerr('See datasheet section 4.3.59 for the meaning.')
+		rospy.logerr('See datasheet section 4.3.59 for the meaning.')
 
 	# Print BNO055 software revision and other diagnostic data.
 	try:
@@ -79,7 +79,7 @@ def publisher():
 		# Update data
 
 		attempts = 0	
-		while(attempts < 4):
+		while attempts < 4:
 			try:
 				# Read the calibration status, 0=uncalibrated and 3=fully calibrated.
 				sys, gyro, accel, mag = sensor.get_calibration_status()
@@ -90,16 +90,15 @@ def publisher():
 				attempts += 1
 				rospy.sleep(0.01)
 	
-		if(attempts != 4):
+		if attempts != 4:
 			info.sysCalibration = sys
 			info.accelCalibration = accel
 			info.gyroCalibration = gyro
 			info.magnoCalibration = mag
 			info.tempC = temp_c
 
-
-		attempts = 0	
-		while(attempts < 4):
+		attempts = 0
+		while attempts < 4:
 			try:
     			# Orientation as a quaternion:
 				orientation.x, orientation.y, orientation.z, orientation.w  = sensor.read_quaternion()

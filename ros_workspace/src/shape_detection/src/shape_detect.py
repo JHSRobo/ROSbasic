@@ -115,18 +115,16 @@ def find_the_shape(data):
     cv2.imshow("Image", crop)
 
     cv2.waitKey(0)
+    exit(0)
 
 
 def listener():
-    rospy.wait_for_service('start_shape_detect')
-
-    def is_true(data):
-        if data.data:
-            rospy.Subscriber("/rov/image_raw", Image, find_the_shape)
-        else:
-            pass
+    
+    def run():
+        rospy.Subscriber("/rov/image_raw", Image, find_the_shape)
     rospy.init_node("shape_detect")
-    rospy.ServiceProxy('start_shape_detect', bool, is_true)
+    s = rospy.Service('start_shape_detect', None, run)
+    rospy.spin()
 
 
 if __name__ == "__main__":

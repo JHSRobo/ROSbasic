@@ -11,6 +11,8 @@ import rospy
 import numpy as np
 from sensor_msgs import Image
 from cv_bridge import CvBridge
+from shape_detection.msg import shape_detect
+from std_msgs import Header
 
 
 def find_the_shape(data):
@@ -95,7 +97,7 @@ def find_the_shape(data):
         # displays number of triangles
         cv2.putText(blackdrop,c2,(10,120), font, 4,(255,255,255),2,cv2.LINE_AA)
         # displays number of Squares
-        cv2.putText(blackdrop,c3,(10,230), font, 4,(255,255,255),2,cv2.LINE_AA)
+        cv2.putText(blackdrop, c3, (10, 230), font, 4, (255, 255, 255), 2, cv2.LINE_AA)
         p1 = (166, 40)
         p2 = (130, 120)
         p3 = (200, 120)
@@ -111,9 +113,24 @@ def find_the_shape(data):
         cv2.imshow("blackdrop", blackdrop)
 
         # show the output image
+    msg = shape_detect()
+
+    header = Header()
+
+    # update message headers
+    header.stamp = rospy.Time.now()
+    header.frame_id = 'humidity_data'
+    msg.header = header
+
+    msg.triangles = s2
+    msg.square = s3
+    msg.rectangle = s4
+    msg.circles = s5
+
+    pub = rospy.Publisher("/rov/shape_output", shape_detect, queue_size=3)
+    pub.publish(msg)
 
     cv2.imshow("Image", crop)
-
     cv2.waitKey(0)
     exit(0)
 

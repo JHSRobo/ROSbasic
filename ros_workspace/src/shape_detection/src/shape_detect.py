@@ -1,6 +1,6 @@
-#!/usr/bin/env/ python
+#!/usr/bin/env python
 # USAGE
-#needs ros support but no one wants to do it.
+# needs ros support but no one wants to do it.
 
 # import the necessary packages
 from edgedetect.shapedetector import ShapeDetector

@@ -1,4 +1,4 @@
-#!/usr/bin/env/
+#!/usr/bin/env/ python
 # USAGE
 #needs ros support but no one wants to do it.
 

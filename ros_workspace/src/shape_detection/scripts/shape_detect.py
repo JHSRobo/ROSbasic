@@ -12,6 +12,7 @@ from std_msgs.msg import Header
 import cv2
 
 
+
 class ShapeDetector:
     def __init__(self):
         self.s1 = self.s2 = self.s3 = self.s4 = self.s5 = 0
@@ -38,7 +39,6 @@ class ShapeDetector:
                 shape = "rectangle"
                 self.s4 += 1
 
-        print(self.s1, "lines,", self.s2, "triangles,", self.s3, "Squares,", self.s4, "rectangles,", self.s5, "circles")
         # return the name of the shape
         return shape
 

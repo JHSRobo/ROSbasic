@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 # USAGE
-# needs ros support but no one wants to do it.
+# Post to /shape_detect mode 1 or 2 to choose what mode shape detect
+# Call service for shape detect
 
 # import the necessary packages
 import imutils
@@ -9,9 +10,16 @@ from sensor_msgs.msg import Image
 from cv_bridge import CvBridge
 from shape_detection.srv import shape_detect
 from std_msgs.msg import Header
+from std_msgs.msg import UInt8
 import cv2
 
+mode = 1 # Mode for shape detect
 
+def modeSwitch(data):
+    if data.data == 1 or 2:
+        mode = data.data
+    else:
+        mode = 1
 
 class ShapeDetector:
     def __init__(self):
@@ -55,15 +63,6 @@ def find_the_shape():
         while True:
             cv2.rectangle(cv_image, (110, 400), (510, 100), (255, 255, 255), 3)
             cv2.imshow('frame', cv_image)
-            k = cv2.waitKey(33)
-            if k == 97:
-                mode = 1
-                break
-            elif k == 115:
-                mode = 2
-                break
-            elif k == 255:
-                continue
         # crop image to fit frame and resize it for better processing!
         y = 110
         x = 120
@@ -172,6 +171,7 @@ def find_the_shape():
 def listener():
     rospy.init_node("shape_detect")
     rospy.Service('start_shape_detect', shape_detect, find_the_shape)
+    rospy.Subscriber("shape_detect/mode", UInt8, modeSwitch)
     rospy.spin()
 
 

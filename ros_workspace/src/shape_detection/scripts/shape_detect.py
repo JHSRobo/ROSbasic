@@ -10,7 +10,7 @@ from sensor_msgs.msg import Image
 from cv_bridge import CvBridge
 from shape_detection.srv import shape_detect
 from std_msgs.msg import Header
-from std_msgs.msg import Uint8
+from std_msgs.msg import UInt8
 import cv2
 
 mode = 1 # Mode for shape detect
@@ -171,7 +171,7 @@ def find_the_shape():
 def listener():
     rospy.init_node("shape_detect")
     rospy.Service('start_shape_detect', shape_detect, find_the_shape)
-    rospy.Subscriber("shape_detect/mode", Uint8, modeSwitch)
+    rospy.Subscriber("shape_detect/mode", UInt8, modeSwitch)
     rospy.spin()
 
 

@@ -41,5 +41,6 @@
  <!-- respawn setup to restart the node every 30 seconds if it dies-->
  <!-- <node type="sensor-hat.py" pkg="sensor_readout" name="sensor_interface" respawn="true" respawn_delay="30"/> -->
  <node type="bno055_ros.py" pkg="bno055" name="imu" respawn="true" respawn_delay="30"/>
+ <node pkg="sen10972" ns="rov" type="phSensor.py" name="phsensor"/>
 
 </launch>

@@ -167,9 +167,11 @@ def find_the_shape():
 def listener():
     rospy.init_node("crack_finder")
     pub = rospy.Publisher("crack_finder", crack_finder, queue_size=2)
+	rate = rospy.Rate(2)
 	while not rospy.is_shutdown():
 		pub.publish(find_the_shape())
-    	rospy.spin()
+		rate.sleep()
+
 
 
 if __name__ == "__main__":

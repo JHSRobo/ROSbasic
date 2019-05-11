@@ -3,7 +3,7 @@ import RPi.GPIO as GPIO
 import rospy
 from std_msgs.msg import Bool
 
-electromagPin = 32
+electromagPin = 37
 
 def callback(data):
     if data.data:

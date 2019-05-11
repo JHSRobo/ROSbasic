@@ -50,7 +50,7 @@ class AtlasI2C:
             #and get a list of characters
             # NOTE: having to change the MSB to 0 is a glitch in the raspberry
             #pi, and you shouldn't have to do this!
-            return "Command succeeded " + ''.join(char_list)
+            return "" + ''.join(char_list)
             # convert the char list to a string and returns it
         else:
             return "Error " + str(ord(response[0]))
@@ -82,7 +82,7 @@ def main():
     rate = rospy.Rate(10)  # 10hz
     while not rospy.is_shutdown():
         msg = Float64()
-        msg.data = device.query("R")
+        msg.data = float(device.query("R"))
         pub.publish(msg)
         rate.sleep()
 

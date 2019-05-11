@@ -10,7 +10,7 @@
 
 <arg name="rgb_image"       default="realsense_cam/color/image_raw"/>
 <arg name="rgb_camera_info" default="realsense_cam/color/camera_info"/>
-<arg name="depth_image"     default="realsense_cam/depth/image_rect_raw"/>
+<arg name="depth_image"     default="realsense_cam/aligned_depth_to_color/image_raw"/>
 
 <include file="$(find rov_description)/launch/visualize_rov.launch">
   <arg name="display" value="true"/>
@@ -53,7 +53,7 @@
         <arg name="pointcloud_texture_index"  value="0"/>
 
         <arg name="enable_sync"           value="false"/>
-        <arg name="align_depth"           value="false"/>
+        <arg name="align_depth"           value="true"/>
 
         <arg name="filters"               value=""/>
         <arg name="clip_distance"         value="10"/>
@@ -64,7 +64,7 @@
 
   <!-- Start gathering visual odometry -->
   <node name="visual_odometer" pkg="rtabmap_ros" type="rgbd_odometry" output="$(arg output_source)">
-    <remap from="odom"            to="visual_odom"/>
+    <remap from="odom"            to="rtabmap/odom"/>
     <remap from="rgb/image"       to="$(arg rgb_image)"/>
     <remap from="rgb/camera_info" to="$(arg rgb_camera_info)"/>
     <remap from="depth/image"     to="$(arg depth_image)"/>
@@ -82,7 +82,7 @@
     <rosparam command="load" file="$(find rov_control)/config/rov_robot_local_params.yaml"/>
   </node>
 
-  <node if="$(arg displayOdom)" pkg="rtabmap_ros" type="rtabmapviz" name="rtabmapviz" args="-d ~/.ros/rtabmap_gui.ini" output="$(arg output_source)">
+  <!-- <node if="$(arg displayOdom)" pkg="rtabmap_ros" type="rtabmapviz" name="rtabmapviz" args="-d ~/.ros/rtabmap_gui.ini" output="$(arg output_source)">
     <param name="subscribe_rgbd"       type="bool"   value="true"/>
     <param name="subscribe_odom_info"  type="bool"   value="true"/>
     <param name="frame_id"             type="string" value="camera_link"/>
@@ -93,7 +93,7 @@
     <remap from="rgb/camera_info" to="$(arg rgb_camera_info)"/>
     <remap from="depth/image"     to="$(arg depth_image)"/>
     <remap from="odom"            to="visual_odom"/>
-  </node>
+  </node> -->
 
 </group>
 

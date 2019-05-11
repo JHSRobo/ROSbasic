@@ -7,7 +7,7 @@ from std_msgs.msg import Bool
 # Counterclockwise motion is done with pin 5 high, pin 6 low
 # Clockwise motion is done with both pins 5 and 6 high
 # This current version is setup just for counterclockwise motion
-troutGroutPin = 5
+troutGroutPin = 13
 
 # Callback function that runs every time a message is published on the topic
 

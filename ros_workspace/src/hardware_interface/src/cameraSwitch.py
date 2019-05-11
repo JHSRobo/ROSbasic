@@ -4,8 +4,8 @@ import rospy
 from std_msgs.msg import UInt8
 
 # GPIO pins that are used, A0 and A1
-pin1 = 38
-pin2 = 40
+pin1 = 35
+pin2 = 36
 
 # Callback function that runs every time a new message is
 def callback(data):

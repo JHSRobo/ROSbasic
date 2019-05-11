@@ -32,7 +32,6 @@ def listener():
     GPIO.setmode(GPIO.BOARD)
     GPIO.setup(troutGroutPin1, GPIO.OUT)
     GPIO.setup(troutGroutPin2, GPIO.OUT)
-    GPIO.setup(6, GPIO.OUT)
 
     rospy.Subscriber("trout_grout", Bool, callback)
 

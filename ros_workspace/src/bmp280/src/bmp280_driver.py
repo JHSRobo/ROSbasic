@@ -52,7 +52,7 @@ class BMP280:
 		calibrationSuccess = False 
 		attempts = 0
 		self.tfine = 0
-		while not calibrationSuccess and attempts < 10:
+		while(calibrationSuccess == False and attempts < 10):
 			try:
 				self.loadCalibration()
 				with SMBusWrapper(1) as bus:
@@ -122,24 +122,24 @@ class BMP280:
             
 		var1 = self.tfine - 128000
 		var2 = var1 * var1 * self.cal_REGISTER_DIG_P6
-		var2 = var2 + ((var1*self.cal_REGISTER_DIG_P5)<<17)
-		var2 = var2 + ((self.cal_REGISTER_DIG_P4)<<35)
-		var1 = ((var1 * var1 * self.cal_REGISTER_DIG_P3)>>8) + ((var1 * self.cal_REGISTER_DIG_P2)<<12)
-		var1 = ((((1)<<47)+var1))*(self.cal_REGISTER_DIG_P1)>>33
+		var2 = var2 + ((var1*self.cal_REGISTER_DIG_P5)<<17);
+		var2 = var2 + ((self.cal_REGISTER_DIG_P4)<<35);
+		var1 = ((var1 * var1 * self.cal_REGISTER_DIG_P3)>>8) + ((var1 * self.cal_REGISTER_DIG_P2)<<12);
+		var1 = ((((1)<<47)+var1))*(self.cal_REGISTER_DIG_P1)>>33;
 
 		if var1 == 0:
 			return 0
 
-		p = 1048576 - self.rawPressure
-		p = int((((p<<31) - var2)*3125) / var1)
-		var1 = ((self.cal_REGISTER_DIG_P9) * (p>>13) * (p>>13)) >> 25
-		var2 = ((self.cal_REGISTER_DIG_P8) * p) >> 19
+		p = 1048576 - self.rawPressure;
+		p = int((((p<<31) - var2)*3125) / var1);
+		var1 = ((self.cal_REGISTER_DIG_P9) * (p>>13) * (p>>13)) >> 25;
+		var2 = ((self.cal_REGISTER_DIG_P8) * p) >> 19;
 
-		p = ((p + var1 + var2) >> 8) + ((self.cal_REGISTER_DIG_P7)<<4)
+		p = ((p + var1 + var2) >> 8) + ((self.cal_REGISTER_DIG_P7)<<4);
 		self.pressure = p / 256.0
 
 		#return pressure in pascals
-		return self.pressure
+		return self.pressure;
 
 	##Gets the absolute compensated pressure in atm
 	# @return Pressure in atm
@@ -181,5 +181,3 @@ class BMP280:
 			self.cal_REGISTER_DIG_P7 = bus.read_word_data(self.address, BMP280_REGISTER_DIG_P7) # INT16
 			self.cal_REGISTER_DIG_P8 = bus.read_word_data(self.address, BMP280_REGISTER_DIG_P8) # INT16
 			self.cal_REGISTER_DIG_P9 = bus.read_word_data(self.address, BMP280_REGISTER_DIG_P9) # INT16
-
-

@@ -1,5 +1,8 @@
-cmake_minimum_required(VERSION 2.8.3)
+cmake_minimum_required(VERSION 3.1)
 project(raspicam_node)
+
+
+set(CMAKE_CXX_STANDARD 14) # use C++14
 
 ## Find catkin macros and libraries
 ## if COMPONENTS list like find_package(catkin REQUIRED COMPONENTS xyz)
@@ -10,6 +13,8 @@ find_package(catkin REQUIRED COMPONENTS
   std_msgs
   camera_info_manager
   dynamic_reconfigure
+  diagnostic_updater
+  message_generation
 )
 
 ## System dependencies are found with CMake's conventions
@@ -61,11 +66,10 @@ ENDIF()
 #######################################
 
 ## Generate messages in the 'msg' folder
-# add_message_files(
-#   FILES
-#   Message1.msg
-#   Message2.msg
-# )
+add_message_files(
+  FILES
+  MotionVectors.msg
+)
 
 ## Generate services in the 'srv' folder
 # add_service_files(
@@ -75,10 +79,10 @@ ENDIF()
 # )
 
 ## Generate added messages and services with any dependencies listed here
-# generate_messages(
-#   DEPENDENCIES
-#   std_msgs
-# )
+generate_messages(
+  DEPENDENCIES
+  std_msgs
+)
 
 #add dynamic reconfigure api
 generate_dynamic_reconfigure_options(
@@ -99,6 +103,7 @@ catkin_package(
 #  LIBRARIES raspicam
 #  CATKIN_DEPENDS compressed_image_transport roscpp std_msgs
 #  DEPENDS system_lib
+   CATKIN_DEPENDS message_runtime std_msgs
 )
 
 ###########
@@ -109,45 +114,23 @@ catkin_package(
 ## Your package locations should be listed before other locations
 include_directories(include
   ${catkin_INCLUDE_DIRS}
-  /home/pi/userland
   /opt/vc/include
   /opt/vc/include/interface/vcos/pthreads
   /opt/vc/include/interface/vmcs_host/linux
 )
 
-## Declare a cpp library
-add_library(raspicli STATIC
-  src/RaspiCLI.cpp 
-)
-
-add_library(raspicamcontrol STATIC
-  src/RaspiCamControl.cpp 
-)
-
-add_library(i2c STATIC
-  src/i2c.cpp 
-)
-
-add_library(gpio STATIC
-  src/gpio.cpp 
-)
-
-add_library(gnublin_func STATIC
-  src/functions.cpp 
-)
+add_compile_options(-Wall -Wuseless-cast -Wformat-nonliteral)
 
 ## Declare a cpp executable
-add_executable(raspicam_node src/raspicam_node.cpp)
+add_executable(raspicam_node src/raspicam_node.cpp src/RaspiCamControl.cpp)
 
 ## Add cmake target dependencies of the executable/library
-## as an example, message headers may need to be generated before nodes
-# add_dependencies(raspicam_node raspicam_generate_messages_cpp)
+add_dependencies(raspicam_node raspicam_node_generate_messages_cpp)
 add_dependencies(raspicam_node raspicam_node_gencfg)
 
 ## Specify libraries to link a library or executable target against
 target_link_libraries(raspicam_node
   ${catkin_LIBRARIES}
-  raspicamcontrol raspicli i2c gpio gnublin_func
   ${RPI_LIBRARIES} 
 )
 

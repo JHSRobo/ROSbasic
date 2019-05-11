@@ -7,15 +7,18 @@ from std_msgs.msg import Bool
 # Counterclockwise motion is done with pin 5 high, pin 6 low
 # Clockwise motion is done with both pins 5 and 6 high
 # This current version is setup just for counterclockwise motion
-troutGroutPin = 13
+troutGroutPin1 = 19
+troutGroutPin2 = 21
 
 # Callback function that runs every time a message is published on the topic
 
 def callback(data):
     if data.data:
-        GPIO.output(troutGroutPin, GPIO.HIGH)
+        GPIO.output(troutGroutPin1, GPIO.HIGH)
+	GPIO.output(troutGroutPin2, GPIO.LOW)
     else:
-        GPIO.output(troutGroutPin, GPIO.LOW)
+        GPIO.output(troutGroutPin1, GPIO.LOW)
+	GPIO.output(troutGroutPin2, GPIO.HIGH)
 
 def hook():
     GPIO.cleanup()

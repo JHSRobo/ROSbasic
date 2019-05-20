@@ -37,3 +37,9 @@
 [submodule "ros_workspace/src/line_follower"]
 	path = ros_workspace/src/line_follower
 	url = https://github.com/JHSRobo/line_follower
+[submodule "ros_workspace/src/raspicam_node"]
+	path = ros_workspace/src/raspicam_node
+	url = https://github.com/UbiquityRobotics/raspicam_node.git
+[submodule "ros_workspace/src/mission-tools"]
+	path = ros_workspace/src/mission-tools
+	url = https://github.com/JHSRobo/mission-tools.git

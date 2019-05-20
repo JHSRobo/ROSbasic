@@ -3,13 +3,19 @@ import RPi.GPIO as GPIO
 import rospy
 from std_msgs.msg import Bool
 
+# Pins 5 and 6 are used for motor control
+# Counterclockwise motion is done with pin 5 high, pin 6 low
+# Clockwise motion is done with both pins 5 and 6 high
+# This current version is setup just for counterclockwise motion
+troutGroutPin = 13
+
 # Callback function that runs every time a message is published on the topic
 
 def callback(data):
     if data.data:
-        GPIO.output(33, GPIO.HIGH)
+        GPIO.output(troutGroutPin, GPIO.HIGH)
     else:
-        GPIO.output(33, GPIO.LOW)
+        GPIO.output(troutGroutPin, GPIO.LOW)
 
 def hook():
     GPIO.cleanup()
@@ -21,7 +27,8 @@ def listener():
     rospy.init_node('trout_grout')
 
     GPIO.setmode(GPIO.BOARD)
-    GPIO.setup(33, GPIO.OUT)
+    GPIO.setup(troutGroutPin, GPIO.OUT)
+    GPIO.setup(6, GPIO.OUT)
 
     rospy.Subscriber("trout_grout", Bool, callback)
 

@@ -10,7 +10,7 @@
 
 <arg name="rgb_image"       default="realsense_cam/color/image_raw"/>
 <arg name="rgb_camera_info" default="realsense_cam/color/camera_info"/>
-<arg name="depth_image"     default="realsense_cam/depth/image_rect_raw"/>
+<arg name="depth_image"     default="realsense_cam/aligned_depth_to_color/image_raw"/>
 
 <include file="$(find rov_description)/launch/visualize_rov.launch">
   <arg name="display" value="true"/>
@@ -53,7 +53,7 @@
         <arg name="pointcloud_texture_index"  value="0"/>
 
         <arg name="enable_sync"           value="false"/>
-        <arg name="align_depth"           value="false"/>
+        <arg name="align_depth"           value="true"/>
 
         <arg name="filters"               value=""/>
         <arg name="clip_distance"         value="10"/>
